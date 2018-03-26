@@ -1,0 +1,8 @@
+@mixin scroller {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  // -webkit-overflow-scrolling: touch;
+  position: relative;
+  // transform: translate3d(0, 0, 0);
+}
