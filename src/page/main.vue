@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'MainPage',
+  name: 'Main',
   data () {
     return {
       msg: 'This is main page!'
