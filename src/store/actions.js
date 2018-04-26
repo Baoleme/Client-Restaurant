@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '@/lib/axios';
 // const baseUrl = 'https://baoleme.andiedie.cn/';
 const baseUrl = 'http://127.0.0.1:8520/';
 
@@ -7,18 +7,18 @@ export default {
     return axios.post(baseUrl + 'restaurant/session', {
       email: data.username,
       password: data.password
-    }).then((res) => {
-      if (!res || res.status !== 200 || res.data.err) {
-        return true;
-      } else {
-        commit('LOGIN');
-        return false;
-      }
+    }).then((value) => {
+      commit('LOGIN');
+      return false;
+    }, (error) => {
+      console.log(error.response.data.message);
+      return error.response.data.message;
     });
   },
   getRestInfo ({ commit }) {
-    axios.get(baseUrl + 'restaurant/self').then((res) => {
+    return axios.get(baseUrl + 'restaurant/self').then((res) => {
       if (res.status === 200) {
+        console.log(res.data);
         commit('GET_SELF_INFO', res.data);
         return false;
       }
@@ -29,25 +29,22 @@ export default {
       email: data.username,
       name: data.restname,
       password: data.password
-    }).then((res) => {
-      if (!res || res.status !== 200 || res.data.err) {
-        return true;
-      } else {
-        commit('LOGIN');
-        return false;
-      }
+    }).then((value) => {
+      commit('LOGIN', data.username);
+      return false;
+    }, (error) => {
+      console.log(error.response.data.message);
+      return error.response.data.message;
     });
   },
   sendConfirmEmail ({ commit }) {
-    axios.post(baseUrl + 'restaurant/emailConfirm').then((res) => {
-      if (res.status === 200) return false;
-      else return true;
-    });
+    axios.post(baseUrl + 'restaurant/emailConfirm')
+      .then((value) => { return false; },
+        (error) => { return error.response.data.message; });
   },
   emailConfirm ({ commit }, cipher) {
-    axios.get(baseUrl + 'restaurant/emailConfirm?cipher=' + cipher).then((res) => {
-      if (res.status === 200) return false;
-      else return true;
-    });
+    axios.get(baseUrl + 'restaurant/emailConfirm?cipher=' + cipher)
+      .then((value) => { return false; },
+        (error) => { return error.response.data.message; });
   }
 };

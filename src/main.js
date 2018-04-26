@@ -4,6 +4,9 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import store from './store'; // Vuex store
+import iView from 'iview';
+import 'iview/dist/styles/iview.css';
+import '../my_theme/index.less';
 
 import ax from '@/lib/axios';
 import config from '@/config';
@@ -12,6 +15,7 @@ Vue.config.productionTip = false;
 
 Vue.prototype.$http = ax;
 Vue.prototype.$config = config;
+Vue.use(iView);
 
 /* eslint-disable no-new */
 new Vue({

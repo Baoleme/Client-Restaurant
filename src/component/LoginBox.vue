@@ -1,20 +1,38 @@
 <template>
-  <div id="container">
+  <div id="loginBoxContainer">
     <div>
-      <label for="username">用户名: </label>
-      <input
-        type="text" name="username" id="username"
-        placeholder="请输入邮箱" autofocus v-model="username">
+      <img id="logo" src="@/assets/images/logo.png" alt="logo">
+    </div>
+    <div id="header">
+      <header>饱了么</header>
+      <div id="deputy">商家端</div>
     </div>
     <div>
-      <label for="password">密码: </label>
-      <input
-        type="password" name="password" id="password"
-        placeholder="请输入密码" v-model="password">
+      <Input class="input" v-model="username" placeholder="用户名"
+        clearable autofocus size="large" v-on:on-change="clearErrMsg" />
     </div>
-    <button @click="login">登录</button>
-    <button @click="register">新用户注册</button>
-    <a href="www.baidu.com">忘记密码</a>
+    <div>
+      <Input class="input" v-model="password" placeholder="密码"
+        clearable type="password" size="large" v-on:on-change="clearErrMsg" />
+    </div>
+    <div id="errorHintLine" v-show="errorMsg">
+      <Icon type="close-circled" color="#FE8966" size="14" />
+      <span>{{errorMsg}}</span>
+      <!-- <span>errorMsg</span> -->
+    </div>
+    <div id="line1">
+      <div id="autoLogin">
+          <Checkbox v-model="autoLogin"><span id="autoLoginHint">7天内自动登录</span></Checkbox>
+      </div>
+      <a id="forgetPW" href="www.baidu.com">忘记密码?</a>
+    </div>
+    <div>
+      <button @click="login" id="loginBtn">登录</button>
+    </div>
+    <div id="line2">
+      <span id="hint">还没有账户？</span>
+      <span @click="register" id="registerBtn">立即注册</span>
+    </div>
   </div>
 </template>
 
@@ -24,22 +42,24 @@ export default {
   data () {
     return {
       username: '',
-      password: ''
+      password: '',
+      autoLogin: false,
+      errorMsg: ''
     };
   },
   methods: {
     login () {
       if (!this.username) {
-        alert('用户名不为空');
+        this.errorMsg = '用户名不为空';
       } else if (!this.password) {
-        alert('密码不为空');
+        this.errorMsg = '密码不为空';
       } else {
         this.$store.dispatch('loginAction', {
           username: this.username,
           password: this.password
         }).then((err) => {
           if (err) {
-            alert(err);
+            this.errorMsg = err;
           } else {
             this.$store.dispatch('getRestInfo');
             this.$router.replace('/main');
@@ -49,11 +69,97 @@ export default {
     },
     register () {
       this.$router.push('/register');
+    },
+    clearErrMsg () {
+      if (this.errorMsg !== '') {
+        this.errorMsg = '';
+        console.log(this.errorMsg);
+      }
     }
   }
 };
 </script>
 
 <style lang="scss">
+#logo {
+  width: 40%;
+}
+header {
+  font-size: 36px;
+  letter-spacing: 13px;
+}
+#deputy {
+  padding-left: 58px;
+  font-size: 18px;
+  letter-spacing: 8px;
+  margin-bottom: 30px;
+}
 
+.input {
+  width: 100%;
+  margin-bottom: 8px;
+  /*box-shadow:X-Offset T-Offset Blur Blur-Offset Color*/
+  box-shadow: 0px 5px 25px -9px #FCC138;
+  font-size: 15px;
+}
+
+#autoLoginHint {
+  color: #929292;
+  font-size: 14px;
+  margin: 3px;
+}
+#errorHintLine {
+  display: flex;
+  margin: 5px 0 10px 2px;
+  color: #fd6e6a;
+}
+#errorHintLine span {
+  line-height: 1;
+  padding-left: 6px;
+  letter-spacing: 1px;
+  font-size: 14px;
+}
+#line1 {
+  display: flex;
+  justify-content: space-between;
+}
+#autoLogin {
+  margin-top: 7px;
+  display: inline-block;
+}
+#forgetPW {
+  color:#FCC138;
+  font-size: 14px;
+  margin-top: 7px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+#loginBtn {
+  width: 100%;
+  font-size: 16px;
+  padding: 11px 0;
+  color: #ffffff;
+  margin-top: 26px;
+  border: none;
+  background: linear-gradient(to right, #fccf31 , #fd6e6a);
+  outline: none;
+  cursor: pointer;
+}
+
+#line2 {
+  display: flex;
+  letter-spacing: 1px;
+  padding-top: 8px;
+  font-size: 14px;
+}
+#hint {
+  color: #929292;
+}
+#registerBtn {
+  margin-left: 23px;
+  color: #FCC138;
+  font-weight: 600;
+  cursor: pointer;
+}
 </style>

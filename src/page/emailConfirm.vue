@@ -1,9 +1,7 @@
 <template>
-  <div id="contanier">
-    <div>注册成功！验证码已发送至您的邮箱，请前往邮箱查看验证码。</div>
-    <label for="confirmCode">邮箱验证码: </label>
-    <input type="text" id="confirmCode" v-model="confirmCode">
-    <button @click="confirm">验证</button>
+  <div id='contanier'>
+    <div>注册成功！验证邮件已发送至您的邮箱，请前往邮箱验证。十分钟内有效。</div>
+    <button @click='gotoMail'>前往验证</button>
   </div>
 </template>
 
@@ -16,20 +14,10 @@ export default {
     };
   },
   methods: {
-    confirm () {
-      if (!this.confirmCode) {
-        alert('验证码不为空!');
-      } else {
-        this.$store.dispatch('emailConfirm', this.confirmCode)
-          .then((err) => {
-            if (err) {
-              alert(err);
-            } else {
-              this.$store.dispatch('getRestInfo');
-              this.$router.replace('/main');
-            }
-          });
-      }
+    gotoMail () {
+      // 根据邮箱地址跳转到对应的登录页面
+      var url = this.$store.state.email.split('@')[1];
+      window.open('http://mail.' + url);
     }
   }
 };
