@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import login from '@/page/login';
-import main from '@/page/main';
-import register from '@/page/register';
-import emailConfirm from '@/page/emailConfirm';
+import login from '@/components/auth/Login';
+import main from '@/components/Main';
+import register from '@/components/auth/Register';
+import emailConfirm from '@/components/emailConfirm';
 
 Vue.use(Router);
 

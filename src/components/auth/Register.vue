@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import RegisterBox from '@/component/RegisterBox';
+import RegisterBox from './RegisterBox';
 export default {
   name: 'Register',
   data () {

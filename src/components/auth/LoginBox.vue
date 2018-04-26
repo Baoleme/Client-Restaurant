@@ -18,7 +18,6 @@
     <div id="errorHintLine" v-show="errorMsg">
       <Icon type="close-circled" color="#FE8966" size="14" />
       <span>{{errorMsg}}</span>
-      <!-- <span>errorMsg</span> -->
     </div>
     <div id="line1">
       <div id="autoLogin">
