@@ -7,5 +7,9 @@ export default {
     state.restaurantName = data.name;
     state.restaurantId = data.restaurant_id;
     state.isConfirm = data.confirm_email;
+  },
+  SET_NETWORK_ERR (state) {
+    state.isNetworkErr = true;
+    setTimeout(() => { state.isNetworkErr = false; }, 1300);
   }
 };

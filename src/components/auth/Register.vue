@@ -8,6 +8,7 @@
       <!-- <modal v-if="isShowModal" @close="isShowModal=false"></modal> -->
     </div>
     <Footer></Footer>
+    <ErrorModal v-if="isNetworkErr"></ErrorModal>
   </div>
 </template>
 
@@ -16,6 +17,7 @@ import Header from './Header';
 import RegisterBox from './RegisterBox';
 import Footer from './Footer';
 import Modal from './Modal';
+import ErrorModal from '../ErrorModal';
 export default {
   name: 'Register',
   data () {
@@ -38,11 +40,17 @@ export default {
       window.open('http://mail.' + this.emailAddress.split('@')[1]);
     }
   },
+  computed: {
+    isNetworkErr () {
+      return this.$store.state.isNetworkErr;
+    }
+  },
   components: {
     RegisterBox,
     Header,
     Footer,
-    Modal
+    Modal,
+    ErrorModal
   }
 };
 </script>

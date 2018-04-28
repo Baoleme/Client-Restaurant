@@ -5,6 +5,7 @@
       <LoginBox class='LoginBox'></LoginBox>
     </div>
     <Footer></Footer>
+    <ErrorModal v-if="isNetworkErr"></ErrorModal>
   </div>
 </template>
 
@@ -12,6 +13,7 @@
 import Header from './Header';
 import LoginBox from './LoginBox';
 import Footer from './Footer';
+import ErrorModal from '../ErrorModal';
 export default {
   name: 'Login',
   data () {
@@ -23,10 +25,16 @@ export default {
       }
     };
   },
+  computed: {
+    isNetworkErr () {
+      return this.$store.state.isNetworkErr;
+    }
+  },
   components: {
     LoginBox,
     Header,
-    Footer
+    Footer,
+    ErrorModal
   }
 };
 </script>

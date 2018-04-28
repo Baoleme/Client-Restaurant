@@ -11,7 +11,8 @@ export default new Vuex.Store({
     isLogin: false,
     email: '',
     restaurantName: '',
-    restaurantId: 0
+    restaurantId: 0,
+    isNetworkErr: false
   },
   actions,
   getters,

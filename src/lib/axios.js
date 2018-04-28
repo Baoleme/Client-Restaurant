@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '../store';
 
 const ax = axios.create({
   timeout: 3000,
@@ -9,6 +10,11 @@ const ax = axios.create({
 ax.interceptors.response.use(
   res => res,
   err => {
+    // Network Error
+    if (err.message === 'Network Error') {
+      store.commit('SET_NETWORK_ERR');
+    }
+    console.log(err.message);
     if (err.message && err.message.match(/timeout/)) {
       const config = err.config;
       if (config.method !== 'get') return Promise.reject(err); // only retry GET methods
