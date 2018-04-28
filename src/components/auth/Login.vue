@@ -1,8 +1,8 @@
 <template>
-  <div id="loginContainer" :style="backgroundDiv">
-    <Header></Header>
+  <div class="loginContainer" :style="backgroundDiv">
+    <Header :isLogin="true"></Header>
     <div id="parent">
-      <LoginBox id='LoginBox'></LoginBox>
+      <LoginBox class='LoginBox'></LoginBox>
     </div>
     <Footer></Footer>
   </div>
@@ -32,31 +32,22 @@ export default {
 </script>
 
 <style lang="scss">
-#loginContainer {
+.loginContainer {
   position:absolute;
   width:100%;
   height:100%;
+
+  #parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .LoginBox {
+      transform: translateY(-50%);
+      position: absolute;
+      top: 45%;
+      width: 20%;
+    }
+  }
 }
-#parent {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-#LoginBox {
-  transform: translateY(-50%);
-  position: absolute;
-  top: 45%;
-  width: 20%;
-}
-/* footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  font-size: 15px;
-  margin-bottom: 15px;
-  color: #929292;
-}
-footer span {
-  margin: 0 15px 0 15px;
-} */
 </style>

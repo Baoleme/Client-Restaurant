@@ -1,7 +1,6 @@
 export default {
-  LOGIN (state, username) {
+  LOGIN (state) {
     state.isLogin = true;
-    state.email = username;
   },
   GET_SELF_INFO (state, data) {
     state.email = data.email;

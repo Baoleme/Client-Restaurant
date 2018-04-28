@@ -30,7 +30,7 @@ export default {
       name: data.restname,
       password: data.password
     }).then((value) => {
-      commit('LOGIN', data.username);
+      commit('LOGIN');
       return false;
     }, (error) => {
       console.log(error.response.data.message);

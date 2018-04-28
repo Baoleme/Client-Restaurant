@@ -28,14 +28,16 @@ footer {
   font-size: 15px;
   margin-bottom: 15px;
   color: #929292;
-}
-footer span {
-  margin: 0 15px 0 15px;
-}
-footer span:nth-child(1) {
-  cursor: default;
-}
-footer img {
-  width: 140px;
+
+  span {
+    margin: 0 15px 0 15px;
+  }
+
+  span:nth-child(1) {
+    cursor: default;
+  }
+  img {
+    width: 140px;
+  }
 }
 </style>

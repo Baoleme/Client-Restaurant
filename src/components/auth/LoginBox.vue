@@ -1,10 +1,10 @@
 <template>
-  <div id="loginBoxContainer">
-    <div>
+  <div class="loginBoxContainer">
+    <div id="imgline">
       <img id="logo" src="@/assets/images/logo.png" alt="logo">
     </div>
-    <div id="header">
-      <header>饱了么</header>
+    <div id="appName">
+      <div id="formal">饱了么</div>
       <div id="deputy">商家端</div>
     </div>
     <div>
@@ -80,85 +80,99 @@ export default {
 </script>
 
 <style lang="scss">
-#logo {
-  width: 40%;
-}
-header {
-  font-size: 36px;
-  letter-spacing: 13px;
-}
-#deputy {
-  padding-left: 58px;
-  font-size: 18px;
-  letter-spacing: 8px;
-  margin-bottom: 30px;
-}
+.loginBoxContainer {
+  #logo {
+    width: 36%;
+    margin: 26px;
+  }
+  #appName {
+    #formal {
+      font-size: 34px;
+      letter-spacing: 12px;
+      font-weight: bold;
+    }
+    #deputy {
+      padding-left: 48px;
+      font-size: 18px;
+      letter-spacing: 8px;
+      margin-bottom: 30px;
+    }
+  }
 
-.input {
-  width: 100%;
-  margin-bottom: 8px;
-  /*box-shadow:X-Offset T-Offset Blur Blur-Offset Color*/
-  box-shadow: 0px 5px 25px -9px #FCC138;
-  font-size: 15px;
-}
+  .input {
+    width: 100%;
+    margin-bottom: 8px;
+    /*box-shadow:X-Offset T-Offset Blur Blur-Offset Color*/
+    box-shadow: 0px 5px 25px -9px rgb(248, 155, 6);
+    font-size: 15px;
+  }
 
-#autoLoginHint {
-  color: #929292;
-  font-size: 14px;
-  margin: 3px;
-}
-#errorHintLine {
-  display: flex;
-  margin: 5px 0 10px 2px;
-  color: #fd6e6a;
-}
-#errorHintLine span {
-  line-height: 1;
-  padding-left: 6px;
-  letter-spacing: 1px;
-  font-size: 14px;
-}
-#line1 {
-  display: flex;
-  justify-content: space-between;
-}
-#autoLogin {
-  margin-top: 7px;
-  display: inline-block;
-}
-#forgetPW {
-  color:#FCC138;
-  font-size: 14px;
-  margin-top: 7px;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
+  #errorHintLine {
+    display: flex;
+    margin: 5px 0 10px 2px;
+    color: #fd6e6a;
 
-#loginBtn {
-  width: 100%;
-  font-size: 16px;
-  padding: 11px 0;
-  color: #ffffff;
-  margin-top: 26px;
-  border: none;
-  background: linear-gradient(to right, #fccf31 , #fd6e6a);
-  outline: none;
-  cursor: pointer;
-}
+    span {
+      line-height: 1;
+      padding-left: 6px;
+      letter-spacing: 1px;
+      font-size: 14px;
+    }
+  }
 
-#line2 {
-  display: flex;
-  letter-spacing: 1px;
-  padding-top: 8px;
-  font-size: 14px;
-}
-#hint {
-  color: #929292;
-}
-#registerBtn {
-  margin-left: 23px;
-  color: #FCC138;
-  font-weight: 600;
-  cursor: pointer;
+  #line1 {
+    display: flex;
+    justify-content: space-between;
+
+    #autoLogin {
+      margin-top: 7px;
+      display: inline-block;
+
+      #autoLoginHint {
+        color: #929292;
+        font-size: 14px;
+        margin: 3px;
+      }
+    }
+
+    #forgetPW {
+      color:#FCC138;
+      font-size: 14px;
+      margin-top: 7px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  }
+
+  #loginBtn {
+    width: 100%;
+    font-size: 16px;
+    padding: 11px 0;
+    color: #ffffff;
+    margin-top: 26px;
+    border: none;
+    background: linear-gradient(to right, #fccf31 , #fd6e6a);
+    outline: none;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+
+  #line2 {
+    display: flex;
+    letter-spacing: 1px;
+    padding-top: 8px;
+    font-size: 14px;
+
+    #hint {
+      color: #929292;
+    }
+
+    #registerBtn {
+      margin-left: 23px;
+      color: #FCC138;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  }
 }
 </style>

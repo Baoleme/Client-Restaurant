@@ -3,7 +3,6 @@ import Router from 'vue-router';
 import login from '@/components/auth/Login';
 import main from '@/components/Main';
 import register from '@/components/auth/Register';
-import emailConfirm from '@/components/emailConfirm';
 
 Vue.use(Router);
 
@@ -27,11 +26,6 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: register
-    },
-    {
-      path: '/emailConfirm',
-      name: 'emailConfirm',
-      component: emailConfirm
     }
   ]
 });
