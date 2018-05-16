@@ -1,7 +1,8 @@
 <template>
   <div class="loginBoxContainer">
     <div id="imgline">
-      <img id="logo" src="@/assets/images/logo.png" alt="logo">
+      <!-- <img id="logo" src="@/assets/images/logo.png" alt="logo"> -->
+      <img id="logo" src="@/assets/images/baoleme_logo_cat.svg" alt="logo">
     </div>
     <div id="appName">
       <div id="formal">饱了么</div>

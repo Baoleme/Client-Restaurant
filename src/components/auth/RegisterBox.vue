@@ -1,7 +1,7 @@
 <template>
   <div class="registerBox">
     <div class="headline">
-      <img id="logo" src="@/assets/images/logo.png" alt="logo">
+      <img id="logo" src="@/assets/images/baoleme_logo_cat.svg" alt="logo">
       <div class="appName">
         <div id="formal">饱了么</div>
         <div id="deputy">商家端</div>
