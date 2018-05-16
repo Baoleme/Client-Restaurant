@@ -1,7 +1,6 @@
 <template>
   <div class="main_contanier">
     <Menu />
-    main
     <!-- email: {{email}} -->
     <!-- isConfirm: {{isConfirm}}
     <button @click='test'>confirm</button> -->

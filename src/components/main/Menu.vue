@@ -1,5 +1,5 @@
 <template>
-  <div class="menu">
+  <div class="menu" :style="{ height: clientHeight }">
     <div class="logoLine"><img src="@/assets/images/logo_main.png" alt="logo" class="mainLogo"></div>
     <div class="firstPart">
       <div class="menuItem" @click="goto(0)" :class="{active: activeIndex === 0}">
@@ -33,12 +33,23 @@
 export default {
   data () {
     return {
+      clientHeight: document.body.clientHeight
     };
   },
   computed: {
     activeIndex () {
       return this.$store.state.index;
     }
+  },
+  mounted () {
+    // 动态设置背景图的高度为浏览器可视区域高度
+    // 首先在Virtual DOM渲染数据时，设置下背景图的高度．
+    this.clientHeight = `${document.documentElement.clientHeight}px`;
+    // 然后监听window的resize事件．在浏览器窗口变化时再设置下背景图高度
+    const that = this;
+    window.onresize = function temp () {
+      that.clientHeight = `${document.documentElement.clientHeight}px`;
+    };
   },
   methods: {
     goto (index) {
@@ -64,7 +75,7 @@ export default {
 .menu {
   background-color: white;
   width: 168px;
-  min-height: 841px;
+  // min-height: 841px;
   font-size: 14px;
   font-family:PingFangTC-Medium;
   letter-spacing:1px;

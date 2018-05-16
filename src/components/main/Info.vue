@@ -1,7 +1,6 @@
 <template>
   <div>
     <Menu />
-    info
   </div>
 </template>
 

@@ -1,7 +1,6 @@
 <template>
   <div>
     <Menu />
-    order
   </div>
 </template>
 
