@@ -11,5 +11,8 @@ export default {
   SET_NETWORK_ERR (state) {
     state.isNetworkErr = true;
     setTimeout(() => { state.isNetworkErr = false; }, 1300);
+  },
+  UPDATE_INDEX (state, index) {
+    state.index = index;
   }
 };

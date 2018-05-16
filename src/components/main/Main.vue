@@ -1,12 +1,15 @@
 <template>
-  <div id="contanier">
-    email: {{email}}
+  <div class="main_contanier">
+    <Menu />
+    main
+    <!-- email: {{email}} -->
     <!-- isConfirm: {{isConfirm}}
     <button @click='test'>confirm</button> -->
   </div>
 </template>
 
 <script>
+import Menu from './Menu';
 export default {
   name: 'Main',
   data () {
@@ -23,10 +26,15 @@ export default {
     test () {
       this.$store.dispatch('sendConfirmEmail');
     }
+  },
+  components: {
+    Menu
   }
 };
 </script>
 
 <style lang="scss">
-
+.main_contanier {
+  background-color: #e7e7e7;
+}
 </style>
