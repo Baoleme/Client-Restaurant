@@ -1,6 +1,10 @@
 <template>
-  <div class="main_contanier">
+  <div class="mainContanier">
     <Menu />
+    <div class="right">
+      <TopLine class="top"/>
+      <div class="content">content</div>
+    </div>
     <!-- email: {{email}} -->
     <!-- isConfirm: {{isConfirm}}
     <button @click='test'>confirm</button> -->
@@ -9,6 +13,7 @@
 
 <script>
 import Menu from './Menu';
+import TopLine from './TopLine';
 export default {
   name: 'Main',
   data () {
@@ -27,13 +32,32 @@ export default {
     }
   },
   components: {
-    Menu
+    Menu,
+    TopLine
   }
 };
 </script>
 
 <style lang="scss">
-.main_contanier {
-  background-color: #e7e7e7;
+.mainContanier {
+  display: flex;
+  min-height: 100vh;
+
+  .right {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    width: 100%;
+
+    .top {
+      width: 100%;
+    }
+
+    .content {
+      display: flex;
+      flex: 10;
+      background-color: palegreen;
+    }
+  }
 }
 </style>
