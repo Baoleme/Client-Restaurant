@@ -1,13 +1,18 @@
 @import '~iview/src/styles/index.less';
 
 @primary-color: #FCC138;
+@info-color: #fe8966;
 
 @input-focus-border-color: #FE8966;
 @input-hover-border-color: #FE8966;
 @input-height-large: 46px;
 @input-height-base: 40px;
+@input-height-small: 31px;
 @input-border-color: rgba(252, 211, 115, 0.521);
 @input-padding-horizontal: 10px;
+
+@btn-ghost-color: @info-color;
+@btn-ghost-border: @info-color;
 
 @font-size-base: 15px;
 .ivu-checkbox-inner{
@@ -17,4 +22,16 @@
   position: relative;
   display: flex;
   align-items: center;
+}
+.ivu-input-small {
+  padding-left: 42px;
+  border-color: #ffc993;
+}
+
+.ivu-radio-wrapper {
+  font-size: 14px;
+  letter-spacing:1.12px;
+  text-align:left;
+  font-family:PingFangSC-Regular;
+  color:#493f3a;
 }

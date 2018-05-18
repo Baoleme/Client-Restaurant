@@ -56,7 +56,7 @@ export default {
     .content {
       display: flex;
       flex: 10;
-      background-color: palegreen;
+      background-color:#f6f6f6;;
     }
   }
 }
