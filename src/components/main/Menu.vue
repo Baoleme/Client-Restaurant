@@ -3,26 +3,26 @@
     <div class="logoLine"><img src="@/assets/images/logo_main.png" alt="logo" class="mainLogo"></div>
     <div class="firstPart">
       <div class="menuItem" @click="goto(0)" :class="{active: activeIndex === 0}">
-        <img src="@/assets/images/house.svg" alt="house">
+        <img :src="iconHouse" alt="house">
         <span :class="{textActive: activeIndex === 0}">首页</span>
       </div>
       <div class="menuItem" @click="goto(1)" :class="{active: activeIndex === 1}">
-        <img src="@/assets/images/contract.svg" alt="contract">
+        <img :src="iconContract" alt="contract">
         <span :class="{textActive: activeIndex === 1}">订单</span>
       </div>
     </div>
     <div class="secondPart">
       <div class="menuItem management">店铺管理</div>
       <div class="menuItem" @click="goto(2)" :class="{active: activeIndex === 2}">
-        <img src="@/assets/images/dish.svg" alt="dish">
+        <img :src="iconDish" alt="dish">
         <span :class="{textActive: activeIndex === 2}">菜品管理</span>
       </div>
       <div class="menuItem" @click="goto(3)" :class="{active: activeIndex === 3}">
-        <img src="@/assets/images/qr-code.svg" alt="qr-code">
+        <img :src="iconQRcode" alt="qr-code">
         <span :class="{textActive: activeIndex === 3}">二维码生成</span>
       </div>
       <div class="menuItem" @click="goto(4)" :class="{active: activeIndex === 4}">
-        <img src="@/assets/images/information.svg" alt="information">
+        <img :src="iconInfo" alt="information">
         <span :class="{textActive: activeIndex === 4}">商户信息</span>
       </div>
     </div>
@@ -38,6 +38,31 @@ export default {
   computed: {
     activeIndex () {
       return this.$store.state.index;
+    },
+    iconHouse () {
+      return (this.$store.state.index === 0)
+        ? require('../../assets/images/house-orange.svg')
+        : require('../../assets/images/house-grey.svg');
+    },
+    iconContract () {
+      return (this.$store.state.index === 1)
+        ? require('../../assets/images/contract-orange.svg')
+        : require('../../assets/images/contract-grey.svg');
+    },
+    iconDish () {
+      return (this.$store.state.index === 2)
+        ? require('../../assets/images/dish-orange.svg')
+        : require('../../assets/images/dish-grey.svg');
+    },
+    iconQRcode () {
+      return (this.$store.state.index === 3)
+        ? require('../../assets/images/qr-orange.svg')
+        : require('../../assets/images/qr-grey.svg');
+    },
+    iconInfo () {
+      return (this.$store.state.index === 4)
+        ? require('../../assets/images/info-orange.svg')
+        : require('../../assets/images/info-grey.svg');
     }
   },
   methods: {
