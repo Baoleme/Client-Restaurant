@@ -18,9 +18,9 @@
   <div class="divLine"></div>
   <div class="orderFilter">
     <span>订单状态</span>
-    <CheckboxGroup v-model="orderFilter" class="orderFilterGroup" v-for="(filter, index) in orderFilter" :key="index">
-      <Checkbox class="filterItem" :label="filter"><span>{{filter}}</span></Checkbox>
-    </CheckboxGroup>
+    <div v-for="(filter, index) in orderFilter" :key="index" class="orderFilterGroup">
+      <Checkbox class="filterItem" v-model="filterArr[index]"><span>{{filter}}</span></Checkbox>
+    </div>
   </div>
   <div class="tableTitle">
     <p>订单号</p>
@@ -39,6 +39,7 @@
 export default {
   data () {
     return {
+      filterArr: [true, true, true, true]
     };
   },
   props: {
@@ -47,23 +48,32 @@ export default {
       required: true
     }
   },
+  watch: {
+    filterArr: function (val, oldVal) {
+      this.$emit('filter', val);
+    }
+  },
   computed: {
     activeSubIndex () {
       return this.$store.state.subIndex;
     },
-    orderFilter () {
-      if (this.filterList === 1) {
-        return ['新订单', '进行中'];
-      } else if (this.filterList === 2) {
-        return ['已完成', '已取消'];
-      } else if (this.filterList === 3) {
-        return ['新订单', '进行中', '已完成', '已取消'];
+    orderFilter: {
+      get: function () {
+        if (this.filterList === 1) {
+          return ['新订单', '进行中'];
+        } else if (this.filterList === 2) {
+          return ['已完成', '已取消'];
+        } else if (this.filterList === 3) {
+          return ['新订单', '进行中', '已完成', '已取消'];
+        }
+      },
+      set: function (test) {
+        // console.log(test);
       }
     }
   },
   methods: {
     goto (index) {
-      console.log('goto:', index);
       this.$store.commit('UPDATE_SUB_INDEX', index);
       if (index === 1) {
         this.$router.push('/main/order/dealing');
@@ -80,9 +90,8 @@ export default {
 <style lang="scss" scoped>
 .order {
   background: #ffffff;
-  flex: 1;
   height: 230px;
-  box-shadow:0px 13px 32px -18px rgba(252, 193, 56, 0.7);
+  box-shadow:0px 20px 32px -18px rgba(252, 193, 56, 0.7);
   border-radius:4px;
 
   .title {
