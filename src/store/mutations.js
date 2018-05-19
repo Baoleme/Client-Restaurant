@@ -14,5 +14,8 @@ export default {
   },
   UPDATE_INDEX (state, index) {
     state.index = index;
+  },
+  UPDATE_SUB_INDEX (state, index) {
+    state.subIndex = index;
   }
 };

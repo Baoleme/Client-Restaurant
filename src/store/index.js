@@ -13,7 +13,8 @@ export default new Vuex.Store({
     email: '',
     restaurantName: '',
     restaurantId: 0,
-    isNetworkErr: false
+    isNetworkErr: false,
+    subIndex: 1
   },
   actions,
   getters,

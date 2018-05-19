@@ -72,7 +72,7 @@ export default {
       if (index === 0) {
         this.$router.push('/main');
       } else if (index === 1) {
-        this.$router.push('/main/order');
+        this.$router.push('/main/order/dealing');
       } else if (index === 2) {
         this.$router.push('/main/management');
       } else if (index === 3) {

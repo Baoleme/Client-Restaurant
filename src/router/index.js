@@ -3,7 +3,9 @@ import Router from 'vue-router';
 import login from '@/components/auth/Login';
 import main from '@/components/main/Main';
 import register from '@/components/auth/Register';
-import order from '@/components/main/Order';
+import ordering from '@/components/main/Ordering';
+import ordered from '@/components/main/Ordered';
+import orderall from '@/components/main/OrderAll';
 import management from '@/components/main/Management';
 import QRcode from '@/components/main/QRcode';
 import info from '@/components/main/Info';
@@ -37,9 +39,19 @@ export default new Router({
       component: register
     },
     {
-      path: '/main/order',
-      name: 'order',
-      component: order
+      path: '/main/order/dealing',
+      name: 'ordering',
+      component: ordering
+    },
+    {
+      path: '/main/order/dealed',
+      name: 'ordered',
+      component: ordered
+    },
+    {
+      path: '/main/order/all',
+      name: 'orderall',
+      component: orderall
     },
     {
       path: '/main/management',

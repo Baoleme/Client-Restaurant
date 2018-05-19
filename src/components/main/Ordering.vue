@@ -1,20 +1,28 @@
 <template>
   <div class="mainContanier">
-    <Menu />
+    <MyMenu />
     <div class="right">
       <TopLine class="top"/>
-      <div class="content">content</div>
+      <div class="content">
+        <order-menu :filterList="1"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Menu from './Menu';
+import MyMenu from './Menu';
 import TopLine from './TopLine';
+import OrderMenu from './OrderMenu';
 export default {
+  data () {
+    return {
+    };
+  },
   components: {
-    Menu,
-    TopLine
+    MyMenu,
+    TopLine,
+    OrderMenu
   }
 };
 </script>
@@ -38,6 +46,7 @@ export default {
       display: flex;
       flex: 10;
       background-color:#f6f6f6;;
+      padding: 22px 22px 0 22px;
     }
   }
 }
