@@ -62,9 +62,18 @@
                 <div class="dishBody">
                   <div class="bodyLeft"><img class="dishImg" :src="dish.img"/></div>
                   <div class="bodyRight">
-                    <div class="dishName">{{dish.name}}</div>
+                    <div class="dishNameLine">
+                      <span class="dishName">{{dish.name}}</span>
+                      <div>
+                        <img src="@/assets/images/chilli.svg" alt="chilli" class="chilli" v-if="dish.chilliNum > 2">
+                        <img src="@/assets/images/chilli.svg" alt="chilli" class="chilli" v-if="dish.chilliNum > 1">
+                        <img src="@/assets/images/chilli.svg" alt="chilli" class="chilli" v-if="dish.chilliNum > 0">
+                      </div>
+                    </div>
                     <div class="brief">{{dish.brief}}</div>
-                    <div class="dishTag">{{dish.dishTag}}</div>
+                    <div class="tagList">
+                      <span v-for="(tag, index) in dish.tagList" :key="index" :class="{tag1: index % 4 === 0, tag2: index % 4 === 1, tag3: index % 4 === 2, tag4: index % 4 === 3}">{{tag}}</span>
+                    </div>
                     <div class="price"><span>{{dish.price}}</span>起</div>
                   </div>
                 </div>
@@ -98,28 +107,31 @@ export default {
       ],
       dishes: [
         {
-          name: '烤牛肉丸（3串）',
+          name: '牛肉丸汤细米粉加辣条牛肉丸汤细米粉加辣条',
           state: '售卖中',
           img: require('../../assets/images/dish.png'),
           brief: '我们的牛肉丸没有鸡鸭肉很好吃吃吃，可以再做个酱汁，放进做意面的茄汁里煮一煮，让它们裹上一层酸甜的蕃茄汁配着面条一起吃。',
-          dishTag: '招牌菜',
-          price: 12
+          tagList: ['商家推荐', '好吃不腻', '经典选择', '无添加'],
+          price: 12,
+          chilliNum: 3
         },
         {
           name: '烤牛肉丸（3串）',
           state: '售卖中',
           img: require('../../assets/images/dish.png'),
           brief: '我们的牛肉丸没有鸡鸭肉很好吃吃吃，可以再做个酱汁，放进做意面的茄汁里煮一煮，让它们裹上一层酸甜的蕃茄汁配着面条一起吃。',
-          dishTag: '招牌菜',
-          price: 12
+          tagList: ['商家推荐', '好吃不腻', '经典选择', '无添加'],
+          price: 12,
+          chilliNum: 2
         },
         {
           name: '烤牛肉丸（3串）',
           state: '已下架',
           img: require('../../assets/images/dish.png'),
           brief: '我们的牛肉丸没有鸡鸭肉很好吃吃吃，可以再做个酱汁，放进做意面的茄汁里煮一煮，让它们裹上一层酸甜的蕃茄汁配着面条一起吃。',
-          dishTag: '招牌菜',
-          price: 12
+          tagList: ['招牌', '好吃不腻', '经典选择', '无添加'],
+          price: 12,
+          chilliNum: 0
         }
       ]
     };
@@ -416,11 +428,28 @@ export default {
                   flex-direction: column;
                   align-items: flex-start;
 
-                  .dishName {
-                    font-family:PingFangSC-Medium;
-                    font-size:20px;
-                    letter-spacing:0.31px;
+                  .dishNameLine {
                     margin: 8px 0 4px 0;
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+
+                    .dishName {
+                      font-family:PingFangSC-Medium;
+                      font-size:20px;
+                      letter-spacing:0.31px;
+                      overflow: hidden;
+                      text-overflow:ellipsis;
+                      white-space: nowrap;
+                      width: 20vw;
+                      text-align:left;
+                    }
+
+                    .chilli {
+                      width:18px;
+                      height:18px;
+                      margin-top: 4px;
+                    }
                   }
 
                   .brief {
@@ -435,14 +464,38 @@ export default {
                     width: 24vw;
                   }
 
-                  .dishTag {
-                    border:1px solid #67c6ff;
-                    border-radius:3px;
-                    height: 24px;
-                    color: #67c6ff;
-                    font-size: 13px;
-                    padding: 3px;
-                    margin-top: 2px;
+                  .tagList {
+                    margin-top: 5px;
+
+                    span {
+                      padding: 2px 3px;
+                      font-family:PingFangSC-Medium;
+                      font-size: 13px;
+                      height: 24px;
+                      border-radius:3px;
+                      margin-right: 5px;
+                      letter-spacing:0.32px;
+                    }
+
+                    .tag1 {
+                      border:1px solid #67c6ff;
+                      color: #67c6ff;
+                    }
+
+                    .tag2 {
+                      border:1px solid #a9d87a;
+                      color:#a9d87a;
+                    }
+
+                    .tag3 {
+                      border:1px solid #f8c86b;
+                      color:#f8c86b;
+                    }
+
+                    .tag4 {
+                      border:1px solid #ff9b7d;
+                      color:#ff9b7d;
+                    }
                   }
 
                   .price {
