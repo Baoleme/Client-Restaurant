@@ -17,5 +17,8 @@ export default {
   },
   UPDATE_SUB_INDEX (state, index) {
     state.subIndex = index;
+  },
+  UPDATE_CUR_ORDER (state, data) {
+    state.curOrder = data;
   }
 };

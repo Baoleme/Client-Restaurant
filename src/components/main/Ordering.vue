@@ -6,7 +6,7 @@
       <div class="content">
         <order-menu :filterList="1" class="orderMenu" @filter="filter"/>
         <div class="orderList">
-          <div v-for="(order, index) in filterList" :key="index" class="orderItem">
+          <div v-for="(order, index) in filterList" :key="index" class="orderItem" @click="showDetail(index)">
             <p>{{order.number}}</p>
             <p>¥{{order.totalPrice}}</p>
             <p>{{order.table}}</p>
@@ -26,6 +26,7 @@
             </p>
           </div>
         </div>
+        <OrderDetail id="orderDetail" @close="closeDetail"/>
       </div>
     </div>
   </div>
@@ -35,32 +36,33 @@
 import MyMenu from './Menu';
 import TopLine from './TopLine';
 import OrderMenu from './OrderMenu';
+import OrderDetail from './OrderDetail';
 export default {
   data () {
     return {
       orderList: [
         {
-          number: '21937135281',
-          totalPrice: '291.1',
-          table: '23',
+          number: '21937135211',
+          totalPrice: '2018.1',
+          table: '2',
           curState: '新订单',
           createTime: '2017.2.5 09:30',
           waitTime: '20:23',
           note: '不要放葱姜蒜也不要放辣椒，多加陈醋，最好有，不要放葱姜蒜也不要放辣椒，多加陈醋，最好有，不要放葱姜蒜也不要放辣椒，多加陈醋，最好有'
         },
         {
-          number: '21937135281',
-          totalPrice: '291.1',
-          table: '23',
+          number: '21937135222',
+          totalPrice: '2333.1',
+          table: '5',
           curState: '进行中',
           createTime: '2017.2.5 09:30',
           waitTime: '20:23',
           note: '无'
         },
         {
-          number: '21937135281',
-          totalPrice: '291.1',
-          table: '23',
+          number: '21937135233',
+          totalPrice: '6666.1',
+          table: '4',
           curState: '进行中',
           createTime: '2017.2.5 09:30',
           waitTime: '20:23',
@@ -85,12 +87,21 @@ export default {
       if (filterArr[1] === true) {
         this.filterList = this.filterList.concat(list2);
       }
+    },
+    showDetail (index) {
+      console.log(this.filterList[index]);
+      this.$store.commit('UPDATE_CUR_ORDER', this.filterList[index]);
+      document.getElementById('orderDetail').style.display = 'block';
+    },
+    closeDetail () {
+      document.getElementById('orderDetail').style.display = 'none';
     }
   },
   components: {
     MyMenu,
     TopLine,
-    OrderMenu
+    OrderMenu,
+    OrderDetail
   }
 };
 </script>
@@ -116,6 +127,7 @@ export default {
       flex: 10;
       background-color:#f6f6f6;;
       padding: 22px 22px 0 22px;
+      position: relative;
 
       .orderMenu {
         z-index: 10;

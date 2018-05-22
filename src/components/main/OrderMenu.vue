@@ -90,7 +90,7 @@ export default {
 <style lang="scss" scoped>
 .order {
   background: #ffffff;
-  height: 230px;
+  height: 224px;
   box-shadow:0px 20px 32px -18px rgba(252, 193, 56, 0.7);
   border-radius:4px;
 

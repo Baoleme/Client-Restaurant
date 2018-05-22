@@ -14,7 +14,8 @@ export default new Vuex.Store({
     restaurantName: '',
     restaurantId: 0,
     isNetworkErr: false,
-    subIndex: 1
+    subIndex: 1,
+    curOrder: {}
   },
   actions,
   getters,

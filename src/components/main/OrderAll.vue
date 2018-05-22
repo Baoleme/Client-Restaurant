@@ -6,7 +6,7 @@
       <div class="content">
         <order-menu :filterList="3" class="orderMenu" @filter="filter"/>
         <div class="orderList">
-          <div v-for="(order, index) in filterList" :key="index" class="orderItem">
+          <div v-for="(order, index) in filterList" :key="index" class="orderItem" @click="showDetail(index)">
             <p><span :class="{cancel: order.curState === '已取消'}">{{order.number}}</span></p>
             <p><span :class="{cancel: order.curState === '已取消'}">¥{{order.totalPrice}}</span></p>
             <p><span :class="{cancel: order.curState === '已取消'}">{{order.table}}</span></p>
@@ -28,6 +28,7 @@
             <p v-show="order.curState === '已完成' || order.curState === '已取消'">查看</p>
           </div>
         </div>
+        <OrderDetail id="orderDetail" @close="closeDetail"/>
       </div>
     </div>
   </div>
@@ -37,6 +38,7 @@
 import MyMenu from './Menu';
 import TopLine from './TopLine';
 import OrderMenu from './OrderMenu';
+import OrderDetail from './OrderDetail';
 export default {
   data () {
     return {
@@ -112,12 +114,21 @@ export default {
       if (filterArr[3] === true) {
         this.filterList = this.filterList.concat(list4);
       }
+    },
+    showDetail (index) {
+      console.log(this.filterList[index]);
+      this.$store.commit('UPDATE_CUR_ORDER', this.filterList[index]);
+      document.getElementById('orderDetail').style.display = 'block';
+    },
+    closeDetail () {
+      document.getElementById('orderDetail').style.display = 'none';
     }
   },
   components: {
     MyMenu,
     TopLine,
-    OrderMenu
+    OrderMenu,
+    OrderDetail
   }
 };
 </script>
@@ -143,6 +154,7 @@ export default {
       flex: 10;
       background-color:#f6f6f6;;
       padding: 22px 22px 0 22px;
+      position: relative;
 
       .orderMenu {
         z-index: 10;
