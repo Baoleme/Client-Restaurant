@@ -6,7 +6,7 @@
       <div class="content">
         <order-menu :filterList="1" class="orderMenu" @filter="filter"/>
         <div class="orderList">
-          <div v-for="(order, index) in filterList" :key="index" class="orderItem" @click="showDetail(index)">
+          <div v-for="(order, index) in subFilterList" :key="index" class="orderItem" @click="showDetail(index)">
             <p>{{order.number}}</p>
             <p>¥{{order.totalPrice}}</p>
             <p>{{order.table}}</p>
@@ -26,6 +26,7 @@
             </p>
           </div>
         </div>
+        <Page class="pages" :total="pagesNum" :current.sync="current" show-elevator size="small" @on-change="change"></Page>
         <OrderDetail id="orderDetail" @close="closeDetail"/>
       </div>
     </div>
@@ -60,20 +61,37 @@ export default {
           note: '无'
         },
         {
-          number: '21937135233',
-          totalPrice: '6666.1',
+          number: '21937135222',
+          totalPrice: '6666',
           table: '4',
           curState: '进行中',
           createTime: '2017.2.5 09:30',
           waitTime: '20:23',
-          note: '不要放葱姜蒜也不要放辣椒，多加陈醋，最好有'
+          note: '不要放葱姜蒜也不要放辣椒'
+        },
+        {
+          number: '21937135211',
+          totalPrice: '2018.1',
+          table: '2',
+          curState: '新订单',
+          createTime: '2017.2.5 09:30',
+          waitTime: '20:23',
+          note: '不要放葱姜蒜也不要放辣椒，多加陈醋，最好有，不要放葱姜蒜也不要放辣椒，多加陈醋，最好有，不要放葱姜蒜也不要放辣椒，多加陈醋，最好有'
         }
       ],
-      filterList: []
+      pagesNum: 0,
+      current: 1,
+      filterList: [],
+      subFilterList: []
     };
   },
   mounted: function () {
+    this.orderList = this.orderList.concat(this.orderList);
+    this.orderList = this.orderList.concat(this.orderList);
+    this.orderList = this.orderList.concat(this.orderList);
     this.filterList = this.orderList;
+    this.pagesNum = this.filterList.length;
+    this.subFilterList = this.filterList.slice(0, 10);
   },
   methods: {
     filter (filterArr) {
@@ -87,14 +105,20 @@ export default {
       if (filterArr[1] === true) {
         this.filterList = this.filterList.concat(list2);
       }
+      this.pagesNum = this.filterList.length;
+      this.current = 1;
+      this.subFilterList = this.filterList.slice(0, 10);
     },
     showDetail (index) {
-      console.log(this.filterList[index]);
-      this.$store.commit('UPDATE_CUR_ORDER', this.filterList[index]);
+      console.log(this.subFilterList[index]);
+      this.$store.commit('UPDATE_CUR_ORDER', this.subFilterList[index]);
       document.getElementById('orderDetail').style.display = 'block';
     },
     closeDetail () {
       document.getElementById('orderDetail').style.display = 'none';
+    },
+    change: function (page) {
+      this.subFilterList = this.filterList.slice((page - 1) * 10, page * 10);
     }
   },
   components: {
@@ -234,6 +258,11 @@ export default {
         .orderItem:nth-child(2n+1) {
           background:#fff8e3;
         }
+      }
+
+      .pages {
+        background: #ffffff;
+        padding-bottom: 20px;
       }
     }
   }
