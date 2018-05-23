@@ -72,7 +72,15 @@ export default {
       if (index === 0) {
         this.$router.push('/main');
       } else if (index === 1) {
-        this.$router.push('/main/order/dealing');
+        this.$store.dispatch('restaurantSelfOrder', 0).then((err) => {
+          if (err) {
+            this.errorMsg = err;
+          } else {
+            this.$router.push('/main/order/dealing');
+          }
+        });
+        // this.$store.dispatch('restaurantSelfOrder', 1);
+        // this.$router.push('/main/order/dealing');
       } else if (index === 2) {
         this.$router.push('/main/management');
       } else if (index === 3) {

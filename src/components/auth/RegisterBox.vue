@@ -87,9 +87,17 @@ export default {
           if (err) {
             this.errorMsg = err;
           } else {
-            this.$store.dispatch('sendConfirmEmail');
-            this.$emit('showModal', this.username);
-            // this.$router.replace('/emailConfirm');
+            this.$store.dispatch('loginAction', {
+              username: this.username,
+              password: this.password
+            }).then((err) => {
+              if (err) {
+                this.errorMsg = err;
+              } else {
+                this.$store.dispatch('sendConfirmEmail');
+                this.$emit('showModal', this.username);
+              }
+            });
           }
         });
       }

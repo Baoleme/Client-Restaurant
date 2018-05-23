@@ -5,10 +5,11 @@ const baseUrl = 'http://127.0.0.1:8520/';
 export default {
   loginAction ({ commit }, data) {
     return axios.post(baseUrl + 'restaurant/session', {
-      email: data.username,
-      password: data.password
+      email: data.username.trim(),
+      password: data.password.trim()
     }).then((value) => {
       commit('LOGIN');
+      console.log('Login succeed!');
       return false;
     }, (error) => {
       console.log(error.response.data.message);
@@ -47,5 +48,14 @@ export default {
     axios.get(baseUrl + 'restaurant/emailConfirm?cipher=' + cipher)
       .then((value) => { return false; },
         (error) => { return error.response.data.message; });
+  },
+  restaurantSelfOrder ({ commit }, pageNum) {
+    axios.get(baseUrl + 'restaurant/self/order?page=' + pageNum + '&number=10').then((res) => {
+      if (res.status === 200) {
+        // console.log(res.data);
+        commit('UPDATE_ORDER_LIST', res.data);
+        return false;
+      }
+    });
   }
 };

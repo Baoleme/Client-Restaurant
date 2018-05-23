@@ -184,10 +184,10 @@ export default {
       flex:3;
     }
     p:nth-child(5) {
-      flex:4;
+      flex:5;
     }
     p:nth-child(6) {
-      flex:4;
+      flex:3;
     }
     p:nth-child(7) {
       flex:5;

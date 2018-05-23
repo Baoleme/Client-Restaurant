@@ -16,7 +16,8 @@ export default new Vuex.Store({
     isNetworkErr: false,
     subIndex: 1,
     curOrder: {},
-    clue: ''
+    clue: '',
+    orderList: []
   },
   actions,
   getters,

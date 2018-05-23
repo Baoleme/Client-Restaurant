@@ -7,20 +7,20 @@
         <order-menu :filterList="1" class="orderMenu" @filter="filter"/>
         <div class="orderList">
           <div v-for="(order, index) in subFilterList" :key="index" class="orderItem" @click="showDetail(index)">
-            <p>{{order.number}}</p>
-            <p>¥{{order.totalPrice}}</p>
+            <p>{{order.order_id}}</p>
+            <p>¥{{order.price}}</p>
             <p>{{order.table}}</p>
-            <p :class="{newOrder: order.curState === '新订单', lastOrder: order.curState === '进行中'}">
-              <span :class="{newIcon: order.curState === '新订单'}"></span> {{order.curState}}
+            <p :class="{newOrder: order.state === '新订单', lastOrder: order.state === '进行中'}">
+              <span :class="{newIcon: order.state === '新订单'}"></span> {{order.state}}
             </p>
-            <p>{{order.createTime}}</p>
+            <p>{{order.time}}</p>
             <p>{{order.waitTime}}</p>
-            <p><span class="note" :class="{null_: order.note === '无'}">{{order.note}}</span></p>
-            <p v-show="order.curState === '新订单'">
+            <p><span class="note" :class="{null_: order.remark === '无'}">{{order.remark}}</span></p>
+            <p v-show="order.state === '新订单'">
               <Button type="info" class="newGroupBtn" @click="takeOrder">接单</Button>
               <Button type="ghost" class="newGroupBtn ghost" @click="cancelOrder">拒绝</Button>
             </p>
-            <p v-show="order.curState === '进行中'">
+            <p v-show="order.state === '进行中'">
               <Button type="success" class="newGroupBtn" @click="finishOrder">完成</Button>
               <Button type="ghost" class="newGroupBtn cancelGhost" @click="cancelOrder">取消</Button>
             </p>
@@ -28,6 +28,7 @@
         </div>
         <Page class="pages" :total="pagesNum" :current.sync="current" show-elevator size="small" @on-change="change"></Page>
         <OrderDetail id="orderDetail" @close="closeDetail"/>
+        <!-- <div>{{orderList}}</div> -->
       </div>
     </div>
   </div>
@@ -41,42 +42,31 @@ import OrderDetail from './OrderDetail';
 export default {
   data () {
     return {
-      orderList: [
+      testList: [
         {
-          number: '21937135211',
-          totalPrice: '2018.1',
-          table: '2',
-          curState: '新订单',
-          createTime: '2017.2.5 09:30',
-          waitTime: '20:23',
-          note: '不要放葱姜蒜也不要放辣椒，多加陈醋，最好有，不要放葱姜蒜也不要放辣椒，多加陈醋，最好有，不要放葱姜蒜也不要放辣椒，多加陈醋，最好有'
-        },
-        {
-          number: '21937135222',
-          totalPrice: '2333.1',
-          table: '5',
-          curState: '进行中',
-          createTime: '2017.2.5 09:30',
-          waitTime: '20:23',
-          note: '无'
-        },
-        {
-          number: '21937135222',
-          totalPrice: '6666',
-          table: '4',
-          curState: '进行中',
-          createTime: '2017.2.5 09:30',
-          waitTime: '20:23',
-          note: '不要放葱姜蒜也不要放辣椒'
-        },
-        {
-          number: '21937135211',
-          totalPrice: '2018.1',
-          table: '2',
-          curState: '新订单',
-          createTime: '2017.2.5 09:30',
-          waitTime: '20:23',
-          note: '不要放葱姜蒜也不要放辣椒，多加陈醋，最好有，不要放葱姜蒜也不要放辣椒，多加陈醋，最好有，不要放葱姜蒜也不要放辣椒，多加陈醋，最好有'
+          dish: [
+            {
+              count: 1,
+              image_url: 'https://fuss10.elemecdn.com/2/fc/b6f71e07382631587c74f21e6182cjpeg.jpeg',
+              name: '销魂辣子鸡块',
+              price: 10,
+              specifications: ''
+            },
+            {
+              count: 1,
+              image_url: 'https://fuss10.elemecdn.com/d/5f/71e61c66b46517d252c4d02a17059jpeg.jpeg',
+              name: '无骨鸡柳',
+              price: 7,
+              specifications: ''
+            }
+          ],
+          order_id: 27,
+          payment: null,
+          price: 17,
+          remark: null,
+          state: 'created',
+          table: '44',
+          time: '2018-05-17T04:22:50.000Z'
         }
       ],
       pagesNum: 0,
@@ -85,13 +75,42 @@ export default {
       subFilterList: []
     };
   },
-  mounted: function () {
-    this.orderList = this.orderList.concat(this.orderList);
-    this.orderList = this.orderList.concat(this.orderList);
-    this.orderList = this.orderList.concat(this.orderList);
-    this.filterList = this.orderList;
-    this.pagesNum = this.filterList.length;
-    this.subFilterList = this.filterList.slice(0, 10);
+  computed: {
+    orderList: {
+      get: function () {
+        // console.log('computed', this.$store.state.orderList);
+        return this.$store.state.orderList;
+      },
+      set: function () {
+        // console.log(test);
+      }
+    }
+  },
+  // mounted: function () {
+  //   this.orderList = this.orderList.concat(this.orderList);
+  //   this.orderList = this.orderList.concat(this.orderList);
+  //   this.orderList = this.orderList.concat(this.orderList);
+  //   console.log('mounted', this.orderList);
+  //   this.filterList = this.orderList;
+  //   this.pagesNum = this.filterList.length;
+  //   this.subFilterList = this.filterList.slice(0, 10);
+  // },
+  watch: {
+    orderList: function (newList, oldList) {
+      console.log('I watch!');
+      console.log(newList);
+      this.filterList = newList;
+      this.subFilterList = this.filterList;
+      // for (let i = 0, len = this.subFilterList.length; i < len; i++) {
+      //   console.log(this.subFilterList[i]);
+      //   if (this.subFilterList[i].state === 'created') {
+      //     this.subFilterList[i].state = '新订单';
+      //   }
+      //   if (!this.subFilterList[i].remark) {
+      //     this.subFilterList[i].remark = '无';
+      //   }
+      // }
+    }
   },
   methods: {
     filter (filterArr) {
@@ -193,10 +212,10 @@ export default {
             flex:3;
           }
           p:nth-child(5) {
-            flex:4;
+            flex:5;
           }
           p:nth-child(6) {
-            flex:4;
+            flex:3;
           }
           p:nth-child(7) {
             flex:5;
