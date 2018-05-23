@@ -59,6 +59,10 @@ export default {
         font-size: 20px;
         letter-spacing: 2px;
         padding-left: 9px;
+
+        p {
+          color: rgb(26, 25, 25);
+        }
       }
 
       #gotoLogin {

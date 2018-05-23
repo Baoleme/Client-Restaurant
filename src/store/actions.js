@@ -25,11 +25,12 @@ export default {
     });
   },
   registerAction ({ commit }, data) {
-    return axios.post(baseUrl + 'restaurant', {
-      email: data.username,
-      name: data.restname,
-      password: data.password
-    }).then((value) => {
+    let fd = new FormData();
+    fd.append('email', data.username.trim());
+    fd.append('password', data.password.trim());
+    fd.append('name', data.restname.trim());
+    fd.append('license', data.license);
+    return axios.post(baseUrl + 'restaurant', fd).then((value) => {
       commit('LOGIN');
       return false;
     }, (error) => {

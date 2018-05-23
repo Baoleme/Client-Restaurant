@@ -62,7 +62,8 @@ export default {
       taggleHint: '选择文件',
       hintMsg: '文件大小超出限制',
       isNameRight: false,
-      isPWRight: false
+      isPWRight: false,
+      license: ''
     };
   },
   methods: {
@@ -74,11 +75,14 @@ export default {
         this.errorMsg = '密码不为空!';
       } else if (!this.restname) {
         this.errorMsg = '店铺名不为空!';
+      } else if (this.fileMsg === '支持pdf/doc格式，10M以内') {
+        this.errorMsg = '未上传企业资质!';
       } else {
         this.$store.dispatch('registerAction', {
           username: this.username,
           restname: this.restname,
-          password: this.password
+          password: this.password,
+          license: this.license
         }).then((err) => {
           if (err) {
             this.errorMsg = err;
@@ -117,7 +121,9 @@ export default {
       } else {
         this.fileMsg = myfile.files[0].name;
         document.getElementsByClassName('fileMsg')[0].style.color = 'black';
-        console.log(myfile.files[0].name);
+        // console.log(myfile.files[0].name);
+        this.license = myfile.files[0];
+        console.log(this.license);
       }
     },
     taggle () {

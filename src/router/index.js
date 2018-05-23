@@ -16,14 +16,14 @@ Vue.use(Router);
 export default new Router({
   routes: [
     // 开发用，临时将默认页改成主页面
-    {
-      path: '/',
-      redirect: '/main'
-    },
     // {
     //   path: '/',
-    //   redirect: '/login'
+    //   redirect: '/main'
     // },
+    {
+      path: '/',
+      redirect: '/login'
+    },
     {
       path: '/login',
       name: 'login',

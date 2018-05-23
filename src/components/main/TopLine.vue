@@ -7,7 +7,7 @@
     <div class="self">
       <Dropdown class="dropdown">
         <img src="@/assets/images/user.svg" alt="avatar" class="avatar">
-        <div class="username">shujh_sysu@233.com</div>
+        <div class="username">{{email}}</div>
         <Icon type="arrow-down-b"></Icon>
         <DropdownMenu slot="list" class="dropdownItem">
           <DropdownItem>更改密码</DropdownItem>
@@ -23,6 +23,11 @@ export default {
     return {
       trackClue: ''
     };
+  },
+  computed: {
+    email () {
+      return this.$store.state.email;
+    }
   },
   methods: {
     track () {
