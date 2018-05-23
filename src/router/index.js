@@ -9,6 +9,7 @@ import orderall from '@/components/main/OrderAll';
 import management from '@/components/main/Management';
 import QRcode from '@/components/main/QRcode';
 import info from '@/components/main/Info';
+import trackorder from '@/components/main/trackorder';
 
 Vue.use(Router);
 
@@ -67,6 +68,11 @@ export default new Router({
       path: '/main/info',
       name: 'info',
       component: info
+    },
+    {
+      path: '/main/order/trackorder',
+      name: 'trackorder',
+      component: trackorder
     }
   ]
 });

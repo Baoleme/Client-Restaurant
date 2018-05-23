@@ -15,7 +15,8 @@ export default new Vuex.Store({
     restaurantId: 0,
     isNetworkErr: false,
     subIndex: 1,
-    curOrder: {}
+    curOrder: {},
+    clue: ''
   },
   actions,
   getters,

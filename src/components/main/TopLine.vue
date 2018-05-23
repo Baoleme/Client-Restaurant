@@ -1,8 +1,8 @@
 <template>
   <div class="topLine">
     <div class="findOrder">
-      <Input class="input" placeholder="订单序列号或手机地址" clearable size="large"/>
-      <button class="findBtn" slot="append"><Icon  class="icon" type="ios-search-strong" size="21" color="white"></Icon></button>
+      <Input class="input" v-model="trackClue" placeholder="订单序列号或手机地址" clearable size="large"/>
+      <button class="findBtn" slot="append" @click="track"><Icon  class="icon" type="ios-search-strong" size="21" color="white"></Icon></button>
     </div>
     <div class="self">
       <Dropdown class="dropdown">
@@ -19,6 +19,18 @@
 
 <script>
 export default {
+  data () {
+    return {
+      trackClue: ''
+    };
+  },
+  methods: {
+    track () {
+      this.$store.commit('UPDATE_CLUE', this.trackClue);
+      this.$store.commit('UPDATE_INDEX', 1);
+      this.$router.push('/main/order/trackorder');
+    }
+  }
 };
 </script>
 

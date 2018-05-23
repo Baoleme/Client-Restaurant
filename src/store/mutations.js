@@ -20,5 +20,9 @@ export default {
   },
   UPDATE_CUR_ORDER (state, data) {
     state.curOrder = data;
+  },
+  UPDATE_CLUE (state, clue) {
+    console.log('clue', clue);
+    state.clue = clue;
   }
 };

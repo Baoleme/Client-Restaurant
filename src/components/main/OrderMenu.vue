@@ -1,7 +1,8 @@
 <template>
 <div class="order">
-  <div class="title">订单</div>
-  <div class="subMenu">
+  <div class="title" v-show="filterList !== 0">订单</div>
+  <div class="title" v-show="filterList === 0">订单查询</div>
+  <div class="subMenu" v-show="filterList !== 0">
     <div class="subMenuItem" @click="goto(1)" :class="{subActive: activeSubIndex === 1}">
       <span>正在处理中</span>
       <div :class="{activeLine: activeSubIndex === 1}"></div>
@@ -15,7 +16,7 @@
       <div :class="{activeLine: activeSubIndex === 3}"></div>
     </div>
   </div>
-  <div class="divLine"></div>
+  <div class="divLine" v-show="filterList !== 0"></div>
   <div class="orderFilter">
     <span>订单状态</span>
     <div v-for="(filter, index) in orderFilter" :key="index" class="orderFilterGroup">
@@ -63,7 +64,7 @@ export default {
           return ['新订单', '进行中'];
         } else if (this.filterList === 2) {
           return ['已完成', '已取消'];
-        } else if (this.filterList === 3) {
+        } else {
           return ['新订单', '进行中', '已完成', '已取消'];
         }
       },
@@ -90,7 +91,7 @@ export default {
 <style lang="scss" scoped>
 .order {
   background: #ffffff;
-  height: 224px;
+  // height: 224px;
   box-shadow:0px 20px 32px -18px rgba(252, 193, 56, 0.7);
   border-radius:4px;
 
@@ -161,7 +162,7 @@ export default {
 
   .tableTitle {
     display: flex;
-    margin: 30px 40px 0 31px;
+    margin: 30px 40px 16px 31px;
 
     p {
       font-family:PingFangSC-Medium;
