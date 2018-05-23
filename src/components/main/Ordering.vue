@@ -17,12 +17,12 @@
             <p>{{order.waitTime}}</p>
             <p><span class="note" :class="{null_: order.note === '无'}">{{order.note}}</span></p>
             <p v-show="order.curState === '新订单'">
-              <Button type="info" class="newGroupBtn">接单</Button>
-              <Button type="ghost" class="newGroupBtn ghost">拒绝</Button>
+              <Button type="info" class="newGroupBtn" @click="takeOrder">接单</Button>
+              <Button type="ghost" class="newGroupBtn ghost" @click="cancelOrder">拒绝</Button>
             </p>
             <p v-show="order.curState === '进行中'">
-              <Button type="success" class="newGroupBtn">完成</Button>
-              <Button type="ghost" class="newGroupBtn cancelGhost">取消</Button>
+              <Button type="success" class="newGroupBtn" @click="finishOrder">完成</Button>
+              <Button type="ghost" class="newGroupBtn cancelGhost" @click="cancelOrder">取消</Button>
             </p>
           </div>
         </div>
@@ -119,6 +119,12 @@ export default {
     },
     change: function (page) {
       this.subFilterList = this.filterList.slice((page - 1) * 10, page * 10);
+    },
+    takeOrder: function () {
+    },
+    finishOrder: function () {
+    },
+    cancelOrder: function () {
     }
   },
   components: {

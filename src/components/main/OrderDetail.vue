@@ -11,8 +11,9 @@
           <div class="orderNo border">
             <span class="smallTitle">订单号</span>
             <div class="copy">
-              <span>{{orderBoject.number}}</span>
-              <Button type="ghost" class="copyBtn">复制</Button>
+              <input id="number" readonly v-model="orderBoject.number"></input>
+              <!-- <span id="number">{{orderBoject.number}}</span> -->
+              <Button type="ghost" class="copyBtn" @click="copy(orderBoject.number)">复制</Button>
             </div>
           </div>
           <div class="orderState">
@@ -89,6 +90,12 @@ export default {
   methods: {
     close () {
       this.$emit('close');
+    },
+    copy () {
+      var number = document.getElementById('number');
+      console.log(number);
+      number.select();
+      document.execCommand('Copy', 'false', null);
     }
   }
 };
@@ -170,16 +177,16 @@ export default {
               width:61px;
               height:24px;
               line-height: 1;
-              margin: 11px 14px;
+              margin: 11px 14px 11px 0px;
             }
 
-            > span {
+            > input {
               font-family:PingFangSC-Regular;
               font-size:14px;
               color:#493f3a;
               letter-spacing:0.5px;
-              display: inline-block;
-              margin-top: 13px;
+              border: none;
+              width: 104px;
             }
           }
         }
