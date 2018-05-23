@@ -46,13 +46,11 @@
           <div class="line5TitleLine line5line">
             <p>状态</p>
             <p>形成时间</p>
-            <p>等待时间</p>
           </div>
           <div class="line5Subline"></div>
           <div class="line5Content line5line" v-for="(item, index) in temp" :key="index">
             <p>{{item.state}}</p>
             <p>{{item.createTime}}</p>
-            <p>{{item.waitTime}}</p>
           </div>
         </div>
       </div>
@@ -66,18 +64,15 @@ export default {
       temp: [
         {
           state: '卖家接单',
-          createTime: '2017.2.5 09:30',
-          waitTime: '00:00:30'
+          createTime: '2017.2.5 09:30'
         },
         {
           state: '客户下单',
-          createTime: '2017.2.5 8:30',
-          waitTime: '01:20:08'
+          createTime: '2017.2.5 8:30'
         },
         {
           state: '客户下单',
-          createTime: '2017.2.5 8:30',
-          waitTime: '01:20:08'
+          createTime: '2017.2.5 8:30'
         }
       ]
     };
@@ -359,9 +354,6 @@ export default {
           }
           p:nth-child(2) {
             flex: 10;
-          }
-          p:nth-child(3) {
-            flex: 7;
           }
         }
 
