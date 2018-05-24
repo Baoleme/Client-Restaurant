@@ -19,7 +19,9 @@ export default new Vuex.Store({
     clue: '',
     orderList: [],
     numberOfPages: 0,
-    filters: []
+    filters: [],
+    dishList: [],
+    categories: []
   },
   actions,
   getters,

@@ -60,7 +60,7 @@
                   </div>
                 </div>
                 <div class="dishBody">
-                  <div class="bodyLeft"><img class="dishImg" :src="dish.img"/></div>
+                  <div class="bodyLeft"><img class="dishImg" :src="dish.image_url"/></div>
                   <div class="bodyRight">
                     <div class="dishNameLine">
                       <span class="dishName">{{dish.name}}</span>
@@ -70,11 +70,11 @@
                         <img src="@/assets/images/chilli.svg" alt="chilli" class="chilli" v-if="dish.chilliNum > 0">
                       </div>
                     </div>
-                    <div class="brief">{{dish.brief}}</div>
+                    <div class="brief">{{dish.description}}</div>
                     <div class="tagList">
-                      <span v-for="(tag, index) in dish.tagList" :key="index" :class="{tag1: index % 4 === 0, tag2: index % 4 === 1, tag3: index % 4 === 2, tag4: index % 4 === 3}">{{tag}}</span>
+                      <span v-for="(tag, index) in dish.tag" :key="index" :class="{tag1: index % 4 === 0, tag2: index % 4 === 1, tag3: index % 4 === 2, tag4: index % 4 === 3}">{{tag}}</span>
                     </div>
-                    <div class="price"><span>{{dish.price}}</span>起</div>
+                    <div class="price"><span>¥{{dish.price}}</span>起</div>
                   </div>
                 </div>
               </div>
@@ -82,7 +82,7 @@
             <div class="bottomHint">
               <div class="shortLine"></div>
               <p>已到达本分类底部</p>
-              <p>继续滑动前往下一分类</p>
+              <!-- <p>继续滑动前往下一分类</p> -->
             </div>
           </div>
         </div>
@@ -98,47 +98,22 @@ export default {
   data () {
     return {
       activeSubIndex: 0,
-      filter: ['售卖中', '已下架'],
-      categories: [
-        '冷饮果汁',
-        '热菜',
-        '凉菜',
-        '凑单品'
-      ],
-      dishes: [
-        {
-          name: '牛肉丸汤细米粉加辣条牛肉丸汤细米粉加辣条',
-          state: '售卖中',
-          img: require('../../assets/images/dish.png'),
-          brief: '我们的牛肉丸没有鸡鸭肉很好吃吃吃，可以再做个酱汁，放进做意面的茄汁里煮一煮，让它们裹上一层酸甜的蕃茄汁配着面条一起吃。',
-          tagList: ['商家推荐', '好吃不腻', '经典选择', '无添加'],
-          price: 12,
-          chilliNum: 3
-        },
-        {
-          name: '烤牛肉丸（3串）',
-          state: '售卖中',
-          img: require('../../assets/images/dish.png'),
-          brief: '我们的牛肉丸没有鸡鸭肉很好吃吃吃，可以再做个酱汁，放进做意面的茄汁里煮一煮，让它们裹上一层酸甜的蕃茄汁配着面条一起吃。',
-          tagList: ['商家推荐', '好吃不腻', '经典选择', '无添加'],
-          price: 12,
-          chilliNum: 2
-        },
-        {
-          name: '烤牛肉丸（3串）',
-          state: '已下架',
-          img: require('../../assets/images/dish.png'),
-          brief: '我们的牛肉丸没有鸡鸭肉很好吃吃吃，可以再做个酱汁，放进做意面的茄汁里煮一煮，让它们裹上一层酸甜的蕃茄汁配着面条一起吃。',
-          tagList: ['招牌', '好吃不腻', '经典选择', '无添加'],
-          price: 12,
-          chilliNum: 0
-        }
-      ]
+      filter: ['售卖中', '已下架']
     };
   },
   computed: {
+    categories () {
+      return this.$store.state.categories;
+    },
     curCategory () {
       return this.categories[this.activeSubIndex];
+    },
+    dishes: {
+      get: function () {
+        return this.$store.state.dishList[this.activeSubIndex].dish;
+      },
+      set: function () {
+      }
     }
   },
   methods: {
@@ -429,10 +404,11 @@ export default {
                   align-items: flex-start;
 
                   .dishNameLine {
-                    margin: 8px 0 4px 0;
+                    margin: 8px 0 0px 0;
                     width: 100%;
                     display: flex;
                     justify-content: space-between;
+                    flex: 1;
 
                     .dishName {
                       font-family:PingFangSC-Medium;
@@ -462,10 +438,13 @@ export default {
                     white-space: nowrap;
                     // width: 344px;
                     width: 24vw;
+                    text-align: left;
+                    flex: 1;
                   }
 
                   .tagList {
-                    margin-top: 5px;
+                    // margin-top: 5px;
+                    flex: 1;
 
                     span {
                       padding: 2px 3px;
@@ -503,6 +482,8 @@ export default {
                     font-size:15px;
                     color:#9b9b9b;
                     text-align:left;
+                    flex: 1;
+                    margin-bottom: 1px;
                     span {
                       font-family:PingFangSC-Medium;
                       font-size:23px;
@@ -537,6 +518,10 @@ export default {
               margin: auto;
               margin-bottom: 10px;
               margin-top: 43px;
+            }
+
+            p {
+              margin-bottom: 15px;
             }
           }
         }

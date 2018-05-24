@@ -85,7 +85,13 @@ export default {
           }
         });
       } else if (index === 2) {
-        this.$router.push('/main/management');
+        this.$store.dispatch('getDish').then((err) => {
+          if (err) {
+            this.errorMsg = err;
+          } else {
+            this.$router.push('/main/management');
+          }
+        });
       } else if (index === 3) {
         this.$router.push('/main/QRcode');
       } else if (index === 4) {

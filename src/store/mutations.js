@@ -52,5 +52,12 @@ export default {
   },
   UPDATE_FILTERS (state, data) {
     state.filters = data;
+  },
+  UPDATE_DISH_LIST (state, data) {
+    console.log('UPDATE_DISH_LIST', data);
+    state.dishList = data;
+    for (let i = 0, len = state.dishList.length; i < len; i++) {
+      state.categories.push(state.dishList[i].name);
+    }
   }
 };

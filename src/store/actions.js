@@ -62,5 +62,13 @@ export default {
         console.log('dealOrder', error.response.data.message);
         return error.response.data.message;
       });
+  },
+  getDish ({ commit }, data) {
+    axios.get(baseUrl + 'dish').then((res) => {
+      if (res.status === 200) {
+        commit('UPDATE_DISH_LIST', res.data);
+        return false;
+      }
+    });
   }
 };
