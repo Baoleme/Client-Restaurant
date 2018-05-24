@@ -69,7 +69,7 @@ export default {
           time: '2018-05-17T04:22:50.000Z'
         }
       ],
-      pagesNum: 0,
+      // pagesNum: 0,
       current: 1,
       filterList: [],
       subFilterList: []
@@ -83,6 +83,13 @@ export default {
       },
       set: function () {
         // console.log(test);
+      }
+    },
+    pagesNum: {
+      get: function () {
+        return this.$store.state.numberOfPages;
+      },
+      set: function () {
       }
     }
   },
@@ -101,15 +108,6 @@ export default {
       console.log(newList);
       this.filterList = newList;
       this.subFilterList = this.filterList;
-      // for (let i = 0, len = this.subFilterList.length; i < len; i++) {
-      //   console.log(this.subFilterList[i]);
-      //   if (this.subFilterList[i].state === 'created') {
-      //     this.subFilterList[i].state = '新订单';
-      //   }
-      //   if (!this.subFilterList[i].remark) {
-      //     this.subFilterList[i].remark = '无';
-      //   }
-      // }
     }
   },
   methods: {

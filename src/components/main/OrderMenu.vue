@@ -77,11 +77,38 @@ export default {
     goto (index) {
       this.$store.commit('UPDATE_SUB_INDEX', index);
       if (index === 1) {
-        this.$router.push('/main/order/dealing');
+        this.$store.dispatch('restaurantSelfOrder', {
+          page: 0,
+          stateArr: ['paid', 'accepted', 'created']
+        }).then((err) => {
+          if (err) {
+            this.errorMsg = err;
+          } else {
+            this.$router.push('/main/order/dealing');
+          }
+        });
       } else if (index === 2) {
-        this.$router.push('/main/order/dealed');
+        this.$store.dispatch('restaurantSelfOrder', {
+          page: 0,
+          stateArr: ['completed', 'cancelled']
+        }).then((err) => {
+          if (err) {
+            this.errorMsg = err;
+          } else {
+            this.$router.push('/main/order/dealed');
+          }
+        });
       } else if (index === 3) {
-        this.$router.push('/main/order/all');
+        this.$store.dispatch('restaurantSelfOrder', {
+          page: 0,
+          stateArr: ['paid', 'accepted', 'created', 'completed', 'cancelled']
+        }).then((err) => {
+          if (err) {
+            this.errorMsg = err;
+          } else {
+            this.$router.push('/main/order/all');
+          }
+        });
       }
     }
   }

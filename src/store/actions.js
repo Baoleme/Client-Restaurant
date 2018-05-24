@@ -49,8 +49,8 @@ export default {
       .then((value) => { return false; },
         (error) => { return error.response.data.message; });
   },
-  restaurantSelfOrder ({ commit }, pageNum) {
-    axios.get(baseUrl + 'restaurant/self/order?page=' + pageNum + '&number=10').then((res) => {
+  restaurantSelfOrder ({ commit }, data) {
+    axios.get(baseUrl + 'restaurant/self/order?page=' + data.page + '&number=10&state=' + data.stateArr.join(',')).then((res) => {
       if (res.status === 200) {
         // console.log(res.data);
         commit('UPDATE_ORDER_LIST', res.data);

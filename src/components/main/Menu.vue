@@ -26,6 +26,7 @@
         <span :class="{textActive: activeIndex === 4}">商户信息</span>
       </div>
     </div>
+    <ErrorModal v-if="errorMsg"></ErrorModal>
   </div>
 </template>
 
@@ -33,6 +34,7 @@
 export default {
   data () {
     return {
+      errorMsg: ''
     };
   },
   computed: {
@@ -72,15 +74,16 @@ export default {
       if (index === 0) {
         this.$router.push('/main');
       } else if (index === 1) {
-        this.$store.dispatch('restaurantSelfOrder', 0).then((err) => {
+        this.$store.dispatch('restaurantSelfOrder', {
+          page: 0,
+          stateArr: ['paid', 'accepted', 'created']
+        }).then((err) => {
           if (err) {
             this.errorMsg = err;
           } else {
             this.$router.push('/main/order/dealing');
           }
         });
-        // this.$store.dispatch('restaurantSelfOrder', 1);
-        // this.$router.push('/main/order/dealing');
       } else if (index === 2) {
         this.$router.push('/main/management');
       } else if (index === 3) {

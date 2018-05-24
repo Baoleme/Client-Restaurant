@@ -26,7 +26,8 @@ export default {
     state.clue = clue;
   },
   UPDATE_ORDER_LIST (state, data) {
-    console.log('UPDATE_ORDER_LIST:', data.order);
+    console.log('UPDATE_ORDER_LIST:', data.number_of_pages);
+    state.numberOfPages = data.number_of_pages;
     state.orderList = data.order;
     for (let i = 0, len = state.orderList.length; i < len; i++) {
       state.orderList[i].waitTime = '20:23';
@@ -34,6 +35,15 @@ export default {
       state.orderList[i].time = temp.toLocaleString();
       if (state.orderList[i].state === 'created') {
         state.orderList[i].state = '新订单';
+      }
+      if (state.orderList[i].state === 'accepted' || state.orderList[i].state === 'paid') {
+        state.orderList[i].state = '进行中';
+      }
+      if (state.orderList[i].state === 'cancelled') {
+        state.orderList[i].state = '已取消';
+      }
+      if (state.orderList[i].state === 'completed') {
+        state.orderList[i].state = '已完成';
       }
       if (!state.orderList[i].remark) {
         state.orderList[i].remark = '无';

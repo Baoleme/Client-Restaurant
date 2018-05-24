@@ -7,28 +7,28 @@
         <order-menu :filterList="3" class="orderMenu" @filter="filter"/>
         <div class="orderList">
           <div v-for="(order, index) in subFilterList" :key="index" class="orderItem" @click="showDetail(index)">
-            <p><span :class="{cancel: order.curState === '已取消'}">{{order.number}}</span></p>
-            <p><span :class="{cancel: order.curState === '已取消'}">¥{{order.totalPrice}}</span></p>
-            <p><span :class="{cancel: order.curState === '已取消'}">{{order.table}}</span></p>
-            <p :class="{newOrder: order.curState === '新订单', lastOrder: order.curState === '进行中'}">
-              <span :class="{newIcon: order.curState === '新订单'}"></span>
-              <span :class="{cancel: order.curState === '已取消'}">{{order.curState}}</span>
+            <p><span :class="{cancel: order.state === '已取消'}">{{order.order_id}}</span></p>
+            <p><span :class="{cancel: order.state === '已取消'}">¥{{order.price}}</span></p>
+            <p><span :class="{cancel: order.state === '已取消'}">{{order.table}}</span></p>
+            <p :class="{newOrder: order.state === '新订单', lastOrder: order.state === '进行中'}">
+              <span :class="{newIcon: order.state === '新订单'}"></span>
+              <span :class="{cancel: order.state === '已取消'}">{{order.state}}</span>
             </p>
-            <p><span :class="{cancel: order.curState === '已取消'}">{{order.createTime}}</span></p>
-            <p><span :class="{cancel: order.curState === '已取消'}">{{order.waitTime}}</span></p>
-            <p><span class="note" :class="{null_: order.note === '无', cancel: order.curState === '已取消'}">{{order.note}}</span></p>
-            <p v-show="order.curState === '新订单'">
+            <p><span :class="{cancel: order.state === '已取消'}">{{order.time}}</span></p>
+            <p><span :class="{cancel: order.state === '已取消'}">{{order.waitTime}}</span></p>
+            <p><span class="note" :class="{null_: order.remark === '无', cancel: order.state === '已取消'}">{{order.remark}}</span></p>
+            <p v-show="order.state === '新订单'">
               <Button type="info" class="newGroupBtn">接单</Button>
               <Button type="ghost" class="newGroupBtn ghost">拒绝</Button>
             </p>
-            <p v-show="order.curState === '进行中'">
+            <p v-show="order.state === '进行中'">
               <Button type="success" class="newGroupBtn">完成</Button>
               <Button type="ghost" class="newGroupBtn cancelGhost">取消</Button>
             </p>
-            <p v-show="order.curState === '已完成' || order.curState === '已取消'">查看</p>
+            <p v-show="order.state === '已完成' || order.state === '已取消'">查看</p>
           </div>
         </div>
-        <Page class="pages" :total="pagesNum" :current.sync="current" show-elevator size="small" @on-change="change"></Page>
+        <Page class="pages" :total="total" :current.sync="current" show-elevator size="small" @on-change="change"></Page>
         <OrderDetail id="orderDetail" @close="closeDetail"/>
       </div>
     </div>
@@ -43,66 +43,39 @@ import OrderDetail from './OrderDetail';
 export default {
   data () {
     return {
-      orderList: [
-        {
-          number: '21937135281',
-          totalPrice: '291.1',
-          table: '23',
-          curState: '新订单',
-          createTime: '2017.2.5 09:30',
-          waitTime: '20:23',
-          note: '不要放葱姜蒜也不要放辣椒，多加陈醋，最好有，不要放葱姜蒜也不要放辣椒，多加陈醋，最好有，不要放葱姜蒜也不要放辣椒，多加陈醋，最好有'
-        },
-        {
-          number: '21937135281',
-          totalPrice: '291.1',
-          table: '23',
-          curState: '进行中',
-          createTime: '2017.2.5 09:30',
-          waitTime: '20:23',
-          note: '无'
-        },
-        {
-          number: '21937135281',
-          totalPrice: '291.1',
-          table: '23',
-          curState: '进行中',
-          createTime: '2017.2.5 09:30',
-          waitTime: '20:23',
-          note: '不要放葱姜蒜也不要放辣椒，多加陈醋，最好有'
-        },
-        {
-          number: '21937135281',
-          totalPrice: '291.1',
-          table: '23',
-          curState: '已完成',
-          createTime: '2017.2.5 09:30',
-          waitTime: '20:23',
-          note: '不要放葱姜蒜也不要放辣椒，多加陈醋，最好有，不要放葱姜蒜也不要放辣椒，多加陈醋，最好有，不要放葱姜蒜也不要放辣椒，多加陈醋，最好有'
-        },
-        {
-          number: '21937135281',
-          totalPrice: '291.1',
-          table: '23',
-          curState: '已取消',
-          createTime: '2017.2.5 09:30',
-          waitTime: '20:23',
-          note: '无'
-        }
-      ],
-      pagesNum: 0,
+      // pagesNum: this.$store.state.numberOfPages,
+      total: 0,
       current: 1,
       filterList: [],
       subFilterList: []
     };
   },
-  mounted: function () {
-    this.orderList = this.orderList.concat(this.orderList);
-    this.orderList = this.orderList.concat(this.orderList);
-    this.orderList = this.orderList.concat(this.orderList);
-    this.filterList = this.orderList;
-    this.pagesNum = this.filterList.length;
-    this.subFilterList = this.filterList.slice(0, 10);
+  computed: {
+    orderList: {
+      get: function () {
+        return this.$store.state.orderList;
+      },
+      set: function () {
+      }
+    },
+    pagesNum: {
+      get: function () {
+        return this.$store.state.numberOfPages;
+      },
+      set: function () {
+      }
+    }
+  },
+  watch: {
+    orderList: function (newList, oldList) {
+      this.filterList = newList;
+      this.subFilterList = this.filterList;
+    },
+    pagesNum: function (newValue, oldValue) {
+      console.log(newValue);
+      this.total = newValue * 10;
+      console.log(this.total);
+    }
   },
   methods: {
     filter (filterArr) {
@@ -205,10 +178,10 @@ export default {
             flex:3;
           }
           p:nth-child(5) {
-            flex:4;
+            flex:5;
           }
           p:nth-child(6) {
-            flex:4;
+            flex:3;
           }
           p:nth-child(7) {
             flex:5;
