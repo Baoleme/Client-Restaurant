@@ -18,7 +18,8 @@ export default new Vuex.Store({
     curOrder: {},
     clue: '',
     orderList: [],
-    numberOfPages: 0
+    numberOfPages: 0,
+    filters: []
   },
   actions,
   getters,

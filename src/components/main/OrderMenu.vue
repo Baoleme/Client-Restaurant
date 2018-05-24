@@ -1,8 +1,8 @@
 <template>
 <div class="order">
-  <div class="title" v-show="filterList !== 0">订单</div>
-  <div class="title" v-show="filterList === 0">订单查询</div>
-  <div class="subMenu" v-show="filterList !== 0">
+  <div class="title" v-show="filterIndex !== 0">订单</div>
+  <div class="title" v-show="filterIndex === 0">订单查询</div>
+  <div class="subMenu" v-show="filterIndex !== 0">
     <div class="subMenuItem" @click="goto(1)" :class="{subActive: activeSubIndex === 1}">
       <span>正在处理中</span>
       <div :class="{activeLine: activeSubIndex === 1}"></div>
@@ -16,7 +16,7 @@
       <div :class="{activeLine: activeSubIndex === 3}"></div>
     </div>
   </div>
-  <div class="divLine" v-show="filterList !== 0"></div>
+  <div class="divLine" v-show="filterIndex !== 0"></div>
   <div class="orderFilter">
     <span>订单状态</span>
     <div v-for="(filter, index) in orderFilter" :key="index" class="orderFilterGroup">
@@ -44,14 +44,56 @@ export default {
     };
   },
   props: {
-    filterList: {
+    filterIndex: {
       type: Number,
       required: true
     }
   },
   watch: {
     filterArr: function (val, oldVal) {
-      this.$emit('filter', val);
+      let thisStateArr = [];
+      if (this.filterIndex === 0 || this.filterIndex === 1 || this.filterIndex === 3) {
+        if (this.filterArr[0] === true) {
+          thisStateArr.push('created');
+        }
+        if (this.filterArr[1] === true) {
+          thisStateArr.push('accepted');
+          thisStateArr.push('paid');
+        }
+      } else if (this.filterIndex === 2) {
+        if (this.filterArr[0] === true) {
+          thisStateArr.push('completed');
+        }
+        if (this.filterArr[1] === true) {
+          thisStateArr.push('cancelled');
+        }
+      }
+      if (this.filterIndex === 0 || this.filterIndex === 3) {
+        if (this.filterArr[2] === true) {
+          thisStateArr.push('completed');
+        }
+        if (this.filterArr[3] === true) {
+          thisStateArr.push('cancelled');
+        }
+      }
+      if (thisStateArr.length === 0) {
+        this.$store.commit('UPDATE_FILTERS', []);
+        this.$store.commit('UPDATE_ORDER_LIST', {
+          number_of_pages: 1,
+          order: []
+        });
+      } else {
+        this.$store.dispatch('restaurantSelfOrder', {
+          page: 0,
+          stateArr: thisStateArr
+        }).then((err) => {
+          if (err) {
+            this.errorMsg = err;
+          } else {
+            this.$emit('filter', val);
+          }
+        });
+      }
     }
   },
   computed: {
@@ -60,9 +102,9 @@ export default {
     },
     orderFilter: {
       get: function () {
-        if (this.filterList === 1) {
+        if (this.filterIndex === 1) {
           return ['新订单', '进行中'];
-        } else if (this.filterList === 2) {
+        } else if (this.filterIndex === 2) {
           return ['已完成', '已取消'];
         } else {
           return ['新订单', '进行中', '已完成', '已取消'];

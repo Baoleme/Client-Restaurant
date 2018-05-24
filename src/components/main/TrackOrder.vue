@@ -4,7 +4,7 @@
     <div class="right">
       <TopLine class="top"/>
       <div class="content">
-        <order-menu :filterList="0" class="orderMenu" @filter="filter"/>
+        <order-menu :filterIndex="0" class="orderMenu" @filter="filter"/>
         <div class="orderList">
           <div v-for="(order, index) in subFilterList" :key="index" class="orderItem" @click="showDetail(index)">
             <p><span :class="{cancel: order.curState === '已取消'}">{{order.number}}</span></p>

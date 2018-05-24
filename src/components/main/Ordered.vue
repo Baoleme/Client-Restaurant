@@ -4,9 +4,9 @@
     <div class="right">
       <TopLine class="top"/>
       <div class="content">
-        <order-menu :filterList="2" class="orderMenu" @filter="filter"/>
+        <order-menu :filterIndex="2" class="orderMenu" @filter="filter"/>
         <div class="orderList">
-          <div v-for="(order, index) in subFilterList" :key="index" class="orderItem" @click="showDetail(index)">
+          <div v-for="(order, index) in filterList" :key="index" class="orderItem" @click="showDetail(index)">
             <p><span :class="{cancel: order.state === '已取消'}">{{order.order_id}}</span></p>
             <p><span :class="{cancel: order.state === '已取消'}">¥{{order.price}}</span></p>
             <p><span :class="{cancel: order.state === '已取消'}">{{order.table}}</span></p>
@@ -34,8 +34,7 @@ export default {
     return {
       // pagesNum: 0,
       current: 1,
-      filterList: [],
-      subFilterList: []
+      filterList: []
     };
   },
   computed: {
@@ -57,34 +56,30 @@ export default {
   watch: {
     orderList: function (newList, oldList) {
       this.filterList = newList;
-      this.subFilterList = this.filterList;
     }
   },
   methods: {
     filter (filterArr) {
-      let list1 = this.orderList.filter(order => (order.curState === '已完成'));
-      let list2 = this.orderList.filter(order => (order.curState === '已取消'));
-      this.filterList = [];
-      if (filterArr[0] === true) {
-        this.filterList = this.filterList.concat(list1);
-      }
-      if (filterArr[1] === true) {
-        this.filterList = this.filterList.concat(list2);
-      }
-      this.pagesNum = this.filterList.length;
       this.current = 1;
-      this.subFilterList = this.filterList.slice(0, 10);
     },
     showDetail (index) {
-      console.log(this.subFilterList[index]);
-      this.$store.commit('UPDATE_CUR_ORDER', this.subFilterList[index]);
+      console.log(this.filterList[index]);
+      this.$store.commit('UPDATE_CUR_ORDER', this.filterList[index]);
       document.getElementById('orderDetail').style.display = 'block';
     },
     closeDetail () {
       document.getElementById('orderDetail').style.display = 'none';
     },
-    change: function (page) {
-      this.subFilterList = this.filterList.slice((page - 1) * 10, page * 10);
+    change: function (newPage) {
+      this.$store.dispatch('restaurantSelfOrder', {
+        page: newPage - 1,
+        stateArr: this.$store.state.filters
+      }).then((err) => {
+        if (err) {
+          this.errorMsg = err;
+        } else {
+        }
+      });
     }
   },
   components: {

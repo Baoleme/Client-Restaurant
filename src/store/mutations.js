@@ -49,5 +49,8 @@ export default {
         state.orderList[i].remark = '无';
       }
     }
+  },
+  UPDATE_FILTERS (state, data) {
+    state.filters = data;
   }
 };

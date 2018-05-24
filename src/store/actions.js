@@ -50,6 +50,7 @@ export default {
         (error) => { return error.response.data.message; });
   },
   restaurantSelfOrder ({ commit }, data) {
+    commit('UPDATE_FILTERS', data.stateArr);
     axios.get(baseUrl + 'restaurant/self/order?page=' + data.page + '&number=10&state=' + data.stateArr.join(',')).then((res) => {
       if (res.status === 200) {
         // console.log(res.data);

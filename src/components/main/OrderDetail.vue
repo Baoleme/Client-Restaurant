@@ -11,22 +11,21 @@
           <div class="orderNo border">
             <span class="smallTitle">订单号</span>
             <div class="copy">
-              <input id="number" readonly v-model="orderBoject.number"></input>
-              <!-- <span id="number">{{orderBoject.number}}</span> -->
-              <Button type="ghost" class="copyBtn" @click="copy(orderBoject.number)">复制</Button>
+              <input id="number" readonly v-model="orderBoject.order_id"></input>
+              <Button type="ghost" class="copyBtn" @click="copy()">复制</Button>
             </div>
           </div>
           <div class="orderState">
             <div class="orderStateLeft">
               <span class="leftName">状态</span>
-              <span :class="{newIcon: orderBoject.curState === '新订单'}"></span>
-              <span :class="{newOrder: orderBoject.curState==='新订单', ordering: orderBoject.curState==='进行中', ordered: orderBoject.curState==='已完成', cancelOrder: orderBoject.curState==='已取消'}">{{orderBoject.curState}}</span>
+              <span :class="{newIcon: orderBoject.state === '新订单'}"></span>
+              <span :class="{newOrder: orderBoject.state==='新订单', ordering: orderBoject.state==='进行中', ordered: orderBoject.state==='已完成', cancelOrder: orderBoject.state==='已取消'}">{{orderBoject.state}}</span>
             </div>
-            <p class="orderStateRight" v-show="orderBoject.curState === '新订单'">
+            <p class="orderStateRight" v-show="orderBoject.state === '新订单'">
               <Button type="info" class="newGroupBtn">接单</Button>
               <Button type="ghost" class="newGroupBtn ghost">拒绝</Button>
             </p>
-            <p class="orderStateRight" v-show="orderBoject.curState === '进行中'">
+            <p class="orderStateRight" v-show="orderBoject.state === '进行中'">
               <Button type="success" class="newGroupBtn">完成</Button>
               <Button type="ghost" class="newGroupBtn cancelGhost">取消</Button>
             </p>
@@ -34,12 +33,12 @@
         </div>
         <div class="line2">
           <div class="line2Left border"><span>餐桌号</span><span>{{orderBoject.table}}</span></div>
-          <div class="line2Right border"><span>金额</span><span class="price">¥{{orderBoject.totalPrice}}</span></div>
+          <div class="line2Right border"><span>金额</span><span class="price">¥{{orderBoject.price}}</span></div>
         </div>
         <div class="line3">
           <div class="line3Note">备注</div>
           <div class="line3Subline"></div>
-          <div class="line3Content">{{orderBoject.note}}</div>
+          <div class="line3Content">{{orderBoject.remark}}</div>
         </div>
         <div class="line4">订单历史</div>
         <div class="line5">
@@ -172,7 +171,7 @@ export default {
               width:61px;
               height:24px;
               line-height: 1;
-              margin: 11px 14px 11px 0px;
+              margin: 11px 14px;
             }
 
             > input {
@@ -182,6 +181,7 @@ export default {
               letter-spacing:0.5px;
               border: none;
               width: 104px;
+              text-align: right;
             }
           }
         }
