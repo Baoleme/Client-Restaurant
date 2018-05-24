@@ -1,6 +1,6 @@
 import axios from '@/lib/axios';
-// const baseUrl = 'https://baoleme.andiedie.cn/';
-const baseUrl = 'http://127.0.0.1:8520/';
+const baseUrl = 'https://api.baoleme.andiedie.cn/';
+// const baseUrl = 'http://127.0.0.1:8520/';
 
 export default {
   loginAction ({ commit }, data) {
@@ -44,11 +44,6 @@ export default {
       .then((value) => { return false; },
         (error) => { return error.response.data.message; });
   },
-  emailConfirm ({ commit }, cipher) {
-    axios.get(baseUrl + 'restaurant/emailConfirm?cipher=' + cipher)
-      .then((value) => { return false; },
-        (error) => { return error.response.data.message; });
-  },
   restaurantSelfOrder ({ commit }, data) {
     commit('UPDATE_FILTERS', data.stateArr);
     axios.get(baseUrl + 'restaurant/self/order?page=' + data.page + '&number=10&state=' + data.stateArr.join(',')).then((res) => {
@@ -58,5 +53,14 @@ export default {
         return false;
       }
     });
+  },
+  dealOrder ({ commit }, data) {
+    axios.put(baseUrl + 'order/' + data.id, {
+      state: data.state
+    }).then((value) => { return false; },
+      (error) => {
+        console.log('dealOrder', error.response.data.message);
+        return error.response.data.message;
+      });
   }
 };

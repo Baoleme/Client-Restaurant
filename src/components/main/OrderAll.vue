@@ -18,12 +18,12 @@
             <p><span :class="{cancel: order.state === '已取消'}">{{order.waitTime}}</span></p>
             <p><span class="note" :class="{null_: order.remark === '无', cancel: order.state === '已取消'}">{{order.remark}}</span></p>
             <p v-show="order.state === '新订单'">
-              <Button type="info" class="newGroupBtn">接单</Button>
-              <Button type="ghost" class="newGroupBtn ghost">拒绝</Button>
+              <Button type="info" class="newGroupBtn" @click.stop="dealTheOrder(order.order_id, 'accepted')">接单</Button>
+              <Button type="ghost" class="newGroupBtn ghost" @click.stop="dealTheOrder(order.order_id, 'cancelled')">拒绝</Button>
             </p>
             <p v-show="order.state === '进行中'">
-              <Button type="success" class="newGroupBtn">完成</Button>
-              <Button type="ghost" class="newGroupBtn cancelGhost">取消</Button>
+              <Button type="success" class="newGroupBtn" @click.stop="dealTheOrder(order.order_id, 'completed')">完成</Button>
+              <Button type="ghost" class="newGroupBtn cancelGhost" @click.stop="dealTheOrder(order.order_id, 'cancelled')">取消</Button>
             </p>
             <p v-show="order.state === '已完成' || order.state === '已取消'">查看</p>
           </div>
@@ -84,8 +84,19 @@ export default {
       this.$store.commit('UPDATE_CUR_ORDER', this.filterList[index]);
       document.getElementById('orderDetail').style.display = 'block';
     },
-    closeDetail () {
+    closeDetail (sign) {
       document.getElementById('orderDetail').style.display = 'none';
+      if (sign === 1) {
+        this.$store.dispatch('restaurantSelfOrder', {
+          page: this.current - 1,
+          stateArr: this.$store.state.filters
+        }).then((err) => {
+          if (err) {
+            this.errorMsg = err;
+          } else {
+          }
+        });
+      }
     },
     change: function (newPage) {
       this.$store.dispatch('restaurantSelfOrder', {
@@ -95,6 +106,26 @@ export default {
         if (err) {
           this.errorMsg = err;
         } else {
+        }
+      });
+    },
+    dealTheOrder: function (orderId, newState) {
+      this.$store.dispatch('dealOrder', {
+        id: orderId,
+        state: newState
+      }).then((err) => {
+        if (err) {
+          this.errorMsg = err;
+        } else {
+          this.$store.dispatch('restaurantSelfOrder', {
+            page: this.current - 1,
+            stateArr: this.$store.state.filters
+          }).then((err) => {
+            if (err) {
+              this.errorMsg = err;
+            } else {
+            }
+          });
         }
       });
     }

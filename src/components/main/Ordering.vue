@@ -17,12 +17,12 @@
             <p>{{order.waitTime}}</p>
             <p><span class="note" :class="{null_: order.remark === '无'}">{{order.remark}}</span></p>
             <p v-show="order.state === '新订单'">
-              <Button type="info" class="newGroupBtn" @click="takeOrder">接单</Button>
-              <Button type="ghost" class="newGroupBtn ghost" @click="cancelOrder">拒绝</Button>
+              <Button type="info" class="newGroupBtn" @click.stop="dealTheOrder(order.order_id, 'accepted')">接单</Button>
+              <Button type="ghost" class="newGroupBtn ghost" @click.stop="dealTheOrder(order.order_id, 'cancelled')">拒绝</Button>
             </p>
             <p v-show="order.state === '进行中'">
-              <Button type="success" class="newGroupBtn" @click="finishOrder">完成</Button>
-              <Button type="ghost" class="newGroupBtn cancelGhost" @click="cancelOrder">取消</Button>
+              <Button type="success" class="newGroupBtn" @click.stop="dealTheOrder(order.order_id, 'completed')">完成</Button>
+              <Button type="ghost" class="newGroupBtn cancelGhost" @click.stop="dealTheOrder(order.order_id, 'cancelled')">取消</Button>
             </p>
           </div>
         </div>
@@ -41,33 +41,6 @@ import OrderDetail from './OrderDetail';
 export default {
   data () {
     return {
-      testList: [
-        {
-          dish: [
-            {
-              count: 1,
-              image_url: 'https://fuss10.elemecdn.com/2/fc/b6f71e07382631587c74f21e6182cjpeg.jpeg',
-              name: '销魂辣子鸡块',
-              price: 10,
-              specifications: ''
-            },
-            {
-              count: 1,
-              image_url: 'https://fuss10.elemecdn.com/d/5f/71e61c66b46517d252c4d02a17059jpeg.jpeg',
-              name: '无骨鸡柳',
-              price: 7,
-              specifications: ''
-            }
-          ],
-          order_id: 27,
-          payment: null,
-          price: 17,
-          remark: null,
-          state: 'created',
-          table: '44',
-          time: '2018-05-17T04:22:50.000Z'
-        }
-      ],
       // pagesNum: 0,
       current: 1,
       filterList: []
@@ -105,8 +78,20 @@ export default {
       this.$store.commit('UPDATE_CUR_ORDER', this.filterList[index]);
       document.getElementById('orderDetail').style.display = 'block';
     },
-    closeDetail () {
+    closeDetail (sign) {
+      console.log(sign);
       document.getElementById('orderDetail').style.display = 'none';
+      if (sign === 1) {
+        this.$store.dispatch('restaurantSelfOrder', {
+          page: this.current - 1,
+          stateArr: this.$store.state.filters
+        }).then((err) => {
+          if (err) {
+            this.errorMsg = err;
+          } else {
+          }
+        });
+      }
     },
     change: function (newPage) {
       this.$store.dispatch('restaurantSelfOrder', {
@@ -119,11 +104,26 @@ export default {
         }
       });
     },
-    takeOrder: function () {
-    },
-    finishOrder: function () {
-    },
-    cancelOrder: function () {
+    dealTheOrder: function (orderId, newState) {
+      this.$store.dispatch('dealOrder', {
+        id: orderId,
+        state: newState
+      }).then((err) => {
+        if (err) {
+          this.errorMsg = err;
+        } else {
+          console.log('deal succeed!');
+          this.$store.dispatch('restaurantSelfOrder', {
+            page: this.current - 1,
+            stateArr: this.$store.state.filters
+          }).then((err) => {
+            if (err) {
+              this.errorMsg = err;
+            } else {
+            }
+          });
+        }
+      });
     }
   },
   components: {
@@ -234,6 +234,7 @@ export default {
             width:55px;
             height:26px;
             line-height: 1;
+            z-index: 20;
           }
 
           .ghost {

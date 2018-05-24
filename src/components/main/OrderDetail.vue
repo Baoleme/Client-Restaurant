@@ -22,12 +22,12 @@
               <span :class="{newOrder: orderBoject.state==='新订单', ordering: orderBoject.state==='进行中', ordered: orderBoject.state==='已完成', cancelOrder: orderBoject.state==='已取消'}">{{orderBoject.state}}</span>
             </div>
             <p class="orderStateRight" v-show="orderBoject.state === '新订单'">
-              <Button type="info" class="newGroupBtn">接单</Button>
-              <Button type="ghost" class="newGroupBtn ghost">拒绝</Button>
+              <Button type="info" class="newGroupBtn" @click.stop="dealTheOrder(orderBoject.order_id, 'accepted')">接单</Button>
+              <Button type="ghost" class="newGroupBtn ghost" @click.stop="dealTheOrder(orderBoject.order_id, 'cancelled')">拒绝</Button>
             </p>
             <p class="orderStateRight" v-show="orderBoject.state === '进行中'">
-              <Button type="success" class="newGroupBtn">完成</Button>
-              <Button type="ghost" class="newGroupBtn cancelGhost">取消</Button>
+              <Button type="success" class="newGroupBtn" @click.stop="dealTheOrder(orderBoject.order_id, 'completed')">完成</Button>
+              <Button type="ghost" class="newGroupBtn cancelGhost" @click.stop="dealTheOrder(orderBoject.order_id, 'cancelled')">取消</Button>
             </p>
           </div>
         </div>
@@ -83,13 +83,25 @@ export default {
   },
   methods: {
     close () {
-      this.$emit('close');
+      this.$emit('close', 0);
     },
     copy () {
       var number = document.getElementById('number');
       console.log(number);
       number.select();
       document.execCommand('Copy', 'false', null);
+    },
+    dealTheOrder: function (orderId, newState) {
+      this.$store.dispatch('dealOrder', {
+        id: orderId,
+        state: newState
+      }).then((err) => {
+        if (err) {
+          this.errorMsg = err;
+        } else {
+          this.$emit('close', 1);
+        }
+      });
     }
   }
 };

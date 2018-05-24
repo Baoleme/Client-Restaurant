@@ -54,11 +54,10 @@ export default {
       let thisStateArr = [];
       if (this.filterIndex === 0 || this.filterIndex === 1 || this.filterIndex === 3) {
         if (this.filterArr[0] === true) {
-          thisStateArr.push('created');
+          thisStateArr.push('paid');
         }
         if (this.filterArr[1] === true) {
           thisStateArr.push('accepted');
-          thisStateArr.push('paid');
         }
       } else if (this.filterIndex === 2) {
         if (this.filterArr[0] === true) {
@@ -121,7 +120,7 @@ export default {
       if (index === 1) {
         this.$store.dispatch('restaurantSelfOrder', {
           page: 0,
-          stateArr: ['paid', 'accepted', 'created']
+          stateArr: ['paid', 'accepted']
         }).then((err) => {
           if (err) {
             this.errorMsg = err;
@@ -143,7 +142,7 @@ export default {
       } else if (index === 3) {
         this.$store.dispatch('restaurantSelfOrder', {
           page: 0,
-          stateArr: ['paid', 'accepted', 'created', 'completed', 'cancelled']
+          stateArr: ['paid', 'accepted', 'completed', 'cancelled']
         }).then((err) => {
           if (err) {
             this.errorMsg = err;
