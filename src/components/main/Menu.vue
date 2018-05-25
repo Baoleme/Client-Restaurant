@@ -76,7 +76,7 @@ export default {
       } else if (index === 1) {
         this.$store.dispatch('restaurantSelfOrder', {
           page: 0,
-          stateArr: ['paid', 'accepted', 'created']
+          stateArr: ['paid', 'accepted']
         }).then((err) => {
           if (err) {
             this.errorMsg = err;
