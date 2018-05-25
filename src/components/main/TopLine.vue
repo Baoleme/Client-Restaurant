@@ -69,6 +69,7 @@ export default {
       cursor: pointer;
       position: relative;
       right: 3px;
+      text-align: center;
 
       .icon {
         padding-top: 3px;

@@ -89,7 +89,7 @@ export default {
           if (err) {
             this.errorMsg = err;
           } else {
-            this.$router.push('/main/management');
+            this.$router.push('/main/dish/management');
           }
         });
       } else if (index === 3) {

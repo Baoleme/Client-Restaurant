@@ -7,6 +7,7 @@ import ordering from '@/components/main/Ordering';
 import ordered from '@/components/main/Ordered';
 import orderall from '@/components/main/OrderAll';
 import management from '@/components/main/Management';
+import newdish from '@/components/main/NewDish';
 import QRcode from '@/components/main/QRcode';
 import info from '@/components/main/Info';
 import trackorder from '@/components/main/trackorder';
@@ -15,15 +16,15 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
-    // 开发用，临时将默认页改成主页面
-    // {
-    //   path: '/',
-    //   redirect: '/main'
-    // },
+    // 开发用，临时将默认页改成
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/main/dish/newdish'
     },
+    // {
+    //   path: '/',
+    //   redirect: '/login'
+    // },
     {
       path: '/login',
       name: 'login',
@@ -55,9 +56,14 @@ export default new Router({
       component: orderall
     },
     {
-      path: '/main/management',
+      path: '/main/dish/management',
       name: 'management',
       component: management
+    },
+    {
+      path: '/main/dish/newdish',
+      name: 'newdish',
+      component: newdish
     },
     {
       path: '/main/QRcode',

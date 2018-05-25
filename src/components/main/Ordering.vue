@@ -269,6 +269,7 @@ export default {
       .pages {
         background: #ffffff;
         padding-bottom: 20px;
+        text-align: center;
       }
     }
   }
