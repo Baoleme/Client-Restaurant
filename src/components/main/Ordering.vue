@@ -26,7 +26,7 @@
             </p>
           </div>
         </div>
-        <Page class="pages" :total="pagesNum" :current.sync="current" show-elevator size="small" @on-change="change"></Page>
+        <Page class="pages" :total="total" :current.sync="current" show-elevator size="small" @on-change="change"></Page>
         <OrderDetail id="orderDetail" @close="closeDetail"/>
       </div>
     </div>
@@ -42,6 +42,7 @@ export default {
   data () {
     return {
       // pagesNum: 0,
+      total: 0,
       current: 1,
       filterList: []
     };
@@ -67,6 +68,9 @@ export default {
   watch: {
     orderList: function (newList, oldList) {
       this.filterList = newList;
+    },
+    pagesNum: function (newValue, oldValue) {
+      this.total = newValue * 10;
     }
   },
   methods: {
@@ -125,6 +129,18 @@ export default {
         }
       });
     }
+  },
+  beforeMount () {
+    var self = this.$store;
+    this.intervalid = setInterval(function () {
+      self.dispatch('restaurantSelfOrder', {
+        page: 0,
+        stateArr: ['paid', 'accepted']
+      });
+    }, 1000);
+  },
+  beforeDestroy () {
+    clearInterval(this.intervalid);
   },
   components: {
     MyMenu,

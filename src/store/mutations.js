@@ -27,6 +27,7 @@ export default {
   },
   UPDATE_ORDER_LIST (state, data) {
     console.log('UPDATE_ORDER_LIST:', data.order);
+    console.log('number_of_pages:', data.number_of_pages);
     state.numberOfPages = data.number_of_pages;
     state.orderList = data.order;
     for (let i = 0, len = state.orderList.length; i < len; i++) {
