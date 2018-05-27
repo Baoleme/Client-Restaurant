@@ -42,7 +42,7 @@ export default {
   data () {
     return {
       // pagesNum: 0,
-      total: 0,
+      total: this.$store.state.numberOfPages * 10,
       current: 1,
       filterList: []
     };
@@ -132,10 +132,11 @@ export default {
   },
   beforeMount () {
     var self = this.$store;
+    var that = this;
     this.intervalid = setInterval(function () {
       self.dispatch('restaurantSelfOrder', {
-        page: 0,
-        stateArr: ['paid', 'accepted']
+        page: that.current - 1,
+        stateArr: self.state.filters
       });
     }, 1000);
   },

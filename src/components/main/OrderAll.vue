@@ -44,7 +44,7 @@ export default {
   data () {
     return {
       // pagesNum: this.$store.state.numberOfPages,
-      total: 0,
+      total: this.$store.state.numberOfPages * 10,
       current: 1,
       filterList: []
     };
@@ -129,6 +129,19 @@ export default {
         }
       });
     }
+  },
+  beforeMount () {
+    var self = this.$store;
+    var that = this;
+    this.intervalid = setInterval(function () {
+      self.dispatch('restaurantSelfOrder', {
+        page: that.current - 1,
+        stateArr: self.state.filters
+      });
+    }, 1000);
+  },
+  beforeDestroy () {
+    clearInterval(this.intervalid);
   },
   components: {
     MyMenu,

@@ -33,7 +33,7 @@ export default {
   data () {
     return {
       // pagesNum: 0,
-      total: 0,
+      total: this.$store.state.numberOfPages * 10,
       current: 1,
       filterList: []
     };

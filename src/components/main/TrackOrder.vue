@@ -43,7 +43,7 @@ import OrderDetail from './OrderDetail';
 export default {
   data () {
     return {
-      total: 0,
+      total: this.$store.state.numberOfPages * 10,
       current: 1,
       filterList: []
     };
