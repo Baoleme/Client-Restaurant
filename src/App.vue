@@ -6,7 +6,14 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  // 定时更新等待时间，所有订单的等待时间用同一个计时器
+  beforeMount () {
+    var self = this.$store;
+    setInterval(function () {
+      self.commit('UPDATE_TIME_CLOCK');
+    }, 1000);
+  }
 };
 </script>
 

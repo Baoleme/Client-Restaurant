@@ -21,7 +21,8 @@ export default new Vuex.Store({
     numberOfPages: 0,
     filters: [],
     dishList: [],
-    categories: []
+    categories: [],
+    waitTimeClock: []
   },
   actions,
   getters,
