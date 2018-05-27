@@ -54,6 +54,15 @@ export default {
       }
     });
   },
+  trackSelfOrder ({ commit }, data) {
+    commit('UPDATE_FILTERS', data.stateArr);
+    axios.get(baseUrl + 'restaurant/self/order?page=' + data.page + '&number=10&state=' + data.stateArr.join(',') + '&keyword=' + data.keyword).then((res) => {
+      if (res.status === 200) {
+        commit('UPDATE_ORDER_LIST', res.data);
+        return false;
+      }
+    });
+  },
   dealOrder ({ commit }, data) {
     axios.put(baseUrl + 'order/' + data.id, {
       state: data.state

@@ -31,9 +31,19 @@ export default {
   },
   methods: {
     track () {
-      this.$store.commit('UPDATE_CLUE', this.trackClue);
-      this.$store.commit('UPDATE_INDEX', 1);
-      this.$router.push('/main/order/trackorder');
+      this.$store.dispatch('trackSelfOrder', {
+        page: 0,
+        stateArr: ['paid', 'accepted', 'completed', 'cancelled'],
+        keyword: this.trackClue
+      }).then((err) => {
+        if (err) {
+          this.errorMsg = err;
+        } else {
+          this.$store.commit('UPDATE_CLUE', this.trackClue);
+          this.$store.commit('UPDATE_INDEX', 1);
+          this.$router.push('/main/order/trackorder');
+        }
+      });
     }
   }
 };

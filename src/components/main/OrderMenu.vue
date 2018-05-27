@@ -82,16 +82,30 @@ export default {
           order: []
         });
       } else {
-        this.$store.dispatch('restaurantSelfOrder', {
-          page: 0,
-          stateArr: thisStateArr
-        }).then((err) => {
-          if (err) {
-            this.errorMsg = err;
-          } else {
-            this.$emit('filter', val);
-          }
-        });
+        if (this.filterIndex === 0) {
+          this.$store.dispatch('trackSelfOrder', {
+            page: 0,
+            stateArr: thisStateArr,
+            keyword: this.$store.state.clue
+          }).then((err) => {
+            if (err) {
+              this.errorMsg = err;
+            } else {
+              this.$emit('filter', val);
+            }
+          });
+        } else {
+          this.$store.dispatch('restaurantSelfOrder', {
+            page: 0,
+            stateArr: thisStateArr
+          }).then((err) => {
+            if (err) {
+              this.errorMsg = err;
+            } else {
+              this.$emit('filter', val);
+            }
+          });
+        }
       }
     }
   },
