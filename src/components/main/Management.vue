@@ -65,9 +65,9 @@
                     <div class="dishNameLine">
                       <span class="dishName">{{dish.name}}</span>
                       <div>
-                        <img src="@/assets/images/chilli.svg" alt="chilli" class="chilli" v-if="dish.chilliNum > 2">
-                        <img src="@/assets/images/chilli.svg" alt="chilli" class="chilli" v-if="dish.chilliNum > 1">
-                        <img src="@/assets/images/chilli.svg" alt="chilli" class="chilli" v-if="dish.chilliNum > 0">
+                        <img src="@/assets/images/chilli.svg" alt="chilli" class="chilli" v-if="dish.spicy > 2">
+                        <img src="@/assets/images/chilli.svg" alt="chilli" class="chilli" v-if="dish.spicy > 1">
+                        <img src="@/assets/images/chilli.svg" alt="chilli" class="chilli" v-if="dish.spicy > 0">
                       </div>
                     </div>
                     <div class="brief">{{dish.description}}</div>
