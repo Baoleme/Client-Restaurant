@@ -35,6 +35,23 @@
           <div class="line2Left border"><span>餐桌号</span><span>{{orderBoject.table}}</span></div>
           <div class="line2Right border"><span>金额</span><span class="price">¥{{orderBoject.price}}</span></div>
         </div>
+        <div class="line4">菜品</div>
+        <!-- <div class="line6"></div> -->
+        <div class="line6">
+          <div class="line5TitleLine line6line">
+            <p>名称</p>
+            <p>规格</p>
+            <p>数量</p>
+            <p>价格</p>
+          </div>
+          <div class="line5Subline"></div>
+          <div class="line6Content line6line" v-for="(item, index) in orderBoject.dish" :key="index">
+            <p>{{item.name}}</p>
+            <p>{{item.specification}}</p>
+            <p>{{item.count}}</p>
+            <p>¥{{item.price}}</p>
+          </div>
+        </div>
         <div class="line3">
           <div class="line3Note">备注</div>
           <div class="line3Subline"></div>
@@ -64,6 +81,14 @@ export default {
         {
           state: '卖家接单',
           createTime: '2017.2.5 09:30'
+        },
+        {
+          state: '客户下单',
+          createTime: '2017.2.5 8:30'
+        },
+        {
+          state: '客户下单',
+          createTime: '2017.2.5 8:30'
         },
         {
           state: '客户下单',
@@ -121,9 +146,9 @@ export default {
     background:#ffffff;
     border-radius:4px;
     width:740px;
-    height:622px;
+    // height:622px;
     margin: auto;
-    margin-top: 66px;
+    margin-top: 46px;
     padding-top: 15px;
 
     .titleLine {
@@ -347,12 +372,6 @@ export default {
         height:193px;
         margin: 10px 33px;
 
-        .line5TitleLine {
-          color:#9b9b9b;
-          font-family:PingFangSC-Medium;
-          padding: 13px 0 5px 33px;
-        }
-
         .line5line {
           display: flex;
           // justify-content: space-between;
@@ -369,12 +388,6 @@ export default {
           }
         }
 
-        .line5Subline {
-          border-top:1px solid #e6e6e6;
-          width:100%;
-          height:0px;
-        }
-
         .line5Content {
           font-family:PingFangSC-Regular;
           color:#493f3a;
@@ -383,6 +396,57 @@ export default {
         }
 
         .line5Content:nth-child(2n+1) {
+          background:#fffbed;
+        }
+      }
+
+      .line5TitleLine {
+        color:#9b9b9b;
+        font-family:PingFangSC-Medium;
+        padding: 13px 0 5px 33px;
+      }
+
+      .line5Subline {
+        border-top:1px solid #e6e6e6;
+        width:100%;
+        height:0px;
+      }
+
+      .line6 {
+        background:#ffffff;
+        border:1px solid #e6e6e6;
+        border-radius:3px;
+        width:673px;
+        margin: 10px 33px 15px 33px;
+
+        .line6line {
+          display: flex;
+          text-align: left;
+          font-family:PingFangSC-Medium;
+          font-size:12px;
+          letter-spacing:0.96px;
+
+          p:nth-child(1) {
+            flex: 1;
+          }
+          p:nth-child(2) {
+            flex: 1;
+          }
+          p:nth-child(3) {
+            flex: 1;
+          }
+          p:nth-child(4) {
+            flex: 1;
+          }
+        }
+
+        .line6Content {
+          font-family:PingFangSC-Regular;
+          color:#493f3a;
+          padding: 6px 0 5px 33px;
+        }
+
+        .line6Content:nth-child(2n+1) {
           background:#fffbed;
         }
       }
