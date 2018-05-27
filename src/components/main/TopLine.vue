@@ -1,7 +1,7 @@
 <template>
   <div class="topLine">
     <div class="findOrder">
-      <Input class="input" v-model="trackClue" placeholder="订单序列号或手机地址" clearable size="large"/>
+      <Input class="input" v-model="trackClue" placeholder="搜索订单号等信息" clearable size="large"/>
       <button class="findBtn" slot="append" @click="track"><Icon  class="icon" type="ios-search-strong" size="21" color="white"></Icon></button>
     </div>
     <div class="self">
