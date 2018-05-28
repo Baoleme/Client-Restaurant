@@ -1,7 +1,4 @@
 export default {
-  LOGIN (state) {
-    state.isLogin = true;
-  },
   GET_SELF_INFO (state, data) {
     state.email = data.email;
     state.restaurantName = data.name;

@@ -8,8 +8,16 @@ export default {
       email: data.username.trim(),
       password: data.password.trim()
     }).then((value) => {
-      commit('LOGIN');
+      // commit('LOGIN');
       console.log('Login succeed!');
+      return false;
+    }, (error) => {
+      console.log(error.response.data.message);
+      return error.response.data.message;
+    });
+  },
+  logout ({ commit }) {
+    return axios.delete(baseUrl + 'restaurant/session').then((value) => {
       return false;
     }, (error) => {
       console.log(error.response.data.message);

@@ -11,6 +11,7 @@
         <Icon type="arrow-down-b"></Icon>
         <DropdownMenu slot="list" class="dropdownItem">
           <DropdownItem>更改密码</DropdownItem>
+          <DropdownItem @click="logout">退出登录<Icon class="logoutIcon" type="android-exit" size="17"></Icon></DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>
@@ -42,6 +43,14 @@ export default {
           this.$store.commit('UPDATE_CLUE', this.trackClue);
           this.$store.commit('UPDATE_INDEX', 1);
           this.$router.push('/main/order/trackorder');
+        }
+      });
+    },
+    logout () {
+      this.$store.dispatch('logout').then((err) => {
+        if (err) {
+        } else {
+          this.$router.push('/login');
         }
       });
     }
@@ -106,6 +115,10 @@ export default {
 
     .dropdownItem {
       width: 230px;
+
+      .logoutIcon {
+        padding-left: 5px;
+      }
     }
   }
 }

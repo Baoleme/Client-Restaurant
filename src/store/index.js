@@ -9,7 +9,6 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     index: 0,
-    isLogin: false,
     email: '',
     restaurantName: '',
     restaurantId: 0,
