@@ -28,6 +28,7 @@
             <p v-show="order.state === '已完成' || order.state === '已取消'">查看</p>
           </div>
         </div>
+        <div class="noResult" v-show="filterList.length === 0">没有符合条件的订单</div>
         <Page class="pages" :total="total" :current.sync="current" show-elevator size="small" @on-change="change"></Page>
         <OrderDetail id="orderDetail" @close="closeDetail"/>
       </div>
@@ -272,6 +273,15 @@ export default {
         .cancel {
           color:#9b9b9b;
         }
+      }
+
+      .noResult {
+        background: #ffffff;
+        font-family:PingFangSC-Regular;
+        font-size:14px;
+        color:#b6b5b5;
+        letter-spacing:1px;
+        padding-bottom: 20%;
       }
 
       .pages {
