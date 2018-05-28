@@ -11,7 +11,7 @@
         <Icon type="arrow-down-b"></Icon>
         <DropdownMenu slot="list" class="dropdownItem">
           <DropdownItem>更改密码</DropdownItem>
-          <DropdownItem @click="logout">退出登录<Icon class="logoutIcon" type="android-exit" size="17"></Icon></DropdownItem>
+          <DropdownItem @click.native="logout">退出登录<Icon class="logoutIcon" type="android-exit" size="17"></Icon></DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>

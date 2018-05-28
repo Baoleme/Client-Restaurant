@@ -9,7 +9,6 @@ export default {
       password: data.password.trim()
     }).then((value) => {
       // commit('LOGIN');
-      console.log('Login succeed!');
       return false;
     }, (error) => {
       console.log(error.response.data.message);
