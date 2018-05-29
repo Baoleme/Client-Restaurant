@@ -92,9 +92,19 @@ export default {
       name: data
     }).then((res) => {
       if (res.status === 200) {
-        commit('ADD_CATE', res.data.name);
+        commit('ADD_CATE', res.data);
         return false;
       }
+    });
+  },
+  delCate ({ commit }, data) {
+    axios.delete(baseUrl + 'category/' + data + '?dump=1580').then((res) => {
+      if (res.status === 200) {
+        commit('DEL_CATE', data);
+        return false;
+      }
+    }, (error) => {
+      return error.response.data.message;
     });
   }
 };

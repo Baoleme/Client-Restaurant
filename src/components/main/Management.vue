@@ -31,8 +31,8 @@
               <div v-for="(item, index) in categories" :key="index">
                 <div class="menuItem" @click="goto(index)" :class="{subActive: activeSubIndex === index}">
                   <div class="menuItemEdit">
-                    <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="18" v-show="isEditCate === true"></Icon>
-                    <input class="menuIteminput" disabled="true" :class="{textActive: activeSubIndex === index}" v-model="categories[index]" />
+                    <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="18" v-show="isEditCate === true" @click.native="delCate(categories[index].id)"></Icon>
+                    <input class="menuIteminput" disabled="true" :class="{textActive: activeSubIndex === index}" v-model="categories[index].name" />
                   </div>
                   <span class="moveTips" v-show="isEditCate === false">按住拖动</span>
                 </div>
@@ -137,17 +137,17 @@ export default {
     // },
     categories () {
       return this.$store.state.categories;
+    },
+    curCategory () {
+      return this.categories[this.activeSubIndex];
+    },
+    dishes: {
+      get: function () {
+        return this.$store.state.dishList[this.activeSubIndex].dish;
+      },
+      set: function () {
+      }
     }
-    // curCategory () {
-    //   return this.categories[this.activeSubIndex];
-    // },
-    // dishes: {
-    //   get: function () {
-    //     return this.$store.state.dishList[this.activeSubIndex].dish;
-    //   },
-    //   set: function () {
-    //   }
-    // }
   },
   methods: {
     goto (index) {
@@ -182,6 +182,14 @@ export default {
           }
         });
       }
+    },
+    delCate (id) {
+      this.$store.dispatch('delCate', id).then((err) => {
+        if (err) {
+          this.errorMsg = err;
+        } else {
+        }
+      });
     }
   },
   components: {

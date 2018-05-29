@@ -83,7 +83,10 @@ export default {
     state.dishList = data;
     state.categories = [];
     for (let i = 0, len = state.dishList.length; i < len; i++) {
-      state.categories.push(state.dishList[i].name);
+      state.categories.push({
+        id: state.dishList[i].category_id,
+        name: state.dishList[i].name
+      });
     }
   },
   UPDATE_TIME_CLOCK (state) {
@@ -92,6 +95,17 @@ export default {
     }
   },
   ADD_CATE (state, data) {
-    state.categories.push(data);
+    state.categories.push({
+      id: data.category_id,
+      name: data.name
+    });
+  },
+  DEL_CATE (state, data) {
+    for (let i = 0, len = state.categories.length; i < len; i++) {
+      if (state.categories[i].id === data) {
+        state.categories.splice(i, 1);
+        break;
+      }
+    }
   }
 };
