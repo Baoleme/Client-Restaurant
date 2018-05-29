@@ -86,5 +86,15 @@ export default {
         return false;
       }
     });
+  },
+  addCate ({ commit }, data) {
+    axios.post(baseUrl + 'category', {
+      name: data
+    }).then((res) => {
+      if (res.status === 200) {
+        commit('ADD_CATE', res.data.name);
+        return false;
+      }
+    });
   }
 };

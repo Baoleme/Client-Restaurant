@@ -26,19 +26,37 @@
             <div class="">
               <div class="title">
                 <span>菜品分类</span>
-                <Icon type="gear-b" size="16"></Icon>
+                <Icon type="gear-b" size="16" @click.native="editCategory" :class="{activeGear: isEditCate === true}"></Icon>
               </div>
               <div v-for="(item, index) in categories" :key="index">
                 <div class="menuItem" @click="goto(index)" :class="{subActive: activeSubIndex === index}">
-                  <span :class="{textActive: activeSubIndex === index}">{{item}}</span>
-                  <span class="moveTips">按住拖动</span>
+                  <div class="menuItemEdit">
+                    <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="18" v-show="isEditCate === true"></Icon>
+                    <input class="menuIteminput" disabled="true" :class="{textActive: activeSubIndex === index}" v-model="categories[index]" />
+                  </div>
+                  <span class="moveTips" v-show="isEditCate === false">按住拖动</span>
                 </div>
+              </div>
+              <div class="menuItem" v-show="isEditCate === true & isAddNow === false" @click="newCateInput">
+                <div class="menuItemEdit">
+                  <Icon class="iconMiddle" type="ios-plus-outline" color="#ff8b18" size="18"></Icon>
+                  <span class="menuIteminput">添加分类…</span>
+                </div>
+                <div></div>
+              </div>
+              <div v-show="isAddNow === true">
+                <input type="text" placeholder="新分类名" class="addCateInput" v-model="newCateName">
+                <Icon type="checkmark" color="#fe8966" size="15" class="checkmark" @click.native="addNewCate"></Icon>
               </div>
             </div>
           </div>
           <div class="detailPart">
             <div class="curCategory">
-              <div class="curCategoryLeft">{{curCategory}}
+              <!-- <div class="curCategoryLeft">{{curCategory}}
+                <Icon type="edit" size="16"></Icon>
+              </div> -->
+              <div class="curCategoryLeft">
+                <input  class="curCategoryInput" type="text" v-model="test">
                 <Icon type="edit" size="16"></Icon>
               </div>
               <div class="curCategoryRight">快速编辑</div>
@@ -97,28 +115,73 @@ import TopLine from './TopLine';
 export default {
   data () {
     return {
+      test: '热销',
+      // settings: {
+      //   categories: ['售卖中', '已下架', '售卖中', '已下架'],
+      // },
       activeSubIndex: 0,
-      filter: ['售卖中', '已下架']
+      filter: ['售卖中', '已下架'],
+      isEditCate: false,
+      isAddNow: false,
+      newCateName: ''
     };
   },
   computed: {
+    // categories: {
+    //   get: function () {
+    //     return this.$store.state.categories;
+    //   },
+    //   set: function () {
+    //     return this.$store.state.categories;
+    //   }
+    // },
     categories () {
       return this.$store.state.categories;
-    },
-    curCategory () {
-      return this.categories[this.activeSubIndex];
-    },
-    dishes: {
-      get: function () {
-        return this.$store.state.dishList[this.activeSubIndex].dish;
-      },
-      set: function () {
-      }
     }
+    // curCategory () {
+    //   return this.categories[this.activeSubIndex];
+    // },
+    // dishes: {
+    //   get: function () {
+    //     return this.$store.state.dishList[this.activeSubIndex].dish;
+    //   },
+    //   set: function () {
+    //   }
+    // }
   },
   methods: {
     goto (index) {
       this.activeSubIndex = index;
+    },
+    editCategory () {
+      let menuItem = document.getElementsByClassName('menuIteminput');
+      if (this.isEditCate) {
+        this.isEditCate = false;
+        this.isAddNow = false;
+        for (let i = 0; i < menuItem.length; ++i) {
+          menuItem[i].disabled = true;
+        }
+      } else {
+        this.isEditCate = true;
+        for (let i = 0; i < menuItem.length; ++i) {
+          menuItem[i].disabled = false;
+        }
+      }
+    },
+    newCateInput () {
+      this.isAddNow = true;
+    },
+    addNewCate () {
+      this.isAddNow = false;
+      if (this.newCateName !== '') {
+        this.$store.dispatch('addCate', this.newCateName).then((err) => {
+          if (err) {
+            this.errorMsg = err;
+          } else {
+            this.newCateName = '';
+          }
+        });
+      }
     }
   },
   components: {
@@ -228,6 +291,10 @@ export default {
           z-index: 10;
           font-size:14px;
 
+          .activeGear {
+            color: #ff8b18;
+          }
+
           .title {
             font-family:PingFangSC-Medium;
             letter-spacing:1.12px;
@@ -247,10 +314,23 @@ export default {
             justify-content: space-between;
             margin: auto;
             cursor: default;
+            text-align: left;
 
-            span:nth-child(1) {
+            .menuItemEdit {
               margin-left: 15px;
             }
+
+            .menuIteminput {
+              outline: none;
+              border: none;
+              width: 80px;
+              margin-left: 5px;
+              background: transparent;
+            }
+
+            // span:nth-child(1) {
+            //   margin-left: 15px;
+            // }
             .moveTips {
               right: 2px;
               font-size: 12px;
@@ -262,6 +342,24 @@ export default {
             .textActive {
               color: #ff8b18;
             }
+          }
+
+          .addCateInput {
+            width: 138px;
+            margin: auto;
+            border:1px solid #ffc993;
+            border-radius:4px;
+            height:29px;
+            padding: 2px 20px 2px 6px;
+            outline: none;
+            display: block;
+            margin-top: 10px;
+          }
+
+          .checkmark {
+            position: relative;
+            right: -56px;
+            bottom: 24px;
           }
 
           .menuItem:hover > .moveTips {
@@ -292,10 +390,15 @@ export default {
               letter-spacing:1.12px;
               text-align:left;
               padding-left: 23px;
+
+              .curCategoryInput {
+                min-width: 10px;
+              }
             }
             .curCategoryRight {
               font-size: 12px;
               padding-right: 19px;
+              cursor: default;
             }
           }
 
@@ -527,6 +630,9 @@ export default {
         }
       }
     }
+  }
+  .iconMiddle {
+    vertical-align: middle;
   }
 }
 </style>

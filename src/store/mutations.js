@@ -90,5 +90,8 @@ export default {
     for (let i = 0, len = state.waitTimeClock.length; i < len; i++) {
       state.waitTimeClock[i].clock++;
     }
+  },
+  ADD_CATE (state, data) {
+    state.categories.push(data);
   }
 };
