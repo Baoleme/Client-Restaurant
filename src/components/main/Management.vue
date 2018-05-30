@@ -17,7 +17,7 @@
             </CheckboxGroup>
           </div>
           <div class="newGruop">
-            <Button type="ghost" class="newGroupBtn">新建分类</Button>
+            <Button type="ghost" class="newGroupBtn" @click="gotoNewCate">新建分类</Button>
             <Button type="info" class="newGroupBtn">新建菜品</Button>
           </div>
         </div>
@@ -52,13 +52,14 @@
           </div>
           <div class="detailPart">
             <div class="curCategory">
-              <!-- <div class="curCategoryLeft">{{curCategory}}
-                <Icon type="edit" size="16"></Icon>
-              </div> -->
               <div class="curCategoryLeft">
+                <span contenteditable="false" id="curCateName" :class="{isCurEdit: isCurEdit === true}">{{curCategory.name}}</span>
+                <Icon type="edit" size="16" @click.native="editCurCate(curCategory.id)" :class="{isCurEditIcon: isCurEdit === true}"></Icon>
+              </div>
+              <!-- <div class="curCategoryLeft">
                 <input  class="curCategoryInput" type="text" v-model="test">
                 <Icon type="edit" size="16"></Icon>
-              </div>
+              </div> -->
               <div class="curCategoryRight">快速编辑</div>
             </div>
             <div class="dishes">
@@ -115,7 +116,6 @@ import TopLine from './TopLine';
 export default {
   data () {
     return {
-      test: '热销',
       // settings: {
       //   categories: ['售卖中', '已下架', '售卖中', '已下架'],
       // },
@@ -123,6 +123,7 @@ export default {
       filter: ['售卖中', '已下架'],
       isEditCate: false,
       isAddNow: false,
+      isCurEdit: false,
       newCateName: ''
     };
   },
@@ -151,7 +152,7 @@ export default {
   },
   methods: {
     goto (index) {
-      console.log(index);
+      // console.log(index);
       this.activeSubIndex = index;
     },
     editCategory () {
@@ -184,8 +185,12 @@ export default {
         });
       }
     },
+    gotoNewCate () {
+      this.isAddNow = true;
+      this.isEditCate = true;
+    },
     delCate (id) {
-      console.log(id);
+      // console.log(id);
       this.$store.dispatch('delCate', id).then((err) => {
         if (err) {
           this.errorMsg = err;
@@ -205,6 +210,27 @@ export default {
         } else {
         }
       });
+    },
+    changCurName (id) {
+    },
+    editCurCate (id) {
+      if (this.isCurEdit) {
+        document.getElementById('curCateName').contentEditable = false;
+        let newName = document.getElementById('curCateName').innerText;
+        console.log(newName);
+        this.$store.dispatch('changeCate', {
+          name: newName,
+          id: id
+        }).then((err) => {
+          if (err) {
+            this.errorMsg = err;
+          } else {
+          }
+        });
+      } else {
+        document.getElementById('curCateName').contentEditable = true;
+      }
+      this.isCurEdit = !this.isCurEdit;
     }
   },
   components: {
@@ -414,8 +440,14 @@ export default {
               text-align:left;
               padding-left: 23px;
 
-              .curCategoryInput {
-                min-width: 10px;
+              .isCurEdit {
+                border:1px solid #ffc993;
+                border-radius:4px;
+                padding: 0px 4px;
+              }
+
+              .isCurEditIcon {
+                color: #ff8b18;
               }
             }
             .curCategoryRight {
