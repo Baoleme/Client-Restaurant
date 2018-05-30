@@ -106,5 +106,18 @@ export default {
     }, (error) => {
       return error.response.data.message;
     });
+  },
+  changeCate ({ commit }, data) {
+    axios.put(baseUrl + 'category/' + data.id, {
+      name: data.name
+    }).then((res) => {
+      if (res.status === 200) {
+        console.log('changeCate successfully!');
+        commit('CG_CATE', data);
+        return false;
+      }
+    }, (error) => {
+      return error.response.data.message;
+    });
   }
 };

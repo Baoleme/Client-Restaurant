@@ -32,7 +32,7 @@
                 <div class="menuItem" @click="goto(index)" :class="{subActive: activeSubIndex === index}">
                   <div class="menuItemEdit">
                     <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="18" v-show="isEditCate === true" @click.native="delCate(categories[index].id)"></Icon>
-                    <input class="menuIteminput" disabled="true" :class="{textActive: activeSubIndex === index}" v-model="categories[index].name" />
+                    <input class="menuIteminput" disabled="true" :class="{textActive: activeSubIndex === index}" :value="categories[index].name" @blur="changeCate(index)"/>
                   </div>
                   <span class="moveTips" v-show="isEditCate === false">按住拖动</span>
                 </div>
@@ -127,12 +127,12 @@ export default {
     };
   },
   computed: {
-    // categories: {
+    // mytest: {
     //   get: function () {
-    //     return this.$store.state.categories;
+    //     return this.categories.slice();
     //   },
     //   set: function () {
-    //     return this.$store.state.categories;
+    //     // return this.$store.state.categories;
     //   }
     // },
     categories () {
@@ -185,6 +185,19 @@ export default {
     },
     delCate (id) {
       this.$store.dispatch('delCate', id).then((err) => {
+        if (err) {
+          this.errorMsg = err;
+        } else {
+        }
+      });
+    },
+    changeCate (index) {
+      let newName = document.getElementsByClassName('menuIteminput')[index].value;
+      console.log(newName);
+      this.$store.dispatch('changeCate', {
+        name: newName,
+        id: this.categories[index].id
+      }).then((err) => {
         if (err) {
           this.errorMsg = err;
         } else {

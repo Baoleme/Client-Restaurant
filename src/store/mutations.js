@@ -107,5 +107,13 @@ export default {
         break;
       }
     }
+  },
+  CG_CATE (state, data) {
+    for (let i = 0, len = state.categories.length; i < len; i++) {
+      if (state.categories[i].id === data.id) {
+        state.categories[i].name = data.name;
+        break;
+      }
+    }
   }
 };
