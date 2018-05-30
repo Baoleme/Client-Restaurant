@@ -18,14 +18,14 @@
           <div class="orderState">
             <div class="orderStateLeft">
               <span class="leftName">状态</span>
-              <span :class="{newIcon: orderBoject.state === '新订单'}"></span>
-              <span :class="{newOrder: orderBoject.state==='新订单', ordering: orderBoject.state==='进行中', ordered: orderBoject.state==='已完成', cancelOrder: orderBoject.state==='已取消'}">{{orderBoject.state}}</span>
+              <span :class="{newIcon: orderBoject.curState === '新订单'}"></span>
+              <span :class="{newOrder: orderBoject.curState==='新订单', ordering: orderBoject.curState==='进行中', ordered: orderBoject.curState==='已完成', cancelOrder: orderBoject.curState==='已取消'}">{{orderBoject.curState}}</span>
             </div>
-            <p class="orderStateRight" v-show="orderBoject.state === '新订单'">
+            <p class="orderStateRight" v-show="orderBoject.curState === '新订单'">
               <Button type="info" class="newGroupBtn" @click.stop="dealTheOrder(orderBoject.order_id, 'accepted')">接单</Button>
               <Button type="ghost" class="newGroupBtn ghost" @click.stop="dealTheOrder(orderBoject.order_id, 'cancelled')">拒绝</Button>
             </p>
-            <p class="orderStateRight" v-show="orderBoject.state === '进行中'">
+            <p class="orderStateRight" v-show="orderBoject.curState === '进行中'">
               <Button type="success" class="newGroupBtn" @click.stop="dealTheOrder(orderBoject.order_id, 'completed')">完成</Button>
               <Button type="ghost" class="newGroupBtn cancelGhost" @click.stop="dealTheOrder(orderBoject.order_id, 'cancelled')">取消</Button>
             </p>
@@ -64,9 +64,9 @@
             <p>形成时间</p>
           </div>
           <div class="line5Subline"></div>
-          <div class="line5Content line5line" v-for="(item, index) in temp" :key="index">
+          <div class="line5Content line5line" v-for="(item, index) in orderBoject.state_record" :key="index">
             <p>{{item.state}}</p>
-            <p>{{item.createTime}}</p>
+            <p>{{item.time}}</p>
           </div>
         </div>
       </div>

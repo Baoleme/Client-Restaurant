@@ -7,25 +7,25 @@
         <order-menu :filterIndex="3" class="orderMenu" @filter="filter"/>
         <div class="orderList">
           <div v-for="(order, index) in filterList" :key="index" class="orderItem" @click="showDetail(index)">
-            <p><span :class="{cancel: order.state === '已取消'}">{{order.order_id}}</span></p>
-            <p><span :class="{cancel: order.state === '已取消'}">¥{{order.price}}</span></p>
-            <p><span :class="{cancel: order.state === '已取消'}">{{order.table}}</span></p>
-            <p :class="{newOrder: order.state === '新订单', lastOrder: order.state === '进行中'}">
-              <span :class="{newIcon: order.state === '新订单'}"></span>
-              <span :class="{cancel: order.state === '已取消'}">{{order.state}}</span>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.order_id}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">¥{{order.price}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.table}}</span></p>
+            <p :class="{newOrder: order.curState === '新订单', lastOrder: order.curState === '进行中'}">
+              <span :class="{newIcon: order.curState === '新订单'}"></span>
+              <span :class="{cancel: order.curState === '已取消'}">{{order.curState}}</span>
             </p>
-            <p><span :class="{cancel: order.state === '已取消'}">{{order.time}}</span></p>
-            <p><span :class="{cancel: order.state === '已取消'}">{{order.waitTime}}</span></p>
-            <p><span class="note" :class="{null_: order.remark === '无', cancel: order.state === '已取消'}">{{order.remark}}</span></p>
-            <p v-show="order.state === '新订单'">
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.createTime}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.waitTime}}</span></p>
+            <p><span class="note" :class="{null_: order.remark === '无', cancel: order.curState === '已取消'}">{{order.remark}}</span></p>
+            <p v-show="order.curState === '新订单'">
               <Button type="info" class="newGroupBtn" @click.stop="dealTheOrder(order.order_id, 'accepted')">接单</Button>
               <Button type="ghost" class="newGroupBtn ghost" @click.stop="dealTheOrder(order.order_id, 'cancelled')">拒绝</Button>
             </p>
-            <p v-show="order.state === '进行中'">
+            <p v-show="order.curState === '进行中'">
               <Button type="success" class="newGroupBtn" @click.stop="dealTheOrder(order.order_id, 'completed')">完成</Button>
               <Button type="ghost" class="newGroupBtn cancelGhost" @click.stop="dealTheOrder(order.order_id, 'cancelled')">取消</Button>
             </p>
-            <p v-show="order.state === '已完成' || order.state === '已取消'">查看</p>
+            <p v-show="order.curState === '已完成' || order.curState === '已取消'">查看</p>
           </div>
         </div>
         <Page class="pages" :total="total" :current.sync="current" show-elevator size="small" @on-change="change"></Page>

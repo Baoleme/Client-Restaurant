@@ -7,12 +7,12 @@
         <order-menu :filterIndex="2" class="orderMenu" @filter="filter"/>
         <div class="orderList">
           <div v-for="(order, index) in filterList" :key="index" class="orderItem" @click="showDetail(index)">
-            <p><span :class="{cancel: order.state === '已取消'}">{{order.order_id}}</span></p>
-            <p><span :class="{cancel: order.state === '已取消'}">¥{{order.price}}</span></p>
-            <p><span :class="{cancel: order.state === '已取消'}">{{order.table}}</span></p>
-            <p><span :class="{cancel: order.state === '已取消'}">{{order.state}}</span></p>
-            <p><span :class="{cancel: order.state === '已取消'}">{{order.time}}</span></p>
-            <p><span :class="{cancel: order.state === '已取消'}">{{order.waitTime}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.order_id}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">¥{{order.price}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.table}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.curState}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.createTime}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.waitTime}}</span></p>
             <p><span class="note" :class="{null_: order.remark === '无', cancel: order.state === '已取消'}">{{order.remark}}</span></p>
             <p>查看</p>
           </div>

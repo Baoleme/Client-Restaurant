@@ -29,7 +29,9 @@ export default {
     state.orderList = data.order;
     for (let i = 0, len = state.orderList.length; i < len; i++) {
       state.orderList[i].waitTime = '-';
-      if (state.orderList[i].state === 'paid' || state.orderList[i].state === 'accepted') {
+      state.orderList[i].createTime = state.orderList[i].state_record[0].time;
+      state.orderList[i].curState = state.orderList[i].state_record[state.orderList[i].state_record.length - 1].state;
+      if (state.orderList[i].curState === 'paid' || state.orderList[i].curState === 'accepted') {
         for (let j = 0, len = state.waitTimeClock.length; j < len; j++) {
           if (state.waitTimeClock[j].id === state.orderList[i].order_id) {
             let h = parseInt(state.waitTimeClock[j].clock / 3600);
@@ -56,20 +58,25 @@ export default {
     }
 
     for (let i = 0, len = state.orderList.length; i < len; i++) {
-      let temp = new Date(state.orderList[i].time);
-      state.orderList[i].time = temp.toLocaleString();
-      if (state.orderList[i].state === 'paid') {
-        state.orderList[i].state = '新订单';
+      let temp = new Date(state.orderList[i].createTime);
+      state.orderList[i].createTime = temp.toLocaleString();
+      for (let j = 0, len2 = state.orderList[i].state_record.length; j < len2; j++) {
+        let temp = new Date(state.orderList[i].state_record[j].time);
+        state.orderList[i].state_record[j].time = temp.toLocaleString();
+        if (state.orderList[i].state_record[j].state === 'paid') {
+          state.orderList[i].state_record[j].state = '新订单';
+        }
+        if (state.orderList[i].state_record[j].state === 'accepted') {
+          state.orderList[i].state_record[j].state = '进行中';
+        }
+        if (state.orderList[i].state_record[j].state === 'cancelled') {
+          state.orderList[i].state_record[j].state = '已取消';
+        }
+        if (state.orderList[i].state_record[j].state === 'completed') {
+          state.orderList[i].state_record[j].state = '已完成';
+        }
       }
-      if (state.orderList[i].state === 'accepted') {
-        state.orderList[i].state = '进行中';
-      }
-      if (state.orderList[i].state === 'cancelled') {
-        state.orderList[i].state = '已取消';
-      }
-      if (state.orderList[i].state === 'completed') {
-        state.orderList[i].state = '已完成';
-      }
+      state.orderList[i].curState = state.orderList[i].state_record[state.orderList[i].state_record.length - 1].state;
       if (!state.orderList[i].remark) {
         state.orderList[i].remark = '无';
       }

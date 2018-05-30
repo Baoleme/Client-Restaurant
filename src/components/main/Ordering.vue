@@ -10,17 +10,17 @@
             <p>{{order.order_id}}</p>
             <p>¥{{order.price}}</p>
             <p>{{order.table}}</p>
-            <p :class="{newOrder: order.state === '新订单', lastOrder: order.state === '进行中'}">
-              <span :class="{newIcon: order.state === '新订单'}"></span> {{order.state}}
+            <p :class="{newOrder: order.curState === '新订单', lastOrder: order.curState === '进行中'}">
+              <span :class="{newIcon: order.curState === '新订单'}"></span> {{order.curState}}
             </p>
-            <p>{{order.time}}</p>
+            <p>{{order.createTime}}</p>
             <p>{{order.waitTime}}</p>
             <p><span class="note" :class="{null_: order.remark === '无'}">{{order.remark}}</span></p>
-            <p v-show="order.state === '新订单'">
+            <p v-show="order.curState === '新订单'">
               <Button type="info" class="newGroupBtn" @click.stop="dealTheOrder(order.order_id, 'accepted')">接单</Button>
               <Button type="ghost" class="newGroupBtn ghost" @click.stop="dealTheOrder(order.order_id, 'cancelled')">拒绝</Button>
             </p>
-            <p v-show="order.state === '进行中'">
+            <p v-show="order.curState === '进行中'">
               <Button type="success" class="newGroupBtn" @click.stop="dealTheOrder(order.order_id, 'completed')">完成</Button>
               <Button type="ghost" class="newGroupBtn cancelGhost" @click.stop="dealTheOrder(order.order_id, 'cancelled')">取消</Button>
             </p>
