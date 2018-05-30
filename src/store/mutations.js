@@ -99,6 +99,11 @@ export default {
       id: data.category_id,
       name: data.name
     });
+    state.dishList.push({
+      category_id: data.category_id,
+      name: data.name,
+      dish: []
+    });
   },
   DEL_CATE (state, data) {
     for (let i = 0, len = state.categories.length; i < len; i++) {

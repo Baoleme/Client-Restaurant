@@ -100,6 +100,7 @@ export default {
   delCate ({ commit }, data) {
     axios.delete(baseUrl + 'category/' + data + '?dump=1580').then((res) => {
       if (res.status === 200) {
+        console.log('delCate successfully!');
         commit('DEL_CATE', data);
         return false;
       }

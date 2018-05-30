@@ -151,6 +151,7 @@ export default {
   },
   methods: {
     goto (index) {
+      console.log(index);
       this.activeSubIndex = index;
     },
     editCategory () {
@@ -184,6 +185,7 @@ export default {
       }
     },
     delCate (id) {
+      console.log(id);
       this.$store.dispatch('delCate', id).then((err) => {
         if (err) {
           this.errorMsg = err;
