@@ -18,7 +18,7 @@
                 </div>
                 <div class="subLine1"></div>
                 <input type="text" class="input1" v-model="dishName" @focus="nameOnfocus" @blur="nameOnblur"
-                  placeholder="15个汉字以下，推荐8个汉字以下，在app内可完整显示">
+                  placeholder="15个汉字以下，推荐8个汉字以下，在app内可完整显示" maxlength="15">
               </div>
               <div class="hintPart" v-show="isNameNull">
               <!-- <div class="hintPart" v-show="checkList[0]"> -->
@@ -130,7 +130,7 @@
             <div class="additionalInput borderClass">
               <div class="label3">菜品介绍</div>
               <div class="subLine1 subLine3"></div>
-              <textarea class="textarea" v-model="description"></textarea>
+              <textarea class="textarea" v-model="description" maxlength="50"></textarea>
               <div class="wordRestriction"><span>{{description.length}}</span><span>/50</span></div>
             </div>
             <div class="chilliLine">
@@ -147,7 +147,7 @@
               <div class="customTag">
                 <div class="newTag" v-for="(item, index) in tagList" :key="index">
                   <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="20" @click.native="deleteTag(item.id)"></Icon>
-                  <input type="text" class="newTagInput borderClass" placeholder="自定义标签" v-model="item.model">
+                  <input type="text" class="newTagInput borderClass" placeholder="自定义标签" v-model="item.model" maxlength="4">
                 </div>
                 <div class="newBtn" v-show="tagList.length !== 4">
                   <Icon class="iconMiddle" type="ios-plus-outline" color="#ff8b18" size="16" @click.native="addTag"></Icon>
