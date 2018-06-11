@@ -345,7 +345,7 @@ export default {
       if (this.isNameNull || this.isCateNull || this.isImgNull || this.isPriceNull ||
       this.isSizeOut || flag) {
         this.$Modal.warning({
-          title: '添加失败',
+          title: '菜品添加提示',
           content: '信息不完整,请补充必填信息'
         });
       } else {
@@ -407,7 +407,19 @@ export default {
         this.$store.dispatch('addDish', newDishObj).then((err) => {
           if (err) {
           } else {
-            this.$router.push('/main/dish/management');
+            this.$Modal.success({
+              title: '菜品添加提示',
+              content: '菜品添加成功!',
+              onOk: () => {
+                this.$store.dispatch('getDish').then((err) => {
+                  if (err) {
+                    this.errorMsg = err;
+                  } else {
+                    this.$router.push('/main/dish/management');
+                  }
+                });
+              }
+            });
           }
         });
       }
