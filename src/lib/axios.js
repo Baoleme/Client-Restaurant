@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from '../store';
 
 const ax = axios.create({
-  timeout: 3000,
+  // timeout: 3000,
   withCredentials: true,
   // baseURL: config.axiosBase
   baseURL: '/api'

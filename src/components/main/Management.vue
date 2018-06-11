@@ -233,6 +233,7 @@ export default {
       this.isCurEdit = !this.isCurEdit;
     },
     gotoAddDish () {
+      this.$store.commit('SAVE_NEWDISH_IMG', '');
       this.$router.push('/main/dish/newdish');
     }
   },

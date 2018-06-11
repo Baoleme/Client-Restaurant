@@ -53,7 +53,7 @@
                 <div class="hintPart imghintPart">
                   <div v-show="isImgNull || isSizeOut">
                     <Icon type="close-circled" color="#FE8966" size="14" />
-                    <span v-show="isSizeOut">图片大小超过5M</span>
+                    <span v-show="isSizeOut">图片大小超过1M</span>
                     <span v-show="isImgNull">图片不能为空</span>
                   </div>
                   <div class="uploadBtn">
@@ -61,7 +61,7 @@
                   </div>
                 </div>
               </div>
-              <div class="imgHint">提示：支持jpg/png格式，大小5M以下</div>
+              <div class="imgHint">提示：支持jpg/png格式，大小1M以下</div>
             </div>
             <div class="subTitle2">
               <span>价格信息</span><span>提示：商品价格=基础价格+规格组合价格</span>
@@ -305,7 +305,6 @@ export default {
       this.tempSelect = this.dishCate;
     },
     addNewDish: function () {
-      
     },
     cancelAddDish: function () {
       this.$router.push('/main/dish/management');
@@ -313,18 +312,24 @@ export default {
   },
   mounted () {
     var that = this;
+    var self = this.$store;
     document.getElementById('uploadImg').onchange = function () {
       var imgFile = this.files[0];
       console.log(this.files[0].size / 1024000);
-      if ((this.files[0].size / 1024000) > 5) {
+      if ((this.files[0].size / 1024000) > 1) {
         that.isSizeOut = 1;
       } else {
         that.isSizeOut = 0;
-        var fr = new FileReader();
-        fr.onload = function () {
-          document.getElementById('dishImg').src = fr.result;
-        };
-        fr.readAsDataURL(imgFile);
+        self.dispatch('uploadImg', this.files[0]).then((err) => {
+          if (err) {
+          } else {
+            var fr = new FileReader();
+            fr.onload = function () {
+              document.getElementById('dishImg').src = fr.result;
+            };
+            fr.readAsDataURL(imgFile);
+          }
+        });
       }
     };
   },

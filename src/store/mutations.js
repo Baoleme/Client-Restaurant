@@ -127,5 +127,9 @@ export default {
         break;
       }
     }
+  },
+  SAVE_NEWDISH_IMG (state, data) {
+    state.curImg = data;
+    console.log(state.curImg);
   }
 };

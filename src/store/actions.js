@@ -120,5 +120,16 @@ export default {
     }, (error) => {
       return error.response.data.message;
     });
+  },
+  uploadImg ({ commit }, data) {
+    let fd = new FormData();
+    fd.append('image', data);
+    return axios.post(baseUrl + 'image', fd).then((value) => {
+      commit('SAVE_NEWDISH_IMG', value.data.url);
+      return false;
+    }, (error) => {
+      console.log(error.response.data.message);
+      return error.response.data.message;
+    });
   }
 };
