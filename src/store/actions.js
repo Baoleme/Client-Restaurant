@@ -131,5 +131,12 @@ export default {
       console.log(error.response.data.message);
       return error.response.data.message;
     });
+  },
+  addDish ({ commit }, data) {
+    axios.post(baseUrl + 'dish', data).then((value) => {
+      return false;
+    }, (error) => {
+      return error.response.data.message;
+    });
   }
 };

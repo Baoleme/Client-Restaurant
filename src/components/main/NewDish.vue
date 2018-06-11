@@ -33,7 +33,7 @@
                   <div class="require">必填*</div>
                 </div>
                 <div class="subLine1"></div>
-                <input type="text" class="input1" @focus="cateOnfocus" @blur="cateOnblur" v-model="dishCate">
+                <input type="text" class="input1" @focus="cateOnfocus" @blur="cateOnblur"  @keydown="onkeydown" v-model="dishCate">
               </div>
               <div class="hintPart" v-show="isCateNull">
                 <Icon type="close-circled" color="#FE8966" size="14" />
@@ -41,7 +41,7 @@
               </div>
             </div>
             <div class="curCateList" v-show="isShowCurCateList">
-              <div v-for="(item, index) in filterList" :key="index" @mouseover="selectCate(item)" @mouseout="mouseout">{{item}}</div>
+              <div v-for="(item, index) in filterList" :key="index" @mouseover="selectCate(item)" @mouseout="mouseout">{{item.name}}</div>
             </div>
             <div class="imgPart">
               <div class="labelLine2">
@@ -84,7 +84,10 @@
               <div class="newSpecCate">
                 <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="22" @click.native="delSpecCate(item.specId)"></Icon>
                 <input type="text" class="newCateInput borderClass" placeholder="规格名，如冷热" v-model="item.specNameModel">
-                <input type="text" class="defaultCate borderClass" placeholder="默认规格名，如标准杯" v-model="item.defaultName">
+                <Select v-model="item.defaultName" size="small" style="width:200px" placeholder="请选择默认规格名">
+                  <Option v-for="it in item.specItemList" :value="it.nameModel" :key="it.nameModel">{{ it.nameModel }}</Option>
+                </Select>
+                <!-- <input type="text" class="defaultCate borderClass" placeholder="默认规格名，如标准杯" v-model="item.defaultName"> -->
               </div>
               <div class="newSpecGroup" v-for="(subItem, index2) in item.specItemList" :key="index2">
                 <div class="newSpecItem">
@@ -107,6 +110,10 @@
                     </div>
                     <div class="newSpecItemLine"></div>
                   </div>
+                  <div class="hintPart" v-show="subItem.isNull">
+                    <Icon type="close-circled" color="#FE8966" size="14" />
+                    <span>可选择规格名不能为空</span>
+                  </div>
                 </div>
               </div>
               <div class="newBtn addNewSpecItem">
@@ -123,8 +130,8 @@
             <div class="additionalInput borderClass">
               <div class="label3">菜品介绍</div>
               <div class="subLine1 subLine3"></div>
-              <textarea class="textarea" v-model="describe"></textarea>
-              <div class="wordRestriction"><span>{{describe.length}}</span><span>/50</span></div>
+              <textarea class="textarea" v-model="description"></textarea>
+              <div class="wordRestriction"><span>{{description.length}}</span><span>/50</span></div>
             </div>
             <div class="chilliLine">
               <div class="label4">标签</div>
@@ -133,7 +140,7 @@
               <div class="chilliImg"></div>
               <span>不辣</span> -->
               <Select v-model="chilliModel" size="small" style="width:100px" placeholder="请选择辣度">
-                <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                <Option v-for="item in chillList" :value="item" :key="item">{{ item }}</Option>
               </Select>
             </div>
             <div class="newTagPart">
@@ -168,32 +175,15 @@ export default {
     return {
       tagNum: 0,
       specNum: 0,
-      cityList: [
-        {
-          value: '不辣',
-          label: '不辣'
-        },
-        {
-          value: '微辣',
-          label: '微辣'
-        },
-        {
-          value: '中辣',
-          label: '中辣'
-        },
-        {
-          value: '特辣',
-          label: '特辣'
-        }
-      ],
+      chillList: ['不辣', '微辣', '中辣', '特辣'],
       chilliModel: '',
       tagList: [],
       specList: [],
-      describe: '',
-      tempList: ['仙草雪顶类', '鲜花雪顶类', '神仙雪顶'],
+      description: '',
       isShowCurCateList: false,
       dishCate: '',
-      tempSelect: '',
+      dishCateId: 0,
+      tempSelect: {},
       isNameNull: 0,
       isCateNull: 0,
       isImgNull: 0,
@@ -204,8 +194,11 @@ export default {
     };
   },
   computed: {
+    categories: function () {
+      return this.$store.state.categories;
+    },
     filterList: function () {
-      return this.tempList.filter(item => (item.indexOf(this.dishCate) !== -1));
+      return this.categories.filter(item => (item.name.indexOf(this.dishCate) !== -1));
     }
   },
   methods: {
@@ -227,13 +220,15 @@ export default {
       this.specList.push({
         specId: this.specNum++,
         specNameModel: '',
+        // defaultName: '',
         defaultName: '',
         subItemNum: 1,
         specItemList: [
           {
             subId: 0,
             nameModel: '',
-            priceModel: ''
+            priceModel: '',
+            isNull: 0
           }
         ]
       });
@@ -250,12 +245,13 @@ export default {
       specItem.specItemList.push({
         subId: specItem.subItemNum++,
         nameModel: '',
-        priceModel: ''
+        priceModel: '',
+        isNull: 0
       });
     },
     delSpecItem: function (id1, id2) {
       for (let i = 0; i < this.specList.length; i++) {
-        if (this.specList[i].specId === id1) {
+        if (this.specList[i].specId === id1 && this.specList[i].specItemList.length > 1) {
           for (let j = 0; j < this.specList[i].specItemList.length; j++) {
             if (this.specList[i].specItemList[j].subId === id2) {
               this.specList[i].specItemList.splice(j, 1);
@@ -278,17 +274,30 @@ export default {
       this.isCateNull = 0;
       this.isShowCurCateList = true;
       if (this.dishCate === '') {
-        this.tempSelect = '';
+        this.tempSelect = {
+          name: '',
+          id: 0
+        };
       } else {
-        this.tempSelect = this.dishCate;
+        this.tempSelect = {
+          name: this.dishCate,
+          id: this.dishCateId
+        };
       }
     },
     cateOnblur: function () {
-      this.dishCate = this.tempSelect;
+      this.dishCate = this.tempSelect.name;
+      this.dishCateId = this.tempSelect.id;
       this.isShowCurCateList = false;
       if (this.dishCate === '') {
         this.isCateNull = 1;
       }
+    },
+    onkeydown: function () {
+      this.tempSelect = {
+        name: '',
+        id: 0
+      };
     },
     priOnfocus: function () {
       this.isPriceNull = 0;
@@ -299,12 +308,109 @@ export default {
       }
     },
     selectCate: function (selectValue) {
-      this.tempSelect = selectValue;
+      this.tempSelect = {
+        name: selectValue.name,
+        id: selectValue.id
+      };
     },
     mouseout: function () {
-      this.tempSelect = this.dishCate;
+      this.tempSelect = {
+        name: this.dishCate,
+        id: this.dishCateId
+      };
     },
     addNewDish: function () {
+      console.log(this.specList);
+      if (this.$store.state.curImg === '') {
+        this.isImgNull = 1;
+      }
+      if (this.dishName === '') {
+        this.isNameNull = 1;
+      }
+      if (this.dishCate === '') {
+        this.isCateNull = 1;
+      }
+      if (this.dishPrice === '') {
+        this.isPriceNull = 1;
+      }
+      let flag = 0;
+      for (let i = 0; i < this.specList.length; ++i) {
+        for (let j = 0; j < this.specList[i].specItemList.length; ++j) {
+          if (this.specList[i].specItemList[j].nameModel === '') {
+            this.specList[i].specItemList[j].isNull = 1;
+            flag = 1;
+          }
+        }
+      }
+      if (this.isNameNull || this.isCateNull || this.isImgNull || this.isPriceNull ||
+      this.isSizeOut || flag) {
+        this.$Modal.warning({
+          title: '添加失败',
+          content: '信息不完整,请补充必填信息'
+        });
+      } else {
+        let dishSpicy;
+        if (this.chilliModel === '' || this.chilliModel === '不辣') {
+          dishSpicy = 0;
+        } else if (this.chilliModel === '微辣') {
+          dishSpicy = 1;
+        } else if (this.chilliModel === '中辣') {
+          dishSpicy = 2;
+        } else {
+          dishSpicy = 3;
+        }
+        let newDishObj = {
+          category_id: this.dishCateId,
+          name: this.dishName,
+          price: Number(this.dishPrice.trim()),
+          spicy: dishSpicy,
+          image_url: [
+            this.$store.state.curImg
+          ],
+          description: this.description
+        };
+        let specifications = [];
+        if (this.specList.length === 0) {
+          newDishObj.specifications = null;
+        } else {
+          for (let i = 0; i < this.specList.length; ++i) {
+            let temp = {
+              name: this.specList[i].specNameModel,
+              require: true,
+              options: []
+            };
+            for (let j = 0; j < this.specList[i].specItemList.length; ++j) {
+              if (this.specList[i].defaultName === this.specList[i].specItemList[j].nameModel) {
+                temp.default = j;
+              }
+              temp.options.push({
+                name: this.specList[i].specItemList[j].nameModel,
+                delta: Number(this.specList[i].specItemList[j].priceModel.trim())
+              });
+            }
+            specifications.push(temp);
+          }
+          newDishObj.specifications = specifications;
+        }
+        let tag = [];
+        for (let i = 0; i < this.tagList.length; ++i) {
+          if (this.tagList[i].model !== '') {
+            tag.push(this.tagList[i].model);
+          }
+        }
+        if (tag.length === 0) {
+          newDishObj.tag = null;
+        } else {
+          newDishObj.tag = tag;
+        }
+        console.log(newDishObj);
+        this.$store.dispatch('addDish', newDishObj).then((err) => {
+          if (err) {
+          } else {
+            this.$router.push('/main/dish/management');
+          }
+        });
+      }
     },
     cancelAddDish: function () {
       this.$router.push('/main/dish/management');
@@ -323,6 +429,7 @@ export default {
         self.dispatch('uploadImg', this.files[0]).then((err) => {
           if (err) {
           } else {
+            that.isImgNull = 0;
             var fr = new FileReader();
             fr.onload = function () {
               document.getElementById('dishImg').src = fr.result;
@@ -664,6 +771,10 @@ input[type="number"]{
                 display: flex;
                 align-items: flex-end;
                 margin: 10px 0 0 136px;
+
+                .hintPart {
+                  margin-bottom: 60px;
+                }
 
                 .itemBox {
                   width:558px;
