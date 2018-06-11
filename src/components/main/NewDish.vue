@@ -17,9 +17,11 @@
                   <div class="require">必填*</div>
                 </div>
                 <div class="subLine1"></div>
-                <input type="text" class="input1" placeholder="15个汉字以下，推荐8个汉字以下，在app内可完整显示">
+                <input type="text" class="input1" v-model="dishName" @focus="nameOnfocus" @blur="nameOnblur"
+                  placeholder="15个汉字以下，推荐8个汉字以下，在app内可完整显示">
               </div>
-              <div class="hintPart">
+              <div class="hintPart" v-show="isNameNull">
+              <!-- <div class="hintPart" v-show="checkList[0]"> -->
                 <Icon type="close-circled" color="#FE8966" size="14" />
                 <span>商品名不能为空</span>
               </div>
@@ -31,12 +33,15 @@
                   <div class="require">必填*</div>
                 </div>
                 <div class="subLine1"></div>
-                <input type="text" class="input1">
+                <input type="text" class="input1" @focus="cateOnfocus" @blur="cateOnblur" v-model="dishCate">
               </div>
-              <div class="hintPart">
+              <div class="hintPart" v-show="isCateNull">
                 <Icon type="close-circled" color="#FE8966" size="14" />
                 <span>分类不能为空</span>
               </div>
+            </div>
+            <div class="curCateList" v-show="isShowCurCateList">
+              <div v-for="(item, index) in filterList" :key="index" @mouseover="selectCate(item)" @mouseout="mouseout">{{item}}</div>
             </div>
             <div class="imgPart">
               <div class="labelLine2">
@@ -44,14 +49,15 @@
                 <div class="require">必填*</div>
               </div>
               <div class="inputPart">
-                <img src="" alt="" class="dishImg">
+                <img src="@/assets/images/yulan.jpg" alt="" id="dishImg">
                 <div class="hintPart imghintPart">
-                  <div>
+                  <div v-show="isImgNull || isSizeOut">
                     <Icon type="close-circled" color="#FE8966" size="14" />
-                    <span>图片大小超过5M</span>
+                    <span v-show="isSizeOut">图片大小超过5M</span>
+                    <span v-show="isImgNull">图片不能为空</span>
                   </div>
                   <div class="uploadBtn">
-                    <Button type="info" class="newGroupBtn">点击上传</Button>
+                    点击上传<input type="file" id="uploadImg" accept=".jpg,.jpeg,.png"/>
                   </div>
                 </div>
               </div>
@@ -67,22 +73,22 @@
                   <div class="require">必填*</div>
                 </div>
                 <div class="subLine2"></div>
-                <input type="text" class="input2" placeholder="0"><span class="scale">元</span>
+                <input type="number" class="input2" placeholder="0" @focus="priOnfocus" @blur="priOnblur" v-model="dishPrice"><span class="scale">元</span>
               </div>
-              <div class="hintPart">
+              <div class="hintPart" v-show="isPriceNull">
                 <Icon type="close-circled" color="#FE8966" size="14" />
                 <span>价格不能为空</span>
               </div>
             </div>
-            <div class="newSpecificationsPart">
+            <div class="newSpecificationsPart" v-for="(item, index) in specList" :key="index">
               <div class="newSpecCate">
-                <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="22" @click.native="deleteTag"></Icon>
-                <input type="text" class="newCateInput borderClass" placeholder="规格名，如冷热">
-                <input type="text" class="defaultCate borderClass" placeholder="默认规格名，如标准杯">
+                <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="22" @click.native="delSpecCate(item.specId)"></Icon>
+                <input type="text" class="newCateInput borderClass" placeholder="规格名，如冷热" v-model="item.specNameModel">
+                <input type="text" class="defaultCate borderClass" placeholder="默认规格名，如标准杯" v-model="item.defaultName">
               </div>
-              <div class="newSpecGroup">
+              <div class="newSpecGroup" v-for="(subItem, index2) in item.specItemList" :key="index2">
                 <div class="newSpecItem">
-                  <Icon class="iconMiddle deleteSpecItem" type="ios-minus-outline" color="#ff8b18" size="22" @click.native="deleteTag"></Icon>
+                  <Icon class="iconMiddle deleteSpecItem" type="ios-minus-outline" color="#ff8b18" size="22" @click.native="delSpecItem(item.specId,subItem.subId)"></Icon>
                   <div class="itemBox borderClass">
                     <div class="newSpecName">
                       <div class="labelLineLeft labelLine">
@@ -90,50 +96,53 @@
                         <div class="require">必填*</div>
                       </div>
                       <div class="subLine2"></div>
-                      <input type="text" class="input2" placeholder="如大杯/中份/单人装">
+                      <input type="text" class="input2" placeholder="如大杯/中份/单人装" v-model="subItem.nameModel">
                     </div>
                     <div class="delta">
                       <div class="labelLineRight labelLine">
                         <div class="labelRight labelTwo">价格增降</div>
                       </div>
                       <div class="subLine2"></div>
-                      <input type="text" class="input2" placeholder="0"><span class="scale">元</span>
+                      <input type="text" class="input2" placeholder="0" v-model="subItem.priceModel"><span class="scale">元</span>
                     </div>
                     <div class="newSpecItemLine"></div>
                   </div>
                 </div>
-                <div class="newBtn addNewSpecItem">
-                  <Icon class="iconMiddle" type="ios-plus-outline" color="#ff8b18" size="16" @click.native="addSpecItem"></Icon>
-                  <span>添加规格</span>
-                </div>
               </div>
-              <div class="newBtn addNewSpecCate">
-                <Icon class="iconMiddle" type="ios-plus-outline" color="#ff8b18" size="16" @click.native="addSpecCate"></Icon>
-                <span>添加规格分类</span>
+              <div class="newBtn addNewSpecItem">
+                <Icon class="iconMiddle" type="ios-plus-outline" color="#ff8b18" size="16" @click.native="addSpecItem(item)"></Icon>
+                <span>添加规格</span>
               </div>
-              <div class="newSpecificationsHint">提示：不同规格的价格增降指该规格产品在基础价格上的价格变化，如规格为“小份”，价格较标准份“-2”。</div>
             </div>
+            <div class="newBtn addNewSpecCate">
+              <Icon class="iconMiddle" type="ios-plus-outline" color="#ff8b18" size="16" @click.native="addSpecCate"></Icon>
+              <span>添加规格分类</span>
+            </div>
+            <div class="newSpecificationsHint">提示：不同规格的价格增降指该规格产品在基础价格上的价格变化，如规格为“小份”，价格较标准份“-2”。</div>
             <div class="subTitle3">附加信息</div>
             <div class="additionalInput borderClass">
               <div class="label3">菜品介绍</div>
               <div class="subLine1 subLine3"></div>
-              <textarea class="textarea"></textarea>
-              <div class="wordRestriction"><span>50</span><span>/50</span></div>
+              <textarea class="textarea" v-model="describe"></textarea>
+              <div class="wordRestriction"><span>{{describe.length}}</span><span>/50</span></div>
             </div>
             <div class="chilliLine">
               <div class="label4">标签</div>
+              <!-- <div class="chilliImg"></div>
               <div class="chilliImg"></div>
               <div class="chilliImg"></div>
-              <div class="chilliImg"></div>
-              <span>不辣</span>
+              <span>不辣</span> -->
+              <Select v-model="chilliModel" size="small" style="width:100px" placeholder="请选择辣度">
+                <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
             </div>
             <div class="newTagPart">
               <div class="customTag">
-                <div class="newTag" v-for="(i, index) in tagNum" :key="index">
-                  <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="20" @click.native="deleteTag"></Icon>
-                  <input type="text" class="newTagInput borderClass" placeholder="自定义标签">
+                <div class="newTag" v-for="(item, index) in tagList" :key="index">
+                  <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="20" @click.native="deleteTag(item.id)"></Icon>
+                  <input type="text" class="newTagInput borderClass" placeholder="自定义标签" v-model="item.model">
                 </div>
-                <div class="newBtn" v-show="!isTagFour">
+                <div class="newBtn" v-show="tagList.length !== 4">
                   <Icon class="iconMiddle" type="ios-plus-outline" color="#ff8b18" size="16" @click.native="addTag"></Icon>
                   <span>添加自定义标签</span>
                 </div>
@@ -141,8 +150,8 @@
               <div class="newTagHint">提示：自定义标签名称四字以内，最多可添加四个。</div>
             </div>
             <div class="confirmPart">
-              <Button type="info" class="newGroupBtn confirmEdit">新建菜品</Button>
-              <span>放弃新建</span>
+              <Button type="info" class="newGroupBtn confirmEdit" @click="addNewDish">新建菜品</Button>
+              <span @click="cancelAddDish">放弃新建</span>
             </div>
           </div>
         </div>
@@ -158,26 +167,166 @@ export default {
   data () {
     return {
       tagNum: 0,
-      specificationsNum: 0,
-      isTagFour: false
+      specNum: 0,
+      cityList: [
+        {
+          value: '不辣',
+          label: '不辣'
+        },
+        {
+          value: '微辣',
+          label: '微辣'
+        },
+        {
+          value: '中辣',
+          label: '中辣'
+        },
+        {
+          value: '特辣',
+          label: '特辣'
+        }
+      ],
+      chilliModel: '',
+      tagList: [],
+      specList: [],
+      describe: '',
+      tempList: ['仙草雪顶类', '鲜花雪顶类', '神仙雪顶'],
+      isShowCurCateList: false,
+      dishCate: '',
+      tempSelect: '',
+      isNameNull: 0,
+      isCateNull: 0,
+      isImgNull: 0,
+      isSizeOut: 0,
+      isPriceNull: 0,
+      dishName: '',
+      dishPrice: ''
     };
+  },
+  computed: {
+    filterList: function () {
+      return this.tempList.filter(item => (item.indexOf(this.dishCate) !== -1));
+    }
   },
   methods: {
     addTag: function () {
-      this.tagNum = this.tagNum + 1;
-      if (this.tagNum === 4) {
-        this.isTagFour = true;
-      }
+      this.tagList.push({
+        id: this.tagNum++,
+        model: ''
+      });
     },
-    deleteTag: function () {
-      this.tagNum = this.tagNum - 1;
-      if (this.isTagFour) {
-        this.isTagFour = false;
+    deleteTag: function (id) {
+      for (let i = 0; i < this.tagList.length; i++) {
+        if (this.tagList[i].id === id) {
+          this.tagList.splice(i, 1);
+          break;
+        }
       }
     },
     addSpecCate: function () {
-      this.specificationsNum = this.specificationsNum + 1;
+      this.specList.push({
+        specId: this.specNum++,
+        specNameModel: '',
+        defaultName: '',
+        subItemNum: 1,
+        specItemList: [
+          {
+            subId: 0,
+            nameModel: '',
+            priceModel: ''
+          }
+        ]
+      });
+    },
+    delSpecCate: function (id) {
+      for (let i = 0; i < this.specList.length; i++) {
+        if (this.specList[i].specId === id) {
+          this.specList.splice(i, 1);
+          break;
+        }
+      }
+    },
+    addSpecItem: function (specItem) {
+      specItem.specItemList.push({
+        subId: specItem.subItemNum++,
+        nameModel: '',
+        priceModel: ''
+      });
+    },
+    delSpecItem: function (id1, id2) {
+      for (let i = 0; i < this.specList.length; i++) {
+        if (this.specList[i].specId === id1) {
+          for (let j = 0; j < this.specList[i].specItemList.length; j++) {
+            if (this.specList[i].specItemList[j].subId === id2) {
+              this.specList[i].specItemList.splice(j, 1);
+              break;
+            }
+          }
+          break;
+        }
+      }
+    },
+    nameOnfocus: function () {
+      this.isNameNull = 0;
+    },
+    nameOnblur: function () {
+      if (this.dishName === '') {
+        this.isNameNull = 1;
+      }
+    },
+    cateOnfocus: function () {
+      this.isCateNull = 0;
+      this.isShowCurCateList = true;
+      if (this.dishCate === '') {
+        this.tempSelect = '';
+      } else {
+        this.tempSelect = this.dishCate;
+      }
+    },
+    cateOnblur: function () {
+      this.dishCate = this.tempSelect;
+      this.isShowCurCateList = false;
+      if (this.dishCate === '') {
+        this.isCateNull = 1;
+      }
+    },
+    priOnfocus: function () {
+      this.isPriceNull = 0;
+    },
+    priOnblur: function () {
+      if (this.dishPrice === '') {
+        this.isPriceNull = 1;
+      }
+    },
+    selectCate: function (selectValue) {
+      this.tempSelect = selectValue;
+    },
+    mouseout: function () {
+      this.tempSelect = this.dishCate;
+    },
+    addNewDish: function () {
+      
+    },
+    cancelAddDish: function () {
+      this.$router.push('/main/dish/management');
     }
+  },
+  mounted () {
+    var that = this;
+    document.getElementById('uploadImg').onchange = function () {
+      var imgFile = this.files[0];
+      console.log(this.files[0].size / 1024000);
+      if ((this.files[0].size / 1024000) > 5) {
+        that.isSizeOut = 1;
+      } else {
+        that.isSizeOut = 0;
+        var fr = new FileReader();
+        fr.onload = function () {
+          document.getElementById('dishImg').src = fr.result;
+        };
+        fr.readAsDataURL(imgFile);
+      }
+    };
   },
   components: {
     Menu,
@@ -187,6 +336,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type="number"]{
+  -moz-appearance: textfield;
+}
 .mainContanier {
   display: flex;
   min-height: 100vh;
@@ -290,6 +446,24 @@ export default {
             margin-top: 15px;
           }
 
+          .curCateList {
+            border:1px solid #e6e6e6;
+            border-top: none;
+            width:587px;
+            font-size: 14px;
+            position: absolute;
+            background: #ffffff;
+            z-index: 9999;
+            div {
+              padding: 10px;
+              cursor: default;
+            }
+            div:hover {
+              background:#fff8e3;
+              border-radius:4px;
+            }
+          }
+
           .subLine1 {
             border-top:1px solid #e6e6e6;
             width:98%;
@@ -338,7 +512,7 @@ export default {
             .inputPart {
               display: flex;
 
-              .dishImg {
+              #dishImg {
                 display: inline-block;
                 background:#ffffff;
                 border:1px solid #e6e6e6;
@@ -350,10 +524,27 @@ export default {
               .imghintPart {
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
+                justify-content: flex-end;
 
                 .uploadBtn {
-                  text-align: left;
+                  display: inline-block;
+                  background: #f88d6c;
+                  border: #f88d6c 1px solid;
+                  border-radius: 3px;
+                  padding: 11px 15px;
+                  color: #ffffff;
+                  font-size: 14px;
+                  width:91px;
+                  height:43px;
+                  margin-top: 94px;
+                }
+                .uploadBtn input {
+                  position: relative;
+                  right: 16px;
+                  bottom: 33px;
+                  opacity: 0;
+                  width:91px;
+                  height:43px;
                 }
               }
             }
@@ -440,6 +631,7 @@ export default {
           .borderClass {
             border:1px solid #e6e6e6;
             border-radius:3px;
+            outline: none;
           }
 
           .newSpecificationsPart {
@@ -516,22 +708,29 @@ export default {
                   }
                 }
               }
+            }
+            .addNewSpecItem {
+              margin-left: 164px;
+              margin-bottom: 15px;
 
-              .addNewSpecItem {
-                margin-left: 164px;
+              >span {
+                cursor: default;
               }
             }
+          }
 
-            .addNewSpecCate {
-              margin-top: 36px;
+          .addNewSpecCate {
+            margin-top: 26px;
+            >span {
+              cursor: default;
             }
+          }
 
-            .newSpecificationsHint {
-              font-family:PingFangSC-Regular;
-              font-size:14px;
-              color:#dadada;
-              margin-top: 10px;
-            }
+          .newSpecificationsHint {
+            font-family:PingFangSC-Regular;
+            font-size:14px;
+            color:#dadada;
+            margin-top: 10px;
           }
 
           .subTitle3 {
@@ -594,15 +793,15 @@ export default {
               margin-right: 57px;
             }
 
-            .chilliImg {
-              height: 20px;
-              width: 20px;
-              background: url('../../assets/images/spicy-grey.svg')
-            }
+            // .chilliImg {
+            //   height: 20px;
+            //   width: 20px;
+            //   background: url('../../assets/images/spicy-grey.svg')
+            // }
 
-            .chilliImg:hover {
-              background: url('../../assets/images/chilli.svg')
-            }
+            // .chilliImg:hover {
+            //   background: url('../../assets/images/chilli.svg')
+            // }
 
             >span {
               font-family:PingFangSC-Regular;
@@ -660,6 +859,7 @@ export default {
               color:#7f7f7f;
               letter-spacing:2.24px;
               padding-left: 40px;
+              cursor: default;
             }
           }
         }

@@ -18,7 +18,7 @@
           </div>
           <div class="newGruop">
             <Button type="ghost" class="newGroupBtn" @click="gotoNewCate">新建分类</Button>
-            <Button type="info" class="newGroupBtn">新建菜品</Button>
+            <Button type="info" class="newGroupBtn" @click="gotoAddDish">新建菜品</Button>
           </div>
         </div>
         <div class="secondPart">
@@ -231,6 +231,9 @@ export default {
         document.getElementById('curCateName').contentEditable = true;
       }
       this.isCurEdit = !this.isCurEdit;
+    },
+    gotoAddDish () {
+      this.$router.push('/main/dish/newdish');
     }
   },
   components: {
