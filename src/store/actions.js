@@ -47,13 +47,13 @@ export default {
     });
   },
   sendConfirmEmail ({ commit }) {
-    axios.post(baseUrl + 'restaurant/emailConfirm')
+    return axios.post(baseUrl + 'restaurant/emailConfirm')
       .then((value) => { return false; },
         (error) => { return error.response.data.message; });
   },
   restaurantSelfOrder ({ commit }, data) {
     commit('UPDATE_FILTERS', data.stateArr);
-    axios.get(baseUrl + 'restaurant/self/order?page=' + data.page + '&number=10&state=' + data.stateArr.join(',')).then((res) => {
+    return axios.get(baseUrl + 'restaurant/self/order?page=' + data.page + '&number=10&state=' + data.stateArr.join(',')).then((res) => {
       if (res.status === 200) {
         // console.log(res.data);
         commit('UPDATE_ORDER_LIST', res.data);
@@ -63,7 +63,7 @@ export default {
   },
   trackSelfOrder ({ commit }, data) {
     commit('UPDATE_FILTERS', data.stateArr);
-    axios.get(baseUrl + 'restaurant/self/order?page=' + data.page + '&number=10&state=' + data.stateArr.join(',') + '&keyword=' + data.keyword).then((res) => {
+    return axios.get(baseUrl + 'restaurant/self/order?page=' + data.page + '&number=10&state=' + data.stateArr.join(',') + '&keyword=' + data.keyword).then((res) => {
       if (res.status === 200) {
         commit('UPDATE_ORDER_LIST', res.data);
         return false;
@@ -71,7 +71,7 @@ export default {
     });
   },
   dealOrder ({ commit }, data) {
-    axios.put(baseUrl + 'order/' + data.id, {
+    return axios.put(baseUrl + 'order/' + data.id, {
       state: data.state
     }).then((value) => { return false; },
       (error) => {
@@ -80,7 +80,7 @@ export default {
       });
   },
   getDish ({ commit }, data) {
-    axios.get(baseUrl + 'dish').then((res) => {
+    return axios.get(baseUrl + 'dish').then((res) => {
       if (res.status === 200) {
         commit('UPDATE_DISH_LIST', res.data);
         return false;
@@ -88,7 +88,7 @@ export default {
     });
   },
   addCate ({ commit }, data) {
-    axios.post(baseUrl + 'category', {
+    return axios.post(baseUrl + 'category', {
       name: data
     }).then((res) => {
       if (res.status === 200) {
@@ -98,7 +98,7 @@ export default {
     });
   },
   delCate ({ commit }, data) {
-    axios.delete(baseUrl + 'category/' + data + '?dump=1580').then((res) => {
+    return axios.delete(baseUrl + 'category/' + data + '?dump=1580').then((res) => {
       if (res.status === 200) {
         console.log('delCate successfully!');
         commit('DEL_CATE', data);
@@ -109,7 +109,7 @@ export default {
     });
   },
   changeCate ({ commit }, data) {
-    axios.put(baseUrl + 'category/' + data.id, {
+    return axios.put(baseUrl + 'category/' + data.id, {
       name: data.name
     }).then((res) => {
       if (res.status === 200) {
@@ -133,7 +133,7 @@ export default {
     });
   },
   addDish ({ commit }, data) {
-    axios.post(baseUrl + 'dish', data).then((value) => {
+    return axios.post(baseUrl + 'dish', data).then((value) => {
       return false;
     }, (error) => {
       return error.response.data.message;

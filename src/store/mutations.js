@@ -109,6 +109,7 @@ export default {
     }
   },
   ADD_CATE (state, data) {
+    state.curNewCate = data.category_id;
     state.categories.push({
       id: data.category_id,
       name: data.name

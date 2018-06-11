@@ -33,7 +33,7 @@
                   <div class="require">必填*</div>
                 </div>
                 <div class="subLine1"></div>
-                <input type="text" class="input1" @focus="cateOnfocus" @blur="cateOnblur"  @keydown="onkeydown" v-model="dishCate">
+                <input type="text" class="input1" @focus="cateOnfocus" @blur="cateOnblur"  @keyup="onkeyup" v-model="dishCate">
               </div>
               <div class="hintPart" v-show="isCateNull">
                 <Icon type="close-circled" color="#FE8966" size="14" />
@@ -276,7 +276,7 @@ export default {
       if (this.dishCate === '') {
         this.tempSelect = {
           name: '',
-          id: 0
+          id: -1
         };
       } else {
         this.tempSelect = {
@@ -293,19 +293,11 @@ export default {
         this.isCateNull = 1;
       }
     },
-    onkeydown: function () {
+    onkeyup: function () {
       this.tempSelect = {
-        name: '',
-        id: 0
+        name: this.dishCate,
+        id: -1
       };
-    },
-    priOnfocus: function () {
-      this.isPriceNull = 0;
-    },
-    priOnblur: function () {
-      if (this.dishPrice === '') {
-        this.isPriceNull = 1;
-      }
     },
     selectCate: function (selectValue) {
       this.tempSelect = {
@@ -318,6 +310,96 @@ export default {
         name: this.dishCate,
         id: this.dishCateId
       };
+    },
+    priOnfocus: function () {
+      this.isPriceNull = 0;
+    },
+    priOnblur: function () {
+      if (this.dishPrice === '') {
+        this.isPriceNull = 1;
+      }
+    },
+    subFunction: function () {
+      let dishSpicy;
+      if (this.chilliModel === '' || this.chilliModel === '不辣') {
+        dishSpicy = 0;
+      } else if (this.chilliModel === '微辣') {
+        dishSpicy = 1;
+      } else if (this.chilliModel === '中辣') {
+        dishSpicy = 2;
+      } else {
+        dishSpicy = 3;
+      }
+      let newDishObj = {
+        category_id: this.dishCateId,
+        name: this.dishName,
+        price: Number(this.dishPrice.trim()),
+        spicy: dishSpicy,
+        image_url: [
+          this.$store.state.curImg
+        ],
+        description: this.description
+      };
+      let specifications = [];
+      if (this.specList.length === 0) {
+        newDishObj.specifications = null;
+      } else {
+        for (let i = 0; i < this.specList.length; ++i) {
+          let temp = {
+            name: this.specList[i].specNameModel,
+            require: true,
+            options: []
+          };
+          for (let j = 0; j < this.specList[i].specItemList.length; ++j) {
+            if (this.specList[i].defaultName === this.specList[i].specItemList[j].nameModel) {
+              temp.default = j;
+            }
+            temp.options.push({
+              name: this.specList[i].specItemList[j].nameModel,
+              delta: Number(this.specList[i].specItemList[j].priceModel.trim())
+            });
+          }
+          specifications.push(temp);
+        }
+        newDishObj.specifications = specifications;
+      }
+      let tag = [];
+      for (let i = 0; i < this.tagList.length; ++i) {
+        if (this.tagList[i].model !== '') {
+          tag.push(this.tagList[i].model);
+        }
+      }
+      if (tag.length === 0) {
+        newDishObj.tag = null;
+      } else {
+        newDishObj.tag = tag;
+      }
+      console.log(newDishObj);
+      this.$store.dispatch('addDish', newDishObj).then((err) => {
+        if (err) {
+        } else {
+          this.$store.dispatch('getDish').then((err) => {
+            if (err) {
+              this.errorMsg = err;
+            } else {
+              this.$router.push('/main/dish/management');
+            }
+          });
+          // this.$Modal.success({
+          //   title: '菜品添加提示',
+          //   content: '菜品添加成功!',
+          //   onOk: () => {
+          //     this.$store.dispatch('getDish').then((err) => {
+          //       if (err) {
+          //         this.errorMsg = err;
+          //       } else {
+          //         this.$router.push('/main/dish/management');
+          //       }
+          //     });
+          //   }
+          // });
+        }
+      });
     },
     addNewDish: function () {
       console.log(this.specList);
@@ -349,79 +431,18 @@ export default {
           content: '信息不完整,请补充必填信息'
         });
       } else {
-        let dishSpicy;
-        if (this.chilliModel === '' || this.chilliModel === '不辣') {
-          dishSpicy = 0;
-        } else if (this.chilliModel === '微辣') {
-          dishSpicy = 1;
-        } else if (this.chilliModel === '中辣') {
-          dishSpicy = 2;
-        } else {
-          dishSpicy = 3;
-        }
-        let newDishObj = {
-          category_id: this.dishCateId,
-          name: this.dishName,
-          price: Number(this.dishPrice.trim()),
-          spicy: dishSpicy,
-          image_url: [
-            this.$store.state.curImg
-          ],
-          description: this.description
-        };
-        let specifications = [];
-        if (this.specList.length === 0) {
-          newDishObj.specifications = null;
-        } else {
-          for (let i = 0; i < this.specList.length; ++i) {
-            let temp = {
-              name: this.specList[i].specNameModel,
-              require: true,
-              options: []
-            };
-            for (let j = 0; j < this.specList[i].specItemList.length; ++j) {
-              if (this.specList[i].defaultName === this.specList[i].specItemList[j].nameModel) {
-                temp.default = j;
-              }
-              temp.options.push({
-                name: this.specList[i].specItemList[j].nameModel,
-                delta: Number(this.specList[i].specItemList[j].priceModel.trim())
-              });
+        if (this.dishCateId === -1) {
+          this.$store.dispatch('addCate', this.dishCate).then((err) => {
+            if (err) {
+              this.errorMsg = err;
+            } else {
+              this.dishCateId = this.$store.state.curNewCate;
+              this.subFunction();
             }
-            specifications.push(temp);
-          }
-          newDishObj.specifications = specifications;
-        }
-        let tag = [];
-        for (let i = 0; i < this.tagList.length; ++i) {
-          if (this.tagList[i].model !== '') {
-            tag.push(this.tagList[i].model);
-          }
-        }
-        if (tag.length === 0) {
-          newDishObj.tag = null;
+          });
         } else {
-          newDishObj.tag = tag;
+          this.subFunction();
         }
-        console.log(newDishObj);
-        this.$store.dispatch('addDish', newDishObj).then((err) => {
-          if (err) {
-          } else {
-            this.$Modal.success({
-              title: '菜品添加提示',
-              content: '菜品添加成功!',
-              onOk: () => {
-                this.$store.dispatch('getDish').then((err) => {
-                  if (err) {
-                    this.errorMsg = err;
-                  } else {
-                    this.$router.push('/main/dish/management');
-                  }
-                });
-              }
-            });
-          }
-        });
       }
     },
     cancelAddDish: function () {
