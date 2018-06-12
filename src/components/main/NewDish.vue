@@ -338,7 +338,7 @@ export default {
         dishSpicy = 1;
       } else if (this.chilliModel === '中辣') {
         dishSpicy = 2;
-      } else {
+      } else if (this.chilliModel === '特辣') {
         dishSpicy = 3;
       }
       let newDishObj = {
@@ -476,42 +476,42 @@ export default {
       this.description = tempObj.description;
       this.dishId = tempObj.dish_id;
       this.dishImg = tempObj.image_url[0];
-    }
-    if (tempObj.spicy === 0) {
-      this.chilliModel = '不辣';
-    } else if (tempObj.spicy === 1) {
-      this.chilliModel = '微辣';
-    } else if (tempObj.spicy === 2) {
-      this.chilliModel = '中辣';
-    } else {
-      this.chilliModel = '特辣';
-    }
-    if (tempObj.tag) {
-      for (let i = 0; i < tempObj.tag.length; ++i) {
-        this.tagList.push({
-          id: this.tagNum++,
-          model: tempObj.tag[i]
-        });
-      }
-    }
 
-    if (tempObj.specifications) {
-      for (let i = 0, len = tempObj.specifications.length; i < len; ++i) {
-        this.specList.push({
-          specId: this.specNum++,
-          specNameModel: tempObj.specifications[i].name,
-          subItemNum: 1,
-          specItemList: []
-        });
-        for (let j = 0, sLen = tempObj.specifications[i].options.length; j < sLen; ++j) {
-          this.specList[i].specItemList.push({
-            subId: this.specList[i].subItemNum++,
-            nameModel: tempObj.specifications[i].options[j].name,
-            priceModel: tempObj.specifications[i].options[j].delta,
-            isNull: 0
+      if (tempObj.spicy === 0) {
+        this.chilliModel = '不辣';
+      } else if (tempObj.spicy === 1) {
+        this.chilliModel = '微辣';
+      } else if (tempObj.spicy === 2) {
+        this.chilliModel = '中辣';
+      } else {
+        this.chilliModel = '特辣';
+      }
+      if (tempObj.tag) {
+        for (let i = 0; i < tempObj.tag.length; ++i) {
+          this.tagList.push({
+            id: this.tagNum++,
+            model: tempObj.tag[i]
           });
         }
-        this.specList[i].defaultName = this.specList[i].specItemList[tempObj.specifications[i].default].nameModel;
+      }
+      if (tempObj.specifications) {
+        for (let i = 0, len = tempObj.specifications.length; i < len; ++i) {
+          this.specList.push({
+            specId: this.specNum++,
+            specNameModel: tempObj.specifications[i].name,
+            subItemNum: 1,
+            specItemList: []
+          });
+          for (let j = 0, sLen = tempObj.specifications[i].options.length; j < sLen; ++j) {
+            this.specList[i].specItemList.push({
+              subId: this.specList[i].subItemNum++,
+              nameModel: tempObj.specifications[i].options[j].name,
+              priceModel: tempObj.specifications[i].options[j].delta,
+              isNull: 0
+            });
+          }
+          this.specList[i].defaultName = this.specList[i].specItemList[tempObj.specifications[i].default].nameModel;
+        }
       }
     }
 

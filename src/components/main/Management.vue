@@ -60,9 +60,9 @@
                 <input  class="curCategoryInput" type="text" v-model="test">
                 <Icon type="edit" size="16"></Icon>
               </div> -->
-              <div class="curCategoryRight">快速编辑</div>
+              <div class="curCategoryRight" @click="toggleQuickEdit" :class="{quickEdit: isQuickEdit === true}">快速编辑</div>
             </div>
-            <div class="dishes">
+            <div class="dishes" v-show="!isQuickEdit">
               <div class="dish" v-for="(dish, index) in dishes" :key="index" @click="gotoEditDish(dish)">
                 <div class="tagLine">
                   <div class="leftTag">
@@ -98,6 +98,27 @@
                 </div>
               </div>
             </div>
+            <div v-show="isQuickEdit">
+              <div class="quickEditTitle">
+                <div>当前状态</div>
+                <div>名称</div>
+                <div>图片</div>
+                <div>基础价格</div>
+                <div>操作</div>
+              </div>
+              <div class="titleLine"></div>
+              <div class="quickEditItem" v-for="(dish, index) in dishes" :key="dish.dish_id">
+                <div>
+                  <div class="tag" :class="{tagBlue: dish.state === '售卖中', tagGrey: dish.state === '已下架'}" @click="toggleState(index, dish)">
+                    <div class="circle"></div><span>{{dish.state}}</span>
+                  </div>
+                </div>
+                <div><input class="quickEditName" type="text" maxlength="15" :value="dish.name" @blur="changeAttr(index,'name')" @change="setDirty(index)"></div>
+                <div><img :src="dish.image_url"/></div>
+                <div><input class="quickEditPrice" type="number" :value="dish.price" @blur="changeAttr(index,'price')" @change="setDirty(index)"></div>
+                <div><span @click.stop="deleteDish(dish.dish_id)">删除</span></div>
+              </div>
+            </div>
             <div class="bottomHint">
               <div class="shortLine"></div>
               <p>已到达本分类底部</p>
@@ -124,7 +145,8 @@ export default {
       isEditCate: false,
       isAddNow: false,
       isCurEdit: false,
-      newCateName: ''
+      newCateName: '',
+      isQuickEdit: false
     };
   },
   computed: {
@@ -150,6 +172,15 @@ export default {
       }
     }
   },
+  // mounted () {
+  //   for (let j = 0; j < state.dishList[i].dish.length; ++j) {
+  //     if (state.dishList[i].dish[j].selling) {
+  //       state.dishList[i].dish[j].state = '售卖中';
+  //     } else {
+  //       state.dishList[i].dish[j].state = '已下架';
+  //     }
+  //   }
+  // },
   methods: {
     goto (index) {
       // console.log(index);
@@ -267,6 +298,78 @@ export default {
             }
           });
         }
+      });
+    },
+    toggleQuickEdit () {
+      if (this.isQuickEdit) {
+        for (let i = 0, len = this.dishes.length; i < len; ++i) {
+          if (this.dishes[i].dirty) {
+            if (this.dishes[i].state === '售卖中') {
+              // this.dishes[i].selling = true;
+              this.$store.commit('UPDATE_DISH_INFO', {
+                activeIndex: this.activeSubIndex,
+                index: i,
+                key: 'selling',
+                newValue: true
+              });
+            } else {
+              // this.dishes[i].selling = false;
+              this.$store.commit('UPDATE_DISH_INFO', {
+                activeIndex: this.activeSubIndex,
+                index: i,
+                key: 'selling',
+                newValue: false
+              });
+            }
+            this.$store.dispatch('modifyDish', {
+              id: this.dishes[i].dish_id,
+              data: {
+                selling: this.dishes[i].selling,
+                name: this.dishes[i].name,
+                price: this.dishes[i].price
+              }
+            });
+          }
+        }
+      }
+      this.isQuickEdit = !this.isQuickEdit;
+    },
+    toggleState (index, dish) {
+      if (dish.state === '售卖中') {
+        this.$store.commit('UPDATE_DISH_INFO', {
+          activeIndex: this.activeSubIndex,
+          index: index,
+          key: 'state',
+          newValue: '已下架',
+          dish: dish
+        });
+      } else {
+        this.$store.commit('UPDATE_DISH_INFO', {
+          activeIndex: this.activeSubIndex,
+          index: index,
+          key: 'state',
+          newValue: '售卖中',
+          dish: dish
+        });
+      }
+      console.log('toggleState');
+      this.dishes[index].dirty = 1;
+    },
+    setDirty (index) {
+      this.dishes[index].dirty = 1;
+    },
+    changeAttr (index, key) {
+      let newValue;
+      if (key === 'name') {
+        newValue = document.getElementsByClassName('quickEditName')[index].value;
+      } else {
+        newValue = Number(document.getElementsByClassName('quickEditPrice')[index].value);
+      }
+      this.$store.commit('UPDATE_DISH_INFO', {
+        activeIndex: this.activeSubIndex,
+        index: index,
+        key: key,
+        newValue: newValue
       });
     }
   },
@@ -490,7 +593,11 @@ export default {
             .curCategoryRight {
               font-size: 12px;
               padding-right: 19px;
-              cursor: default;
+              cursor: pointer;
+            }
+
+            .quickEdit {
+              color: #ff8b18;
             }
           }
 
@@ -532,47 +639,6 @@ export default {
 
                 .rightTag {
                   display: flex;
-                  .tag {
-                    border-radius:4px;
-                    width:60px;
-                    height:17px;
-
-                    .circle {
-                      width:10px;
-                      height:10px;
-                      border-radius:100%;
-                      display: inline-block;
-                    }
-                    span {
-                      padding-left: 4px;
-                    }
-                  }
-
-                  .tagBlue {
-                    background: #edf8ff;
-
-                    .circle {
-                      background:#c8eaff;
-                      border:2px solid #67c6ff;
-                    }
-
-                    span {
-                      color: #67c6ff;
-                    }
-                  }
-
-                  .tagGrey {
-                    background: #f0f0f0;
-
-                    .circle {
-                      background:#ffffff;
-                      border:2px solid #cecece;
-                    }
-
-                    span {
-                      color:#9b9b9b;
-                    }
-                  }
 
                   .deleteBtn {
                     height: 15px;
@@ -697,6 +763,131 @@ export default {
             .dish:nth-child(2n) {
               margin: 25px 25px 0px 0;
             }
+          }
+
+          .tag {
+            border-radius:4px;
+            width:60px;
+            height:17px;
+
+            .circle {
+              width:10px;
+              height:10px;
+              border-radius:100%;
+              display: inline-block;
+            }
+            span {
+              padding-left: 4px;
+            }
+          }
+
+          .tagBlue {
+            background: #edf8ff;
+
+            .circle {
+              background:#c8eaff;
+              border:2px solid #67c6ff;
+            }
+
+            span {
+              color: #67c6ff;
+            }
+          }
+
+          .tagGrey {
+            background: #f0f0f0;
+
+            .circle {
+              background:#ffffff;
+              border:2px solid #cecece;
+            }
+
+            span {
+              color:#9b9b9b;
+            }
+          }
+
+          .titleLine {
+            width: 100%;
+            border-bottom: 1px solid #e6e6e6;
+          }
+
+          .quickEditTitle {
+            display: flex;
+            font-family:PingFangSC-Medium;
+            font-size:13px;
+            color:#9b9b9b;
+            letter-spacing:0.96px;
+            text-align: left;
+            padding: 20px 20px 20px 50px;
+
+            div:nth-child(1) {
+              flex: 2;
+            }
+            div:nth-child(2) {
+              flex: 4;
+            }
+            div:nth-child(3) {
+              flex: 2;
+            }
+            div:nth-child(4) {
+              flex: 3;
+            }
+            div:nth-child(5) {
+              flex: 2;
+            }
+          }
+
+          .quickEditItem {
+            display: flex;
+            font-family:PingFangSC-Medium;
+            font-size:13px;
+            text-align: left;
+            padding: 20px 20px 20px 50px;
+
+            div:nth-child(1) {
+              flex: 2;
+              div {
+                cursor: pointer;
+              }
+            }
+            div:nth-child(2) {
+              flex: 4;
+              input {
+                width: 70%;
+                border-radius:4px;
+                border:1px solid #e6e6e6;
+                padding: 3px;
+              }
+            }
+            div:nth-child(3) {
+              flex: 2;
+            }
+            div:nth-child(4) {
+              flex: 3;
+              input {
+                width: 40%;
+                border-radius:4px;
+                border:1px solid #e6e6e6;
+                padding: 3px;
+              }
+            }
+            div:nth-child(5) {
+              flex: 2;
+              span {
+                cursor: pointer;
+              }
+            }
+
+            img {
+              border-radius:4px;
+              width:50px;
+              height:50px;
+            }
+          }
+
+          .quickEditItem:nth-child(2n+1) {
+            background: #fffbed;
           }
 
           .bottomHint {

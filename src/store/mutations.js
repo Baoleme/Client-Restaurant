@@ -145,5 +145,11 @@ export default {
   },
   UPDATE_CUR_DISH (state, data) {
     state.curDish = data;
+  },
+  UPDATE_DISH_INFO (state, data) {
+    state.dishList[data.activeIndex].dish[data.index][data.key] = data.newValue;
+    if (data.key === 'state') {
+      state.dishList[data.activeIndex].dish.splice(data.index, 1, data.dish);
+    }
   }
 };
