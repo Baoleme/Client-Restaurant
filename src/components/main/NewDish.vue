@@ -4,9 +4,11 @@
     <div class="right">
       <TopLine class="top"/>
       <div class="bg">
-        <span>菜品管理>新建菜品</span>
+        <span v-show="!isEdit">菜品管理>新建菜品</span>
+        <span v-show="isEdit">菜品管理>编辑菜品</span>
         <div class="newDishContent">
-          <div class="editDishTitle">新建菜品</div>
+          <div class="editDishTitle" v-show="!isEdit">新建菜品</div>
+          <div class="editDishTitle" v-show="isEdit">编辑菜品</div>
           <div class="editDishLine"></div>
           <div class="editDishMain">
             <div class="subTitle1">基本信息</div>
@@ -49,7 +51,8 @@
                 <div class="require">必填*</div>
               </div>
               <div class="inputPart">
-                <img src="@/assets/images/yulan.jpg" alt="" id="dishImg">
+                <!-- <img src="@/assets/images/yulan.jpg" alt="" id="dishImg"> -->
+                <img :src="dishImg" alt="" id="dishImg">
                 <div class="hintPart imghintPart">
                   <div v-show="isImgNull || isSizeOut">
                     <Icon type="close-circled" color="#FE8966" size="14" />
@@ -156,9 +159,13 @@
               </div>
               <div class="newTagHint">提示：自定义标签名称四字以内，最多可添加四个。</div>
             </div>
-            <div class="confirmPart">
-              <Button type="info" class="newGroupBtn confirmEdit" @click="addNewDish">新建菜品</Button>
+            <div class="confirmPart" v-show="!isEdit">
+              <Button type="info" class="newGroupBtn confirmEdit" @click="addNewDish(0)">新建菜品</Button>
               <span @click="cancelAddDish">放弃新建</span>
+            </div>
+            <div class="confirmPart" v-show="isEdit">
+              <Button type="info" class="newGroupBtn confirmEdit" @click="addNewDish(1)">确认编辑</Button>
+              <span @click="cancelAddDish">放弃编辑</span>
             </div>
           </div>
         </div>
@@ -190,7 +197,9 @@ export default {
       isSizeOut: 0,
       isPriceNull: 0,
       dishName: '',
-      dishPrice: ''
+      dishPrice: '',
+      dishId: -1,
+      dishImg: require('../../assets/images/yulan.jpg')
     };
   },
   computed: {
@@ -199,6 +208,9 @@ export default {
     },
     filterList: function () {
       return this.categories.filter(item => (item.name.indexOf(this.dishCate) !== -1));
+    },
+    isEdit: function () {
+      return this.$store.state.isEditDish;
     }
   },
   methods: {
@@ -220,7 +232,6 @@ export default {
       this.specList.push({
         specId: this.specNum++,
         specNameModel: '',
-        // defaultName: '',
         defaultName: '',
         subItemNum: 1,
         specItemList: [
@@ -319,7 +330,7 @@ export default {
         this.isPriceNull = 1;
       }
     },
-    subFunction: function () {
+    subFunction: function (sign) {
       let dishSpicy;
       if (this.chilliModel === '' || this.chilliModel === '不辣') {
         dishSpicy = 0;
@@ -333,7 +344,7 @@ export default {
       let newDishObj = {
         category_id: this.dishCateId,
         name: this.dishName,
-        price: Number(this.dishPrice.trim()),
+        price: Number(this.dishPrice),
         spicy: dishSpicy,
         image_url: [
           this.$store.state.curImg
@@ -356,7 +367,7 @@ export default {
             }
             temp.options.push({
               name: this.specList[i].specItemList[j].nameModel,
-              delta: Number(this.specList[i].specItemList[j].priceModel.trim())
+              delta: Number(this.specList[i].specItemList[j].priceModel)
             });
           }
           specifications.push(temp);
@@ -374,34 +385,39 @@ export default {
       } else {
         newDishObj.tag = tag;
       }
-      console.log(newDishObj);
-      this.$store.dispatch('addDish', newDishObj).then((err) => {
-        if (err) {
-        } else {
-          this.$store.dispatch('getDish').then((err) => {
-            if (err) {
-              this.errorMsg = err;
-            } else {
-              this.$router.push('/main/dish/management');
-            }
-          });
-          // this.$Modal.success({
-          //   title: '菜品添加提示',
-          //   content: '菜品添加成功!',
-          //   onOk: () => {
-          //     this.$store.dispatch('getDish').then((err) => {
-          //       if (err) {
-          //         this.errorMsg = err;
-          //       } else {
-          //         this.$router.push('/main/dish/management');
-          //       }
-          //     });
-          //   }
-          // });
-        }
-      });
+      console.log('subFunction:', newDishObj);
+      if (sign) {
+        this.$store.dispatch('modifyDish', {
+          id: this.dishId,
+          data: newDishObj
+        }).then((err) => {
+          if (err) {
+          } else {
+            this.$store.dispatch('getDish').then((err) => {
+              if (err) {
+                this.errorMsg = err;
+              } else {
+                this.$router.push('/main/dish/management');
+              }
+            });
+          }
+        });
+      } else {
+        this.$store.dispatch('addDish', newDishObj).then((err) => {
+          if (err) {
+          } else {
+            this.$store.dispatch('getDish').then((err) => {
+              if (err) {
+                this.errorMsg = err;
+              } else {
+                this.$router.push('/main/dish/management');
+              }
+            });
+          }
+        });
+      }
     },
-    addNewDish: function () {
+    addNewDish: function (sign) {
       console.log(this.specList);
       if (this.$store.state.curImg === '') {
         this.isImgNull = 1;
@@ -437,11 +453,11 @@ export default {
               this.errorMsg = err;
             } else {
               this.dishCateId = this.$store.state.curNewCate;
-              this.subFunction();
+              this.subFunction(sign);
             }
           });
         } else {
-          this.subFunction();
+          this.subFunction(sign);
         }
       }
     },
@@ -450,6 +466,55 @@ export default {
     }
   },
   mounted () {
+    let tempObj = this.$store.state.curDish;
+    console.log('newDish:', tempObj);
+    if (tempObj.flag) {
+      this.dishName = tempObj.name;
+      this.dishCate = tempObj.category;
+      this.dishCateId = tempObj.category_id;
+      this.dishPrice = tempObj.price;
+      this.description = tempObj.description;
+      this.dishId = tempObj.dish_id;
+      this.dishImg = tempObj.image_url[0];
+    }
+    if (tempObj.spicy === 0) {
+      this.chilliModel = '不辣';
+    } else if (tempObj.spicy === 1) {
+      this.chilliModel = '微辣';
+    } else if (tempObj.spicy === 2) {
+      this.chilliModel = '中辣';
+    } else {
+      this.chilliModel = '特辣';
+    }
+    if (tempObj.tag) {
+      for (let i = 0; i < tempObj.tag.length; ++i) {
+        this.tagList.push({
+          id: this.tagNum++,
+          model: tempObj.tag[i]
+        });
+      }
+    }
+
+    if (tempObj.specifications) {
+      for (let i = 0, len = tempObj.specifications.length; i < len; ++i) {
+        this.specList.push({
+          specId: this.specNum++,
+          specNameModel: tempObj.specifications[i].name,
+          subItemNum: 1,
+          specItemList: []
+        });
+        for (let j = 0, sLen = tempObj.specifications[i].options.length; j < sLen; ++j) {
+          this.specList[i].specItemList.push({
+            subId: this.specList[i].subItemNum++,
+            nameModel: tempObj.specifications[i].options[j].name,
+            priceModel: tempObj.specifications[i].options[j].delta,
+            isNull: 0
+          });
+        }
+        this.specList[i].defaultName = this.specList[i].specItemList[tempObj.specifications[i].default].nameModel;
+      }
+    }
+
     var that = this;
     var self = this.$store;
     document.getElementById('uploadImg').onchange = function () {

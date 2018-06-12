@@ -63,7 +63,7 @@
               <div class="curCategoryRight">快速编辑</div>
             </div>
             <div class="dishes">
-              <div class="dish" v-for="(dish, index) in dishes" :key="index">
+              <div class="dish" v-for="(dish, index) in dishes" :key="index" @click="gotoEditDish(dish)">
                 <div class="tagLine">
                   <div class="leftTag">
                     <div class="rectangle"></div>
@@ -233,7 +233,20 @@ export default {
       this.isCurEdit = !this.isCurEdit;
     },
     gotoAddDish () {
+      this.$store.commit('SET_ISEDITDISH', false);
       this.$store.commit('SAVE_NEWDISH_IMG', '');
+      this.$store.commit('UPDATE_CUR_DISH', {
+        flag: 0
+      });
+      this.$router.push('/main/dish/newdish');
+    },
+    gotoEditDish (data) {
+      this.$store.commit('SET_ISEDITDISH', true);
+      this.$store.commit('SAVE_NEWDISH_IMG', data.image_url[0]);
+      data.flag = 1;
+      data.category = this.curCategory.name;
+      console.log('gotoEditDish', data);
+      this.$store.commit('UPDATE_CUR_DISH', data);
       this.$router.push('/main/dish/newdish');
     }
   },
@@ -474,6 +487,7 @@ export default {
               height:164px;
               display: flex;
               flex-direction: column;
+              cursor: pointer;
 
               .tagLine {
                 flex: 0 0 11%;

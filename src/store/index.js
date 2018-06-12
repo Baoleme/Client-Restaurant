@@ -23,7 +23,9 @@ export default new Vuex.Store({
     categories: [],
     waitTimeClock: [],
     curImg: '',
-    curNewCate: -1
+    curNewCate: -1,
+    isEditDish: false,
+    curDish: null
   },
   actions,
   getters,

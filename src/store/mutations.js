@@ -139,5 +139,11 @@ export default {
   SAVE_NEWDISH_IMG (state, data) {
     state.curImg = data;
     console.log(state.curImg);
+  },
+  SET_ISEDITDISH (state, data) {
+    state.isEditDish = data;
+  },
+  UPDATE_CUR_DISH (state, data) {
+    state.curDish = data;
   }
 };

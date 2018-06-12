@@ -138,5 +138,12 @@ export default {
     }, (error) => {
       return error.response.data.message;
     });
+  },
+  modifyDish ({ commit }, obj) {
+    return axios.put(baseUrl + 'dish/' + obj.id, obj.data).then((value) => {
+      return false;
+    }, (error) => {
+      return error.response.data.message;
+    });
   }
 };
