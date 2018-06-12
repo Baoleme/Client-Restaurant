@@ -145,5 +145,12 @@ export default {
     }, (error) => {
       return error.response.data.message;
     });
+  },
+  delDish ({ commit }, id) {
+    return axios.delete(baseUrl + 'dish/' + id).then((value) => {
+      return false;
+    }, (error) => {
+      return error.response.data.message;
+    });
   }
 };

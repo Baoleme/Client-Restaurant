@@ -73,7 +73,7 @@
                     <div class="tag" :class="{tagBlue: dish.state === '售卖中', tagGrey: dish.state === '已下架'}">
                       <div class="circle"></div><span>{{dish.state}}</span>
                     </div>
-                    <div>
+                    <div @click.stop="deleteDish(dish.dish_id)">
                       <img class="deleteBtn" src="@/assets/images/delete-button.png" alt="deleteBtn">
                     </div>
                   </div>
@@ -248,6 +248,26 @@ export default {
       console.log('gotoEditDish', data);
       this.$store.commit('UPDATE_CUR_DISH', data);
       this.$router.push('/main/dish/newdish');
+    },
+    deleteDish (id) {
+      this.$Modal.confirm({
+        title: '删除菜品提示',
+        content: '确认删除该菜品?',
+        onOk: () => {
+          this.$store.dispatch('delDish', id).then((err) => {
+            if (err) {
+            } else {
+              this.$store.dispatch('getDish').then((err) => {
+                if (err) {
+                  this.errorMsg = err;
+                } else {
+                  this.$router.push('/main/dish/management');
+                }
+              });
+            }
+          });
+        }
+      });
     }
   },
   components: {
