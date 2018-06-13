@@ -7,6 +7,7 @@ import store from './store'; // Vuex store
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 import '../my_theme/index.less';
+import VueDND from 'awe-dnd';
 
 import ax from '@/lib/axios';
 import config from '@/config';
@@ -16,6 +17,7 @@ Vue.config.productionTip = false;
 Vue.prototype.$http = ax;
 Vue.prototype.$config = config;
 Vue.use(iView);
+Vue.use(VueDND);
 
 /* eslint-disable no-new */
 new Vue({

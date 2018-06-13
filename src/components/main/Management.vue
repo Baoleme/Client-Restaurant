@@ -28,11 +28,11 @@
                 <span>菜品分类</span>
                 <Icon type="gear-b" size="16" @click.native="editCategory" :class="{activeGear: isEditCate === true}"></Icon>
               </div>
-              <div v-for="(item, index) in categories" :key="index">
+              <div v-for="(item, index) in myCategories" :key="index" v-dragging="{ item: item, list: myCategories, group: 'category' }">
                 <div class="menuItem" @click="goto(index)" :class="{subActive: activeSubIndex === index}">
                   <div class="menuItemEdit">
-                    <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="18" v-show="isEditCate === true" @click.native="delCate(categories[index].id)"></Icon>
-                    <input class="menuIteminput" disabled="true" :class="{textActive: activeSubIndex === index}" :value="categories[index].name" @blur="changeCate(index)"/>
+                    <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="18" v-show="isEditCate === true" @click.native="delCate(myCategories[index].id)"></Icon>
+                    <input class="menuIteminput" disabled="true" :class="{textActive: activeSubIndex === index}" :value="myCategories[index].name" @blur="changeCate(index)"/>
                   </div>
                   <span class="moveTips" v-show="isEditCate === false">按住拖动</span>
                 </div>
@@ -56,10 +56,6 @@
                 <span contenteditable="false" id="curCateName" :class="{isCurEdit: isCurEdit === true}">{{curCategory.name}}</span>
                 <Icon type="edit" size="16" @click.native="editCurCate(curCategory.id)" :class="{isCurEditIcon: isCurEdit === true}"></Icon>
               </div>
-              <!-- <div class="curCategoryLeft">
-                <input  class="curCategoryInput" type="text" v-model="test">
-                <Icon type="edit" size="16"></Icon>
-              </div> -->
               <div class="curCategoryRight" @click="toggleQuickEdit" :class="{quickEdit: isQuickEdit === true}">快速编辑</div>
             </div>
             <div class="dishes" v-show="!isQuickEdit">
@@ -146,7 +142,9 @@ export default {
       isQuickEdit: false,
       filterDishes: [],
       model1: '',
-      toCateId: -1
+      toCateId: -1,
+      myCategories: [],
+      idArr: []
     };
   },
   computed: {
@@ -154,7 +152,7 @@ export default {
       return this.$store.state.categories;
     },
     curCategory () {
-      return this.categories[this.activeSubIndex];
+      return this.myCategories[this.activeSubIndex];
     },
     dishes: {
       get: function () {
@@ -173,10 +171,48 @@ export default {
       } else {
         this.filterDishes = this.dishes.filter(dish => dish.state === this.filter[0]);
       }
+    },
+    categories: function (newValue, oldValue) {
+      this.myCategories = [];
+      for (let i = 0, len = this.$store.state.dishList.length; i < len; ++i) {
+        this.myCategories.push({
+          id: this.$store.state.dishList[i].category_id,
+          name: this.$store.state.dishList[i].name
+        });
+      }
+    }
+  },
+  beforeMount () {
+    for (let i = 0, len = this.$store.state.dishList.length; i < len; ++i) {
+      this.myCategories.push({
+        id: this.$store.state.dishList[i].category_id,
+        name: this.$store.state.dishList[i].name
+      });
     }
   },
   mounted () {
     this.filterDishes = this.dishes;
+    this.$dragging.$on('dragged', ({ value }) => {
+    });
+    this.$dragging.$on('dragend', (value) => {
+      this.idArr = [];
+      for (let i = 0, len = this.myCategories.length; i < len; ++i) {
+        this.idArr.push(this.myCategories[i].id);
+      }
+      this.$store.dispatch('reOrderCate', this.idArr).then((err) => {
+        if (err) {
+          this.errorMsg = err;
+        } else {
+          this.$store.dispatch('getDish').then((err) => {
+            if (err) {
+              this.errorMsg = err;
+            } else {
+              this.$router.push('/main/dish/management');
+            }
+          });
+        }
+      });
+    });
   },
   methods: {
     goto (index) {
@@ -209,6 +245,13 @@ export default {
             this.errorMsg = err;
           } else {
             this.newCateName = '';
+            this.$store.dispatch('getDish').then((err) => {
+              if (err) {
+                this.errorMsg = err;
+              } else {
+                this.$router.push('/main/dish/management');
+              }
+            });
           }
         });
       }
@@ -231,7 +274,7 @@ export default {
                 this.model1 = val;
               }
             }
-          }, [this.categories.filter(item => item.id !== id).map(function (item) {
+          }, [this.myCategories.filter(item => item.id !== id).map(function (item) {
             return h('Option', {
               props: {
                 value: item.name,
@@ -247,9 +290,9 @@ export default {
         },
         onOk: () => {
           this.toCateId = -1;
-          for (let i = 0; i < this.categories.length; ++i) {
-            if (this.categories[i].name === this.model1) {
-              this.toCateId = this.categories[i].id;
+          for (let i = 0; i < this.myCategories.length; ++i) {
+            if (this.myCategories[i].name === this.model1) {
+              this.toCateId = this.myCategories[i].id;
               break;
             }
           }
@@ -281,15 +324,20 @@ export default {
       console.log(newName);
       this.$store.dispatch('changeCate', {
         name: newName,
-        id: this.categories[index].id
+        id: this.myCategories[index].id
       }).then((err) => {
         if (err) {
           this.errorMsg = err;
         } else {
+          this.$store.dispatch('getDish').then((err) => {
+            if (err) {
+              this.errorMsg = err;
+            } else {
+              this.$router.push('/main/dish/management');
+            }
+          });
         }
       });
-    },
-    changCurName (id) {
     },
     editCurCate (id) {
       if (this.isCurEdit) {

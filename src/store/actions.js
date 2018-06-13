@@ -127,6 +127,15 @@ export default {
       return error.response.data.message;
     });
   },
+  reOrderCate ({ commit }, data) {
+    return axios.put(baseUrl + 'category', data).then((res) => {
+      if (res.status === 200) {
+        return false;
+      }
+    }, (error) => {
+      return error.response.data.message;
+    });
+  },
   uploadImg ({ commit }, data) {
     let fd = new FormData();
     fd.append('image', data);
