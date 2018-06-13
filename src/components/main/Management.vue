@@ -11,7 +11,7 @@
           </div>
           <div class="goodsState">
             <span>商品状态</span>
-            <CheckboxGroup v-model="filter" class="checkboxGroup">
+            <CheckboxGroup v-model="filter" class="checkboxGroup" @on-change="onFilterChange">
               <Checkbox class="checkBox" label="售卖中"><span>售卖中</span></Checkbox>
               <Checkbox class="checkBox" label="已下架"><span>已下架</span></Checkbox>
             </CheckboxGroup>
@@ -63,7 +63,7 @@
               <div class="curCategoryRight" @click="toggleQuickEdit" :class="{quickEdit: isQuickEdit === true}">快速编辑</div>
             </div>
             <div class="dishes" v-show="!isQuickEdit">
-              <div class="dish" v-for="(dish, index) in dishes" :key="index" @click="gotoEditDish(dish)">
+              <div class="dish" v-for="(dish, index) in filterDishes" :key="index" @click="gotoEditDish(dish)">
                 <div class="tagLine">
                   <div class="leftTag">
                     <div class="rectangle"></div>
@@ -107,15 +107,15 @@
                 <div>操作</div>
               </div>
               <div class="titleLine"></div>
-              <div class="quickEditItem" v-for="(dish, index) in dishes" :key="dish.dish_id">
+              <div class="quickEditItem" v-for="(dish, index) in filterDishes" :key="dish.dish_id">
                 <div>
                   <div class="tag" :class="{tagBlue: dish.state === '售卖中', tagGrey: dish.state === '已下架'}" @click="toggleState(index, dish)">
                     <div class="circle"></div><span>{{dish.state}}</span>
                   </div>
                 </div>
-                <div><input class="quickEditName" type="text" maxlength="15" :value="dish.name" @blur="changeAttr(index,'name')" @change="setDirty(index)"></div>
+                <div><input class="quickEditName" type="text" maxlength="15" :value="dish.name" @blur="changeAttr(index,'name',dish)" @change="setDirty(index)"></div>
                 <div><img :src="dish.image_url"/></div>
-                <div><input class="quickEditPrice" type="number" :value="dish.price" @blur="changeAttr(index,'price')" @change="setDirty(index)"></div>
+                <div><input class="quickEditPrice" type="number" :value="dish.price" @blur="changeAttr(index,'price',dish)" @change="setDirty(index)"></div>
                 <div><span @click.stop="deleteDish(dish.dish_id)">删除</span></div>
               </div>
             </div>
@@ -137,27 +137,17 @@ import TopLine from './TopLine';
 export default {
   data () {
     return {
-      // settings: {
-      //   categories: ['售卖中', '已下架', '售卖中', '已下架'],
-      // },
       activeSubIndex: 0,
       filter: ['售卖中', '已下架'],
       isEditCate: false,
       isAddNow: false,
       isCurEdit: false,
       newCateName: '',
-      isQuickEdit: false
+      isQuickEdit: false,
+      filterDishes: []
     };
   },
   computed: {
-    // mytest: {
-    //   get: function () {
-    //     return this.categories.slice();
-    //   },
-    //   set: function () {
-    //     // return this.$store.state.categories;
-    //   }
-    // },
     categories () {
       return this.$store.state.categories;
     },
@@ -172,15 +162,20 @@ export default {
       }
     }
   },
-  // mounted () {
-  //   for (let j = 0; j < state.dishList[i].dish.length; ++j) {
-  //     if (state.dishList[i].dish[j].selling) {
-  //       state.dishList[i].dish[j].state = '售卖中';
-  //     } else {
-  //       state.dishList[i].dish[j].state = '已下架';
-  //     }
-  //   }
-  // },
+  watch: {
+    dishes: function (newValue, oldValue) {
+      if (this.filter.length === 2) {
+        this.filterDishes = this.dishes;
+      } else if (this.filter.length === 0) {
+        this.filterDishes = [];
+      } else {
+        this.filterDishes = this.dishes.filter(dish => dish.state === this.filter[0]);
+      }
+    }
+  },
+  mounted () {
+    this.filterDishes = this.dishes;
+  },
   methods: {
     goto (index) {
       // console.log(index);
@@ -300,12 +295,11 @@ export default {
         }
       });
     },
-    toggleQuickEdit () {
+    updateList () {
       if (this.isQuickEdit) {
         for (let i = 0, len = this.dishes.length; i < len; ++i) {
           if (this.dishes[i].dirty) {
             if (this.dishes[i].state === '售卖中') {
-              // this.dishes[i].selling = true;
               this.$store.commit('UPDATE_DISH_INFO', {
                 activeIndex: this.activeSubIndex,
                 index: i,
@@ -313,7 +307,6 @@ export default {
                 newValue: true
               });
             } else {
-              // this.dishes[i].selling = false;
               this.$store.commit('UPDATE_DISH_INFO', {
                 activeIndex: this.activeSubIndex,
                 index: i,
@@ -332,13 +325,15 @@ export default {
           }
         }
       }
+    },
+    toggleQuickEdit () {
+      this.updateList();
       this.isQuickEdit = !this.isQuickEdit;
     },
     toggleState (index, dish) {
       if (dish.state === '售卖中') {
         this.$store.commit('UPDATE_DISH_INFO', {
           activeIndex: this.activeSubIndex,
-          index: index,
           key: 'state',
           newValue: '已下架',
           dish: dish
@@ -346,19 +341,18 @@ export default {
       } else {
         this.$store.commit('UPDATE_DISH_INFO', {
           activeIndex: this.activeSubIndex,
-          index: index,
           key: 'state',
           newValue: '售卖中',
           dish: dish
         });
       }
       console.log('toggleState');
-      this.dishes[index].dirty = 1;
+      this.filterDishes[index].dirty = 1;
     },
     setDirty (index) {
-      this.dishes[index].dirty = 1;
+      this.filterDishes[index].dirty = 1;
     },
-    changeAttr (index, key) {
+    changeAttr (index, key, dish) {
       let newValue;
       if (key === 'name') {
         newValue = document.getElementsByClassName('quickEditName')[index].value;
@@ -367,10 +361,20 @@ export default {
       }
       this.$store.commit('UPDATE_DISH_INFO', {
         activeIndex: this.activeSubIndex,
-        index: index,
         key: key,
-        newValue: newValue
+        newValue: newValue,
+        dish: dish
       });
+    },
+    onFilterChange () {
+      this.updateList();
+      if (this.filter.length === 2) {
+        this.filterDishes = this.dishes;
+      } else if (this.filter.length === 0) {
+        this.filterDishes = [];
+      } else {
+        this.filterDishes = this.dishes.filter(dish => dish.state === this.filter[0]);
+      }
     }
   },
   components: {

@@ -147,9 +147,20 @@ export default {
     state.curDish = data;
   },
   UPDATE_DISH_INFO (state, data) {
-    state.dishList[data.activeIndex].dish[data.index][data.key] = data.newValue;
+    let it;
+    if (data.dish) {
+      for (let i = 0; i < state.dishList[data.activeIndex].dish.length; ++i) {
+        if (state.dishList[data.activeIndex].dish[i].dish_id === data.dish.dish_id) {
+          it = i;
+          break;
+        }
+      }
+    } else {
+      it = data.index;
+    }
+    state.dishList[data.activeIndex].dish[it][data.key] = data.newValue;
     if (data.key === 'state') {
-      state.dishList[data.activeIndex].dish.splice(data.index, 1, data.dish);
+      state.dishList[data.activeIndex].dish.splice(it, 1, data.dish);
     }
   }
 };
