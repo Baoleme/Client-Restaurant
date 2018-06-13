@@ -98,7 +98,13 @@ export default {
     });
   },
   delCate ({ commit }, data) {
-    return axios.delete(baseUrl + 'category/' + data + '?dump=1580').then((res) => {
+    let url;
+    if (data.toId === -1) {
+      url = baseUrl + 'category/' + data.oldId;
+    } else {
+      url = baseUrl + 'category/' + data.oldId + '?dump=' + data.toId;
+    }
+    return axios.delete(url).then((res) => {
       if (res.status === 200) {
         console.log('delCate successfully!');
         commit('DEL_CATE', data);

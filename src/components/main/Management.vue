@@ -144,7 +144,9 @@ export default {
       isCurEdit: false,
       newCateName: '',
       isQuickEdit: false,
-      filterDishes: []
+      filterDishes: [],
+      model1: '',
+      toCateId: -1
     };
   },
   computed: {
@@ -216,11 +218,61 @@ export default {
       this.isEditCate = true;
     },
     delCate (id) {
-      // console.log(id);
-      this.$store.dispatch('delCate', id).then((err) => {
-        if (err) {
-          this.errorMsg = err;
-        } else {
+      this.$Modal.confirm({
+        render: (h) => {
+          return h('Select', {
+            props: {
+              value: this.model1,
+              placeholder: '请选择该分类下所有菜品的新分类'
+            },
+            on: {
+              'on-change': (val) => {
+                console.log(val);
+                this.model1 = val;
+              }
+            }
+          }, [this.categories.filter(item => item.id !== id).map(function (item) {
+            return h('Option', {
+              props: {
+                value: item.name,
+                key: item.name
+              }
+            });
+          }), h('Option', {
+            props: {
+              value: '直接删除所有菜品'
+            }
+          })]
+          );
+        },
+        onOk: () => {
+          this.toCateId = -1;
+          for (let i = 0; i < this.categories.length; ++i) {
+            if (this.categories[i].name === this.model1) {
+              this.toCateId = this.categories[i].id;
+              break;
+            }
+          }
+          this.$store.dispatch('delCate', {
+            oldId: id,
+            toId: this.toCateId
+          }).then((err) => {
+            if (err) {
+              this.errorMsg = err;
+            } else {
+              this.$store.dispatch('getDish').then((err) => {
+                if (err) {
+                  this.errorMsg = err;
+                } else {
+                  this.$router.push('/main/dish/management');
+                }
+              });
+            }
+          });
+          this.model1 = '';
+        },
+        onCancel: () => {
+          this.model1 = '';
         }
       });
     },

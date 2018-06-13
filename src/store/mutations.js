@@ -94,11 +94,13 @@ export default {
         id: state.dishList[i].category_id,
         name: state.dishList[i].name
       });
-      for (let j = 0; j < state.dishList[i].dish.length; ++j) {
-        if (state.dishList[i].dish[j].selling) {
-          state.dishList[i].dish[j].state = '售卖中';
-        } else {
-          state.dishList[i].dish[j].state = '已下架';
+      if (state.dishList[i].dish) {
+        for (let j = 0; j < state.dishList[i].dish.length; ++j) {
+          if (state.dishList[i].dish[j].selling) {
+            state.dishList[i].dish[j].state = '售卖中';
+          } else {
+            state.dishList[i].dish[j].state = '已下架';
+          }
         }
       }
     }
