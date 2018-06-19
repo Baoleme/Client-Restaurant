@@ -1,55 +1,53 @@
 <template>
   <div class="mainContanier">
-    <Menu />
+    <Menu class="menu"/>
     <div class="right">
       <TopLine class="top"/>
+      <div class="firstPart">
+        <div class="chooseDish">
+          <Icon class="icon" type="ios-search-strong" size="23" color="#FCC138"></Icon>
+          <Input class="input" placeholder="商品名称" clearable size="small"/>
+        </div>
+        <div class="goodsState">
+          <span>商品状态</span>
+          <CheckboxGroup v-model="filter" class="checkboxGroup" @on-change="onFilterChange">
+            <Checkbox class="checkBox" label="售卖中"><span>售卖中</span></Checkbox>
+            <Checkbox class="checkBox" label="已下架"><span>已下架</span></Checkbox>
+          </CheckboxGroup>
+        </div>
+        <div class="newGruop">
+          <Button type="ghost" class="newGroupBtn" @click="gotoNewCate">新建分类</Button>
+          <Button type="info" class="newGroupBtn" @click="gotoAddDish">新建菜品</Button>
+        </div>
+      </div>
       <div class="content">
-        <div class="firstPart">
-          <div class="chooseDish">
-            <Icon class="icon" type="ios-search-strong" size="23" color="#FCC138"></Icon>
-            <Input class="input" placeholder="商品名称" clearable size="small"/>
+        <div class="category">
+          <div class="title">
+            <span>菜品分类</span>
+            <Icon type="gear-b" size="16" @click.native="editCategory" :class="{activeGear: isEditCate === true}"></Icon>
           </div>
-          <div class="goodsState">
-            <span>商品状态</span>
-            <CheckboxGroup v-model="filter" class="checkboxGroup" @on-change="onFilterChange">
-              <Checkbox class="checkBox" label="售卖中"><span>售卖中</span></Checkbox>
-              <Checkbox class="checkBox" label="已下架"><span>已下架</span></Checkbox>
-            </CheckboxGroup>
+          <div v-for="(item, index) in myCategories" :key="index" v-dragging="{ item: item, list: myCategories, group: 'category' }">
+            <div class="menuItem" @click="goto(index)" :class="{subActive: activeSubIndex === index}">
+              <div class="menuItemEdit">
+                <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="18" v-show="isEditCate === true" @click.native="delCate(myCategories[index].id)"></Icon>
+                <input class="menuIteminput" disabled="true" :class="{textActive: activeSubIndex === index}" :value="myCategories[index].name" @blur="changeCate(index)"/>
+              </div>
+              <span class="moveTips" v-show="isEditCate === false">按住拖动</span>
+            </div>
           </div>
-          <div class="newGruop">
-            <Button type="ghost" class="newGroupBtn" @click="gotoNewCate">新建分类</Button>
-            <Button type="info" class="newGroupBtn" @click="gotoAddDish">新建菜品</Button>
+          <div class="menuItem" v-show="isEditCate === true & isAddNow === false" @click="newCateInput">
+            <div class="menuItemEdit">
+              <Icon class="iconMiddle" type="ios-plus-outline" color="#ff8b18" size="18"></Icon>
+              <span class="menuIteminput">添加分类…</span>
+            </div>
+            <div></div>
+          </div>
+          <div v-show="isAddNow === true">
+            <input type="text" placeholder="新分类名" class="addCateInput" v-model="newCateName">
+            <Icon type="checkmark" color="#fe8966" size="15" class="checkmark" @click.native="addNewCate"></Icon>
           </div>
         </div>
         <div class="secondPart">
-          <div class="category">
-            <div class="">
-              <div class="title">
-                <span>菜品分类</span>
-                <Icon type="gear-b" size="16" @click.native="editCategory" :class="{activeGear: isEditCate === true}"></Icon>
-              </div>
-              <div v-for="(item, index) in myCategories" :key="index" v-dragging="{ item: item, list: myCategories, group: 'category' }">
-                <div class="menuItem" @click="goto(index)" :class="{subActive: activeSubIndex === index}">
-                  <div class="menuItemEdit">
-                    <Icon class="iconMiddle" type="ios-minus-outline" color="#ff8b18" size="18" v-show="isEditCate === true" @click.native="delCate(myCategories[index].id)"></Icon>
-                    <input class="menuIteminput" disabled="true" :class="{textActive: activeSubIndex === index}" :value="myCategories[index].name" @blur="changeCate(index)"/>
-                  </div>
-                  <span class="moveTips" v-show="isEditCate === false">按住拖动</span>
-                </div>
-              </div>
-              <div class="menuItem" v-show="isEditCate === true & isAddNow === false" @click="newCateInput">
-                <div class="menuItemEdit">
-                  <Icon class="iconMiddle" type="ios-plus-outline" color="#ff8b18" size="18"></Icon>
-                  <span class="menuIteminput">添加分类…</span>
-                </div>
-                <div></div>
-              </div>
-              <div v-show="isAddNow === true">
-                <input type="text" placeholder="新分类名" class="addCateInput" v-model="newCateName">
-                <Icon type="checkmark" color="#fe8966" size="15" class="checkmark" @click.native="addNewCate"></Icon>
-              </div>
-            </div>
-          </div>
           <div class="detailPart">
             <div class="curCategory">
               <div class="curCategoryLeft">
@@ -485,6 +483,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.menu {
+  position: fixed;
+  z-index: 9999;
+}
 .mainContanier {
   display: flex;
   min-height: 100vh;
@@ -496,7 +498,80 @@ export default {
     width: 100%;
 
     .top {
-      width: 100%;
+      position: fixed;
+      right: 0;
+      z-index: 9998;
+      padding-left: 168px;
+    }
+
+    .firstPart {
+      background-color: #ffffff;
+      margin-bottom: 13px;
+      height: 58px;
+      border-radius:4px;
+      display: flex;
+      justify-content: space-between;
+      width: 85.5%;
+      position: fixed;
+      top: 102px;
+      left: 189px;
+      z-index: 10;
+
+      .chooseDish {
+        display: flex;
+        margin: 14px 0 0px 3px;
+
+        .icon {
+          position: relative;
+          left: 30px;
+          z-index: 10;
+          padding-top: 5px;
+        }
+        .input {
+          width: 281px;
+        }
+      }
+
+      .goodsState {
+        margin-top: 20px;
+        font-size: 14px;
+        letter-spacing:1.12px;
+        text-align:left;
+        font-family:PingFangSC-Regular;
+        color:#493f3a;
+        flex: 1;
+        padding-left: 100px;
+
+        .checkboxGroup {
+          display: inline-block;
+          .checkBox {
+            font-family:PingFangSC-Regular;
+            font-size:14px;
+            letter-spacing:1.12px;
+
+            span {
+              padding-left: 8px;
+            }
+          }
+          .checkBox:nth-child(1) {
+            padding-left: 34px;
+          }
+          .checkBox:nth-child(2) {
+            padding-left: 20px;
+          }
+        }
+      }
+
+      .newGruop {
+        margin: 17px 26px;
+
+        .newGroupBtn {
+          width: 86px;
+          height: 26px;
+          line-height: 1;
+          margin-left: 20px;
+        }
+      }
     }
 
     .content {
@@ -505,170 +580,119 @@ export default {
       flex-direction: column;
       background-color:#f6f6f6;
       padding: 22px 22px 0 22px;
+      position: fixed;
+      left: 168px;
+      width: 100%;
+      height: 100%;
 
-      .firstPart {
+      .category {
         background-color: #ffffff;
-        margin-bottom: 13px;
-        height: 58px;
-        border-radius:4px;
-        display: flex;
-        justify-content: space-between;
+        border-radius:6px 0 0 0;
+        width:177px;
+        height:78%;
+        box-shadow:0 2px 15px 0 rgba(193,193,193,0.42);
+        z-index: 10;
+        font-size:14px;
+        position: fixed;
+        top: 180px;
+        overflow: scroll;
 
-        .chooseDish {
-          display: flex;
-          margin: 14px 0 0px 3px;
-
-          .icon {
-            position: relative;
-            left: 30px;
-            z-index: 10;
-            padding-top: 5px;
-          }
-          .input {
-            width: 281px;
-          }
+        .activeGear {
+          color: #ff8b18;
         }
 
-        .goodsState {
-          margin-top: 20px;
-          font-size: 14px;
+        .title {
+          font-family:PingFangSC-Medium;
           letter-spacing:1.12px;
           text-align:left;
-          font-family:PingFangSC-Regular;
-          color:#493f3a;
-          flex: 1;
-          padding-left: 100px;
+          padding: 18px 0 14px 20px;
 
-          .checkboxGroup {
-            display: inline-block;
-            .checkBox {
-              font-family:PingFangSC-Regular;
-              font-size:14px;
-              letter-spacing:1.12px;
-
-              span {
-                padding-left: 8px;
-              }
-            }
-            .checkBox:nth-child(1) {
-              padding-left: 34px;
-            }
-            .checkBox:nth-child(2) {
-              padding-left: 20px;
-            }
+          span {
+            padding-right: 56px;
           }
         }
 
-        .newGruop {
-          margin: 17px 26px;
+        .menuItem {
+          width:167px;
+          height:52px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin: auto;
+          cursor: default;
+          text-align: left;
 
-          .newGroupBtn {
-            width: 86px;
-            height: 26px;
-            line-height: 1;
-            margin-left: 20px;
+          .menuItemEdit {
+            margin-left: 15px;
           }
+
+          .menuIteminput {
+            outline: none;
+            border: none;
+            width: 80px;
+            margin-left: 5px;
+            background: transparent;
+          }
+
+          // span:nth-child(1) {
+          //   margin-left: 15px;
+          // }
+          .moveTips {
+            right: 2px;
+            font-size: 12px;
+            margin-right: 11px;
+            color: #ff8b18;
+            opacity: 0;
+          }
+
+          .textActive {
+            color: #ff8b18;
+          }
+        }
+
+        .addCateInput {
+          width: 138px;
+          margin: auto;
+          border:1px solid #ffc993;
+          border-radius:4px;
+          height:29px;
+          padding: 2px 20px 2px 6px;
+          outline: none;
+          display: block;
+          margin-top: 10px;
+        }
+
+        .checkmark {
+          position: relative;
+          right: -56px;
+          bottom: 24px;
+        }
+
+        .menuItem:hover > .moveTips {
+          opacity: 1;
+        }
+
+        .subActive {
+          background:rgba(255,236,173,0.33);
+          border-radius:6px;
         }
       }
 
       .secondPart {
         display: flex;
         flex: 1;
-
-        .category {
-          background-color: #ffffff;
-          border-radius:6px 0 0 0;
-          width:207px;
-          height:100%;
-          box-shadow:0 2px 15px 0 rgba(193,193,193,0.42);
-          z-index: 10;
-          font-size:14px;
-
-          .activeGear {
-            color: #ff8b18;
-          }
-
-          .title {
-            font-family:PingFangSC-Medium;
-            letter-spacing:1.12px;
-            text-align:left;
-            padding: 18px 0 14px 20px;
-
-            span {
-              padding-right: 56px;
-            }
-          }
-
-          .menuItem {
-            width:167px;
-            height:52px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: auto;
-            cursor: default;
-            text-align: left;
-
-            .menuItemEdit {
-              margin-left: 15px;
-            }
-
-            .menuIteminput {
-              outline: none;
-              border: none;
-              width: 80px;
-              margin-left: 5px;
-              background: transparent;
-            }
-
-            // span:nth-child(1) {
-            //   margin-left: 15px;
-            // }
-            .moveTips {
-              right: 2px;
-              font-size: 12px;
-              margin-right: 11px;
-              color: #ff8b18;
-              opacity: 0;
-            }
-
-            .textActive {
-              color: #ff8b18;
-            }
-          }
-
-          .addCateInput {
-            width: 138px;
-            margin: auto;
-            border:1px solid #ffc993;
-            border-radius:4px;
-            height:29px;
-            padding: 2px 20px 2px 6px;
-            outline: none;
-            display: block;
-            margin-top: 10px;
-          }
-
-          .checkmark {
-            position: relative;
-            right: -56px;
-            bottom: 24px;
-          }
-
-          .menuItem:hover > .moveTips {
-            opacity: 1;
-          }
-
-          .subActive {
-            background:rgba(255,236,173,0.33);
-            border-radius:6px;
-          }
-        }
+        background: #f6f6f6;
+        width: 88.1%;
 
         .detailPart {
           background-color: #ffffff;
           border-radius:0 6px 0 0;
-          width: 100%;
+          width: 85.5%;
+          padding-left: 177px;
+          top: 180px;
+          position: fixed;
+          height: 78%;
+          overflow: scroll;
 
           .curCategory {
             border-bottom:1px solid #e6e6e6;
@@ -676,6 +700,11 @@ export default {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: fixed;
+            // right: 0;
+            top: 180px;
+            width: 75%;
+            background: #ffffff;
 
             .curCategoryLeft {
               font-family:PingFangSC-Light;
@@ -696,7 +725,7 @@ export default {
             }
             .curCategoryRight {
               font-size: 12px;
-              padding-right: 19px;
+              padding-right: 50px;
               cursor: pointer;
             }
 
@@ -709,9 +738,11 @@ export default {
             display: flex;
             flex-flow: row wrap;
             align-content: flex-start;
+            margin-top: 55px;
+            width: 97%;
 
             .dish {
-              flex: 0 0 46%;
+              flex: 0 0 47%;
               box-shadow:0 3px 4px 3px rgba(0,0,0,0.04);
               border-radius:5px;
               border: 1px solid #f0f0f0;
@@ -761,6 +792,7 @@ export default {
                     width:105px;
                     height:105px;
                     margin: 10px;
+                    overflow: initial;
                   }
                 }
 
@@ -811,6 +843,7 @@ export default {
                   .tagList {
                     // margin-top: 5px;
                     flex: 1;
+                    line-height: 2;
 
                     span {
                       padding: 2px 3px;
@@ -865,7 +898,7 @@ export default {
               margin: 25px 30px 0px 25px;
             }
             .dish:nth-child(2n) {
-              margin: 25px 25px 0px 0;
+              margin: 25px 0px 0px 0;
             }
           }
 
@@ -1000,10 +1033,11 @@ export default {
             color:#dadada;
             letter-spacing:0.86px;
             text-align:center;
+            margin-bottom: 15px;
 
             .shortLine {
               opacity:0.24;
-              border-top:1px solid #979797;
+              border-top:1px solid #dadada;
               width:304px;
               height:1px;
               margin: auto;
