@@ -77,28 +77,6 @@
 export default {
   data () {
     return {
-      temp: [
-        {
-          state: '卖家接单',
-          createTime: '2017.2.5 09:30'
-        },
-        {
-          state: '客户下单',
-          createTime: '2017.2.5 8:30'
-        },
-        {
-          state: '客户下单',
-          createTime: '2017.2.5 8:30'
-        },
-        {
-          state: '客户下单',
-          createTime: '2017.2.5 8:30'
-        },
-        {
-          state: '客户下单',
-          createTime: '2017.2.5 8:30'
-        }
-      ]
     };
   },
   computed: {
@@ -150,6 +128,7 @@ export default {
     margin: auto;
     margin-top: 46px;
     padding-top: 15px;
+    min-height: 80%;
 
     .titleLine {
       display: flex;
@@ -176,6 +155,7 @@ export default {
     }
 
     .modalContent {
+      padding-bottom: 10px;
       .border {
         border:1px solid #e6e6e6;
         border-radius:3px;
@@ -369,7 +349,7 @@ export default {
         border:1px solid #e6e6e6;
         border-radius:3px;
         width:673px;
-        height:193px;
+        // height:193px;
         margin: 10px 33px;
 
         .line5line {

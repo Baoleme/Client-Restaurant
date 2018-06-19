@@ -96,6 +96,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.menu {
+  position: fixed;
+  z-index: 99999;
+}
 .mainContanier {
   display: flex;
   min-height: 100vh;
@@ -105,9 +109,13 @@ export default {
     min-height: 100vh;
     flex-direction: column;
     width: 100%;
+    overflow: hidden;
 
     .top {
-      width: 100%;
+      position: fixed;
+      right: 0;
+      z-index: 9999;
+      padding-left: 168px;
     }
 
     .content {
@@ -117,6 +125,9 @@ export default {
       background-color:#f6f6f6;
       padding: 22px 22px 0 22px;
       position: relative;
+      top: 79px;
+      left: 163px;
+      width: 89%;
 
       .orderMenu {
         z-index: 10;
@@ -124,7 +135,6 @@ export default {
 
       .orderList {
         background: #ffffff;
-        flex: 1;
 
         .orderItem {
           display: flex;
@@ -191,10 +201,13 @@ export default {
 
       .pages {
         background: #ffffff;
-        padding-bottom: 20px;
+        padding: 10px 0 13px 0;
         text-align: center;
       }
     }
   }
+}
+#orderDetail {
+  overflow: scroll;
 }
 </style>
