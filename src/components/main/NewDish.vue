@@ -1,6 +1,6 @@
 <template>
   <div class="mainContanier">
-    <Menu />
+    <Menu class="menu"/>
     <div class="right">
       <TopLine class="top"/>
       <div class="bg">
@@ -553,6 +553,10 @@ input::-webkit-inner-spin-button {
 input[type="number"]{
   -moz-appearance: textfield;
 }
+.menu {
+  position: fixed;
+  z-index: 9999;
+}
 .mainContanier {
   display: flex;
   min-height: 100vh;
@@ -564,7 +568,10 @@ input[type="number"]{
     width: 100%;
 
     .top {
-      width: 100%;
+      position: fixed;
+      right: 0;
+      z-index: 9998;
+      padding-left: 168px;
     }
 
     .bg {
@@ -573,6 +580,9 @@ input[type="number"]{
       flex-direction: column;
       background-color:#f6f6f6;
       padding: 0px 22px 0 22px;
+      position: relative;
+      top: 79px;
+      left: 163px;
 
       >span {
         opacity:0.8;
