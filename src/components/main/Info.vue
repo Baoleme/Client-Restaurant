@@ -39,22 +39,6 @@
                 <span>联系电话不能为空且为11位</span>
               </div>
             </div>
-            <div>
-              <div>
-                <div class="qualification">企业资质
-                  <span class="require">必填*</span>
-                  <div id="uploadHintLine" v-show="isFileSizeOut">
-                    <Icon type="close-circled" color="#FE8966" size="14" />
-                    <span>文件大小超出限制</span>
-                  </div>
-                </div>
-                <progress value="" max="100"></progress>
-              </div>
-              <div class="fileMsg">{{fileMsg}}</div>
-              <span class="file">选择文件
-                <input type="file" id="uploadFile" accept=".doc,.pdf" @change="fileName"/>
-              </span>
-            </div>
             <div class="subTitle3">附加信息</div>
             <div class="imgPart">
               <div class="labelLine2">
@@ -106,8 +90,6 @@ export default {
       description: '',
       isImgNull: false,
       isSizeOut: false,
-      fileMsg: '支持pdf/doc格式，10M以内',
-      isFileSizeOut: false,
       logoImg: require('../../assets/images/yulan.jpg')
     };
   },
@@ -175,19 +157,6 @@ export default {
     cancelEdit: function () {
       this.$store.commit('UPDATE_INDEX', 0);
       this.$router.push('/main');
-    },
-    fileName () {
-      let myfile = document.getElementById('uploadFile');
-      // 获取文件上传文件的文件名
-      if (myfile.files[0] === undefined) {
-        this.fileMsg = '支持pdf/doc格式，10M以内';
-        this.taggleHint = '选择文件';
-      } else {
-        this.fileMsg = myfile.files[0].name;
-        document.getElementsByClassName('fileMsg')[0].style.color = 'black';
-        this.license = myfile.files[0];
-        console.log(this.license);
-      }
     }
   },
   mounted () {
@@ -220,15 +189,6 @@ export default {
             fr.readAsDataURL(imgFile);
           }
         });
-      }
-    };
-    document.getElementById('uploadFile').onchange = function () {
-      var imgFile = this.files[0];
-      console.log(imgFile.size / 1024000);
-      if ((imgFile.size / 1024000) > 10) {
-        that.isFileSizeOut = 1;
-      } else {
-        that.isFileSizeOut = 0;
       }
     };
   },
@@ -468,7 +428,7 @@ input[type="number"]{
             color:#6e6e6e;
             letter-spacing:2.24px;
             text-align:left;
-            margin: 0px 0 15px 0;
+            margin: 30px 0 15px 0;
           }
           .additionalInput {
             width:587px;
@@ -537,81 +497,6 @@ input[type="number"]{
     }
   }
 }
-
-.qualification {
-  font-size:14px;
-  color:#6e6e6e;
-  letter-spacing:2.24px;
-  text-align:left;
-  margin: 10px 0;
-  width: 422px;
-
-  >span {
-    padding-left: 150px;
-  }
-}
-
-#uploadHintLine {
-  display: flex;
-  margin: 5px 0 10px 2px;
-  color: #fd6e6a;
-  // opacity: 0;
-
-  span {
-    line-height: 1;
-    padding-left: 6px;
-    letter-spacing: 1px;
-    font-size: 14px;
-  }
-}
-
-.fileMsg {
-  display: flex;
-  position: relative;
-  bottom: 38px;
-  font-size: 14px;
-  color: #dadada;
-  padding-left: 10px
-}
-
-.file {
-  position: relative;
-  display: inline-block;
-  background: #f88d6c;
-  border: #f88d6c 1px solid;
-  border-radius: 3px;
-  padding: 11px 15px;
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 15px;
-  bottom: 72px;
-  left: 281px;
-  width: 92px;
-  height: 45px;
-}
-.file input {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  opacity: 0;
-  height: 44px;
-  width: 370px;
-}
-
-progress {
-  width: 258px;
-  height: 46px;
-  border-radius: 4px;
-  border:1px solid #e6e6e6;
-  background-color:transparent;
-}
-progress::-webkit-progress-bar { background: transparent; }
-progress::-webkit-progress-inner-element { border-radius: 4px; }
-progress::-webkit-progress-value {
-  border-radius: 4px;
-  background-color: rgba(254, 138, 102, 0.76);
-}
-progress::-webkit-progress-bar { border-radius: 4px; }
 
 :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
   color: #dadada;
