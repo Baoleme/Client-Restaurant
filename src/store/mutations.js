@@ -1,9 +1,15 @@
 export default {
   GET_SELF_INFO (state, data) {
-    state.email = data.email;
-    state.restaurantName = data.name;
-    state.restaurantId = data.restaurant_id;
-    state.isConfirm = data.confirm_email;
+    console.log('GET_SELF_INFO', data);
+    state.infoObj = {
+      email: data.email,
+      name: data.name,
+      restaurantId: data.restaurant_id,
+      isConfirm: data.confirm_email,
+      phone: data.phone,
+      logoUrl: data.logo_url,
+      description: data.description
+    };
   },
   SET_NETWORK_ERR (state) {
     state.isNetworkErr = true;

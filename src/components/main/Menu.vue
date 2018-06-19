@@ -95,6 +95,7 @@ export default {
       } else if (index === 3) {
         this.$router.push('/main/QRcode');
       } else if (index === 4) {
+        this.$store.commit('SAVE_NEWDISH_IMG', this.$store.state.infoObj.logoUrl);
         this.$router.push('/main/info');
       }
     }

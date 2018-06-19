@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     email () {
-      return this.$store.state.email;
+      return this.$store.state.infoObj.email;
     }
   },
   methods: {

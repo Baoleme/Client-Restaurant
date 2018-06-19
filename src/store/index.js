@@ -9,9 +9,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     index: 0,
-    email: '',
-    restaurantName: '',
-    restaurantId: 0,
+    infoObj: {},
     isNetworkErr: false,
     subIndex: 1,
     curOrder: {},

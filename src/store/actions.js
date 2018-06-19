@@ -167,5 +167,12 @@ export default {
     }, (error) => {
       return error.response.data.message;
     });
+  },
+  modifyInfo ({ commit }, data) {
+    return axios.put(baseUrl + 'restaurant/self', data).then((value) => {
+      return false;
+    }, (error) => {
+      return error.response.data.message;
+    });
   }
 };
