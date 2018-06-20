@@ -10,7 +10,7 @@
         <div class="username">{{email}}</div>
         <Icon type="arrow-down-b"></Icon>
         <DropdownMenu slot="list" class="dropdownItem">
-          <DropdownItem>更改密码</DropdownItem>
+          <DropdownItem @click.native="gotoChangePW">更改密码</DropdownItem>
           <DropdownItem @click.native="logout">退出登录<Icon class="logoutIcon" type="android-exit" size="17"></Icon></DropdownItem>
         </DropdownMenu>
       </Dropdown>
@@ -45,6 +45,10 @@ export default {
           this.$router.push('/main/order/trackorder');
         }
       });
+    },
+    gotoChangePW () {
+      this.$store.commit('UPDATE_INDEX', 4);
+      this.$router.push('/main/info/password');
     },
     logout () {
       this.$store.dispatch('logout').then((err) => {

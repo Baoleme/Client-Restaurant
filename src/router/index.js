@@ -11,6 +11,7 @@ import newdish from '@/components/main/NewDish';
 import QRcode from '@/components/main/QRcode';
 import info from '@/components/main/Info';
 import trackorder from '@/components/main/trackorder';
+import changepw from '@/components/main/ChangePW';
 
 Vue.use(Router);
 
@@ -74,6 +75,11 @@ export default new Router({
       path: '/main/info',
       name: 'info',
       component: info
+    },
+    {
+      path: '/main/info/password',
+      name: 'changepw',
+      component: changepw
     },
     {
       path: '/main/order/trackorder',
