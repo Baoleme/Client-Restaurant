@@ -41,7 +41,7 @@ export default {
   name: 'LoginBox',
   data () {
     return {
-      username: '',
+      username: '8016@zyuco.com',
       password: '',
       autoLogin: false,
       errorMsg: ''
