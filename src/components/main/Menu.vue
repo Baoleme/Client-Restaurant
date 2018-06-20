@@ -74,6 +74,7 @@ export default {
       if (index === 0) {
         this.$router.push('/main');
       } else if (index === 1) {
+        this.$store.commit('UPDATE_SUB_INDEX', 1);
         this.$store.dispatch('restaurantSelfOrder', {
           page: 0,
           stateArr: ['paid', 'accepted']

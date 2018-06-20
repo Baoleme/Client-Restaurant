@@ -86,6 +86,19 @@ export default {
       });
     }
   },
+  beforeMount () {
+    var self = this.$store;
+    var that = this;
+    this.intervalid = setInterval(function () {
+      self.dispatch('restaurantSelfOrder', {
+        page: that.current - 1,
+        stateArr: self.state.filters
+      });
+    }, 1000);
+  },
+  beforeDestroy () {
+    clearInterval(this.intervalid);
+  },
   components: {
     MyMenu,
     TopLine,
