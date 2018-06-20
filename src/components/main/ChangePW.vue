@@ -116,7 +116,7 @@ export default {
 }
 
 .box {
-  width: 20%;
+  width: 258px;
   margin: auto;
 
   .changePW {

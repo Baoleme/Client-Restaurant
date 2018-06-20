@@ -174,5 +174,20 @@ export default {
     }, (error) => {
       return error.response.data.message;
     });
+  },
+  addDeskQR ({ commit }, data) {
+    return axios.post(baseUrl + 'table', data).then((value) => {
+      return false;
+    }, (error) => {
+      return error.response.data.message;
+    });
+  },
+  getDeskQR ({ commit }, data) {
+    return axios.get(baseUrl + 'table').then((value) => {
+      console.log('getDeskQR', value);
+      return false;
+    }, (error) => {
+      return error.response.data.message;
+    });
   }
 };
