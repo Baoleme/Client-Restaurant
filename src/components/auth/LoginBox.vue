@@ -61,9 +61,14 @@ export default {
           if (err) {
             this.errorMsg = err;
           } else {
-            this.$store.dispatch('getRestInfo');
+            this.$store.dispatch('getRestInfo').then((err) => {
+              if (err) {
+                this.errorMsg = err;
+              } else {
+                this.$router.replace('/main');
+              }
+            });
             this.$store.dispatch('getDish');
-            this.$router.replace('/main');
           }
         });
       }
