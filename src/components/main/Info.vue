@@ -63,8 +63,8 @@
             <div class="additionalInput borderClass">
               <div class="label3">商家介绍</div>
               <div class="subLine1 subLine3"></div>
-              <textarea class="textarea" v-model="description" maxlength="50"></textarea>
-              <div class="wordRestriction"><span>{{description.length}}</span><span>/50</span></div>
+              <textarea class="textarea" v-model="description" maxlength="200"></textarea>
+              <div class="wordRestriction"><span>{{description.length}}</span><span>/200</span></div>
             </div>
             <div class="confirmPart">
               <Button type="info" class="newGroupBtn confirmEdit" @click="confirmEdit">确认更改</Button>
