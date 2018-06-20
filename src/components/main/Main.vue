@@ -144,6 +144,9 @@ export default {
       });
     }
   },
+  beforeMount () {
+    this.$store.commit('UPDATE_INDEX', 0);
+  },
   components: {
     Menu,
     TopLine

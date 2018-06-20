@@ -181,6 +181,8 @@ export default {
     }
   },
   beforeMount () {
+    this.$store.commit('UPDATE_INDEX', 2);
+
     for (let i = 0, len = this.$store.state.dishList.length; i < len; ++i) {
       this.myCategories.push({
         id: this.$store.state.dishList[i].category_id,

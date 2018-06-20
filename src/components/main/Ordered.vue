@@ -87,6 +87,9 @@ export default {
     }
   },
   beforeMount () {
+    this.$store.commit('UPDATE_INDEX', 1);
+    this.$store.commit('UPDATE_SUB_INDEX', 2);
+
     var self = this.$store;
     var that = this;
     this.intervalid = setInterval(function () {
