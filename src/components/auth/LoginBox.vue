@@ -44,7 +44,8 @@ export default {
       username: '8016@zyuco.com',
       password: '',
       autoLogin: false,
-      errorMsg: ''
+      errorMsg: '',
+      userInCookie: false
     };
   },
   methods: {
@@ -61,6 +62,11 @@ export default {
           if (err) {
             this.errorMsg = err;
           } else {
+            if (this.autoLogin === true && !this.userInCookie) {
+              this.setCookie(this.username, this.password, 7);
+            } else if (this.autoLogin === false) {
+              this.clearCookie();
+            }
             this.$store.dispatch('getRestInfo').then((err) => {
               if (err) {
                 this.errorMsg = err;
@@ -73,6 +79,28 @@ export default {
         });
       }
     },
+    setCookie (username, password, days) {
+      let date = new Date();
+      date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days);
+      window.document.cookie = 'username=' + username + ';path=/;expires=' + date.toGMTString();
+      window.document.cookie = 'password=' + password + ';path=/;expires=' + date.toGMTString();
+    },
+    getCookie () {
+      if (document.cookie.length > 0) {
+        var arr = document.cookie.split('; ');
+        for (var i = 0; i < arr.length; i++) {
+          var arr2 = arr[i].split('=');
+          if (arr2[0] === 'userName') {
+            this.username = arr2[1];
+          } else if (arr2[0] === 'password') {
+            this.password = arr2[1];
+          }
+        }
+      }
+    },
+    clearCookie () {
+      this.setCookie('', '', -1);
+    },
     register () {
       this.$router.push('/register');
     },
@@ -81,6 +109,19 @@ export default {
         this.errorMsg = '';
         console.log(this.errorMsg);
       }
+    }
+  },
+  mounted () {
+    this.getCookie();
+    if (this.username && this.password) {
+      this.userInCookie = true;
+      this.autoLogin = true;
+      this.login();
+      console.log('mounted', 'getCookie ture');
+    } else {
+      this.userInCookie = false;
+      this.autoLogin = false;
+      console.log('mounted', 'getCookie false');
     }
   }
 };

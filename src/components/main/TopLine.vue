@@ -54,6 +54,10 @@ export default {
       this.$store.dispatch('logout').then((err) => {
         if (err) {
         } else {
+          let date = new Date();
+          date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * 7);
+          window.document.cookie = 'username=;path=/;expires=' + date.toGMTString();
+          window.document.cookie = 'password=;path=/;expires=' + date.toGMTString();
           this.$router.push('/login');
         }
       });
