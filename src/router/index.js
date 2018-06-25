@@ -10,7 +10,7 @@ import management from '@/components/main/Management';
 import newdish from '@/components/main/NewDish';
 import QRcode from '@/components/main/QRcode';
 import info from '@/components/main/Info';
-import trackorder from '@/components/main/trackorder';
+import trackorder from '@/components/main/TrackOrder';
 import changepw from '@/components/main/ChangePW';
 
 Vue.use(Router);
