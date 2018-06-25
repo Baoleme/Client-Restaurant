@@ -11,7 +11,7 @@
           <div class="orderNo border">
             <span class="smallTitle">订单号</span>
             <div class="copy">
-              <input id="number" readonly v-model="orderBoject.order_id"></input>
+              <input id="number" readonly v-model="orderBoject.order_id" />
               <Button type="ghost" class="copyBtn" @click="copy()">复制</Button>
             </div>
           </div>
