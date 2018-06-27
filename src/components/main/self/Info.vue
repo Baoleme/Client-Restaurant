@@ -39,6 +39,21 @@
                 <span>联系电话不能为空且为11位</span>
               </div>
             </div>
+            <div class="input secondInput">
+              <div class="inputPart">
+                <div class="labelLine1">
+                  <div class="label1">店面地址</div>
+                  <div class="require">必填*</div>
+                </div>
+                <div class="subLine1"></div>
+                <input type="text" class="input1" @focus="addressOnfocus" @blur="addressOnblur"
+                placeholder="请输入地址" v-model="resAddress">
+              </div>
+              <div class="hintPart" v-show="isAddressNull">
+                <Icon type="close-circled" color="#FE8966" size="14" />
+                <span>地址不能为空</span>
+              </div>
+            </div>
             <div class="subTitle3">附加信息</div>
             <div class="imgPart">
               <div class="labelLine2">
@@ -87,6 +102,8 @@ export default {
       isNameNull: false,
       resPhone: '',
       isPhoneNull: false,
+      resAddress: '',
+      isAddressNull: false,
       description: '',
       isImgNull: false,
       isSizeOut: false,
@@ -110,6 +127,14 @@ export default {
         this.isPhoneNull = 1;
       }
     },
+    addressOnfocus: function () {
+      this.isAddressNull = 0;
+    },
+    addressOnblur: function () {
+      if (this.resAddress === '') {
+        this.isAddressNull = 1;
+      }
+    },
     confirmEdit: function () {
       if (this.$store.state.curImg === '') {
         this.isImgNull = 1;
@@ -117,10 +142,13 @@ export default {
       if (this.resName === '') {
         this.isNameNull = 1;
       }
-      if (this.resPhone.length !== 11) {
+      if (!this.resPhone || this.resPhone.length !== 11) {
         this.isPhoneNull = 1;
       }
-      if (this.isNameNull || this.isPhoneNull || this.isImgNull) {
+      if (this.resAddress === '') {
+        this.isAddressNull = 1;
+      }
+      if (this.isNameNull || this.isPhoneNull || this.isImgNull || this.isAddressNull) {
         this.$Modal.warning({
           title: '修改商家信息提示',
           content: '信息不完整,请补充必填信息'
@@ -129,9 +157,15 @@ export default {
         let newInfoObj = {
           name: this.resName,
           logo_url: this.$store.state.curImg,
-          description: this.description,
-          phone: this.resPhone
+          // description: this.description,
+          phone: this.resPhone,
+          address: this.resAddress
         };
+        if (this.description === '') {
+          newInfoObj.description = null;
+        } else {
+          newInfoObj.description = this.description;
+        }
         this.$store.dispatch('modifyInfo', newInfoObj).then((err) => {
           if (err) {
           } else {
@@ -161,6 +195,7 @@ export default {
     let tempObj = this.$store.state.infoObj;
     this.resName = tempObj.name;
     this.resPhone = tempObj.phone;
+    this.resAddress = tempObj.address;
     this.description = tempObj.description;
     this.logoImg = tempObj.logoUrl;
     if (!this.description) {

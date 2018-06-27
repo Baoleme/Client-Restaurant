@@ -8,7 +8,8 @@ export default {
       isConfirm: data.confirm_email,
       phone: data.phone,
       logoUrl: data.logo_url,
-      description: data.description
+      description: data.description,
+      address: data.address
     };
   },
   SET_NETWORK_ERR (state) {

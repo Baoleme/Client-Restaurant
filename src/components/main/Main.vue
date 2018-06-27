@@ -86,7 +86,7 @@ export default {
     return {
       isConfirm: this.$store.state.isConfirm,
       resName: this.$store.state.infoObj.name,
-      address: '广东省广州市大学城贝岗村村口第一路第四个摊位广东省广州市大学城贝岗村村口第一路第四个摊位',
+      address: this.$store.state.infoObj.address,
       phone: this.$store.state.infoObj.phone,
       description: this.$store.state.infoObj.description,
       logoUrl: this.$store.state.infoObj.logoUrl,
