@@ -90,14 +90,22 @@ export default {
       phone: this.$store.state.infoObj.phone,
       description: this.$store.state.infoObj.description,
       logoUrl: this.$store.state.infoObj.logoUrl,
-      taggle: true,
-      numNewOrder: this.$store.state.countObj.numNewOrder,
-      numOrdering: this.$store.state.countObj.numOrdering,
-      numOrdered: this.$store.state.countObj.numOrdered,
-      numAllOrder: this.$store.state.countObj.numAllOrder
+      taggle: true
     };
   },
   computed: {
+    numNewOrder () {
+      return this.$store.state.countObj.numNewOrder;
+    },
+    numOrdering () {
+      return this.$store.state.countObj.numOrdering;
+    },
+    numOrdered () {
+      return this.$store.state.countObj.numOrdered;
+    },
+    numAllOrder () {
+      return this.$store.state.countObj.numAllOrder;
+    }
   },
   methods: {
     gotoEditInfo: function () {
@@ -150,6 +158,14 @@ export default {
   },
   beforeMount () {
     this.$store.commit('UPDATE_INDEX', 0);
+
+    var self = this.$store;
+    this.intervalid = setInterval(function () {
+      self.dispatch('getOrderCounts');
+    }, 1000);
+  },
+  beforeDestroy () {
+    clearInterval(this.intervalid);
   },
   components: {
     Menu,

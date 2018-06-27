@@ -95,6 +95,7 @@ export default {
     state.countObj.numOrdering = data.accepted;
     state.countObj.numOrdered = data.cancelled + data.completed;
     state.countObj.numAllOrder = data.cancelled + data.completed + data.paid + data.accepted;
+    console.log(state.countObj);
   },
   UPDATE_FILTERS (state, data) {
     state.filters = data;
