@@ -4,31 +4,19 @@
     <div class="right">
       <TopLine class="top"/>
       <div class="content">
-        <order-menu :filterIndex="0" class="orderMenu" @filter="filter"/>
+        <order-menu :filterIndex="2" class="orderMenu" @filter="filter"/>
         <div class="orderList">
           <div v-for="(order, index) in filterList" :key="index" class="orderItem" @click="showDetail(index)">
             <p><span :class="{cancel: order.curState === '已取消'}">{{order.order_id}}</span></p>
             <p><span :class="{cancel: order.curState === '已取消'}">¥{{order.price}}</span></p>
             <p><span :class="{cancel: order.curState === '已取消'}">{{order.table}}</span></p>
-            <p :class="{newOrder: order.curState === '新订单', lastOrder: order.curState === '进行中'}">
-              <span :class="{newIcon: order.curState === '新订单'}"></span>
-              <span :class="{cancel: order.curState === '已取消'}">{{order.curState}}</span>
-            </p>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.curState}}</span></p>
             <p><span :class="{cancel: order.curState === '已取消'}">{{order.createTime}}</span></p>
             <p><span :class="{cancel: order.curState === '已取消'}">{{order.waitTime}}</span></p>
-            <p><span class="note" :class="{null_: order.remark === '无', cancel: order.curState === '已取消'}">{{order.remark}}</span></p>
-            <p v-show="order.curState === '新订单'">
-              <Button type="info" class="newGroupBtn" @click.stop="dealTheOrder(order.order_id, 'accepted')">接单</Button>
-              <Button type="ghost" class="newGroupBtn ghost" @click.stop="dealTheOrder(order.order_id, 'cancelled')">拒绝</Button>
-            </p>
-            <p v-show="order.curState === '进行中'">
-              <Button type="success" class="newGroupBtn" @click.stop="dealTheOrder(order.order_id, 'completed')">完成</Button>
-              <Button type="ghost" class="newGroupBtn cancelGhost" @click.stop="dealTheOrder(order.order_id, 'cancelled')">取消</Button>
-            </p>
-            <p v-show="order.curState === '已完成' || order.curState === '已取消'">查看</p>
+            <p><span class="note" :class="{null_: order.remark === '无', cancel: order.state === '已取消'}">{{order.remark}}</span></p>
+            <p>查看</p>
           </div>
         </div>
-        <div class="noResult" v-show="filterList.length === 0">没有符合条件的订单</div>
         <Page class="pages" :total="total" :current.sync="current" show-elevator size="small" @on-change="change"></Page>
         <OrderDetail id="orderDetail" @close="closeDetail"/>
       </div>
@@ -37,13 +25,14 @@
 </template>
 
 <script>
-import MyMenu from './Menu';
-import TopLine from './TopLine';
+import MyMenu from './../Menu';
+import TopLine from './../TopLine';
 import OrderMenu from './OrderMenu';
 import OrderDetail from './OrderDetail';
 export default {
   data () {
     return {
+      // pagesNum: 0,
       total: this.$store.state.numberOfPages * 10,
       current: 1,
       filterList: []
@@ -64,9 +53,6 @@ export default {
       set: function () {
       }
     }
-  },
-  mounted () {
-    this.total = this.pagesNum;
   },
   watch: {
     orderList: function (newList, oldList) {
@@ -89,40 +75,27 @@ export default {
       document.getElementById('orderDetail').style.display = 'none';
     },
     change: function (newPage) {
-      this.$store.dispatch('trackSelfOrder', {
+      this.$store.dispatch('restaurantSelfOrder', {
         page: newPage - 1,
-        stateArr: this.$store.state.filters,
-        keyword: this.$store.state.clue
+        stateArr: this.$store.state.filters
       }).then((err) => {
         if (err) {
           this.errorMsg = err;
         } else {
-        }
-      });
-    },
-    dealTheOrder: function (orderId, newState) {
-      this.$store.dispatch('dealOrder', {
-        id: orderId,
-        state: newState
-      }).then((err) => {
-        if (err) {
-          this.errorMsg = err;
-        } else {
-          console.log('deal succeed!');
         }
       });
     }
   },
   beforeMount () {
     this.$store.commit('UPDATE_INDEX', 1);
+    this.$store.commit('UPDATE_SUB_INDEX', 2);
 
     var self = this.$store;
     var that = this;
     this.intervalid = setInterval(function () {
-      self.dispatch('trackSelfOrder', {
+      self.dispatch('restaurantSelfOrder', {
         page: that.current - 1,
-        stateArr: self.state.filters,
-        keyword: self.state.clue
+        stateArr: self.state.filters
       });
     }, 1000);
   },
@@ -139,6 +112,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.menu {
+  position: fixed;
+  z-index: 99999;
+}
 .mainContanier {
   display: flex;
   min-height: 100vh;
@@ -148,18 +125,25 @@ export default {
     min-height: 100vh;
     flex-direction: column;
     width: 100%;
+    overflow: hidden;
 
     .top {
-      width: 100%;
+      position: fixed;
+      right: 0;
+      z-index: 9999;
+      padding-left: 168px;
     }
 
     .content {
       display: flex;
       flex-direction: column;
       flex: 10;
-      background-color:#f6f6f6;;
+      background-color:#f6f6f6;
       padding: 22px 22px 0 22px;
       position: relative;
+      top: 79px;
+      left: 163px;
+      width: 89%;
 
       .orderMenu {
         z-index: 10;
@@ -167,7 +151,6 @@ export default {
 
       .orderList {
         background: #ffffff;
-        flex: 1;
 
         .orderItem {
           display: flex;
@@ -206,23 +189,7 @@ export default {
           p:nth-child(8) {
             flex:4;
             justify-content: center;
-          }
-          p:nth-child(9) {
-            flex:4;
-            justify-content: center;
-          }
-          p:nth-child(10) {
-            flex:4;
-            justify-content: center;
             cursor: default;
-          }
-
-          .newOrder {
-            color:#ff8b18;
-          }
-
-          .lastOrder {
-            color:#67c6ff;
           }
 
           .note {
@@ -237,61 +204,26 @@ export default {
             color:#9b9b9b;
             font-family:PingFangSC-Regular;
           }
-
-          .newGroupBtn {
-            width:55px;
-            height:26px;
-            line-height: 1;
-          }
-
-          .ghost {
-            font-family:PingFangSC-Regular;
-            color:#493f3a;
-            margin-left: 20px;
-          }
-
-          .cancelGhost {
-            font-family:PingFangSC-Regular;
-            border:1px solid #67c6ff;
-            border-radius:3px;
-            color:#493f3a;
-            margin-left: 20px;
-          }
-
-          .newIcon {
-            background:#ff8b18;
-            border:1px solid #fdc543;
-            width:8px;
-            height:8px;
-            border-radius:100%;
-            margin-right: 2px;
-          }
-        }
-
-        .orderItem:nth-child(2n+1) {
-          background:#fff8e3;
         }
 
         .cancel {
           color:#9b9b9b;
         }
-      }
 
-      .noResult {
-        background: #ffffff;
-        font-family:PingFangSC-Regular;
-        font-size:14px;
-        color:#b6b5b5;
-        letter-spacing:1px;
-        padding-bottom: 20%;
+        .orderItem:nth-child(2n+1) {
+          background:#fff8e3;
+        }
       }
 
       .pages {
         background: #ffffff;
-        padding-bottom: 20px;
+        padding: 10px 0 13px 0;
         text-align: center;
       }
     }
   }
+}
+#orderDetail {
+  overflow: scroll;
 }
 </style>

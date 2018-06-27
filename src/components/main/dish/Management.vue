@@ -126,8 +126,8 @@
 </template>
 
 <script>
-import Menu from './Menu';
-import TopLine from './TopLine';
+import Menu from './../Menu';
+import TopLine from './../TopLine';
 export default {
   data () {
     return {

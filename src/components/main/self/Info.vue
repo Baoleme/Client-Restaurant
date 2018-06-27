@@ -78,8 +78,8 @@
 </template>
 
 <script>
-import Menu from './Menu';
-import TopLine from './TopLine';
+import Menu from './../Menu';
+import TopLine from './../TopLine';
 export default {
   data () {
     return {
@@ -90,7 +90,7 @@ export default {
       description: '',
       isImgNull: false,
       isSizeOut: false,
-      logoImg: require('../../assets/images/yulan.jpg')
+      logoImg: require('../../../assets/images/yulan.jpg')
     };
   },
   methods: {

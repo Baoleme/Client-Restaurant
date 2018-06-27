@@ -3,15 +3,15 @@ import Router from 'vue-router';
 import login from '@/components/auth/Login';
 import main from '@/components/main/Main';
 import register from '@/components/auth/Register';
-import ordering from '@/components/main/Ordering';
-import ordered from '@/components/main/Ordered';
-import orderall from '@/components/main/OrderAll';
-import management from '@/components/main/Management';
-import newdish from '@/components/main/NewDish';
+import ordering from '@/components/main/order/Ordering';
+import ordered from '@/components/main/order/Ordered';
+import orderall from '@/components/main/order/OrderAll';
+import management from '@/components/main/dish/Management';
+import newdish from '@/components/main/dish/NewDish';
 import QRcode from '@/components/main/QRcode';
-import info from '@/components/main/Info';
-import trackorder from '@/components/main/TrackOrder';
-import changepw from '@/components/main/ChangePW';
+import info from '@/components/main/self/Info';
+import trackorder from '@/components/main/order/TrackOrder';
+import changepw from '@/components/main/self/ChangePW';
 
 Vue.use(Router);
 

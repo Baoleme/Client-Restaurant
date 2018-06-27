@@ -4,18 +4,19 @@
     <div class="right">
       <TopLine class="top"/>
       <div class="content">
-        <order-menu :filterIndex="1" class="orderMenu" @filter="filter"/>
+        <order-menu :filterIndex="3" class="orderMenu" @filter="filter"/>
         <div class="orderList">
           <div v-for="(order, index) in filterList" :key="index" class="orderItem" @click="showDetail(index)">
-            <p>{{order.order_id}}</p>
-            <p>¥{{order.price}}</p>
-            <p>{{order.table}}</p>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.order_id}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">¥{{order.price}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.table}}</span></p>
             <p :class="{newOrder: order.curState === '新订单', lastOrder: order.curState === '进行中'}">
-              <span :class="{newIcon: order.curState === '新订单'}"></span> {{order.curState}}
+              <span :class="{newIcon: order.curState === '新订单'}"></span>
+              <span :class="{cancel: order.curState === '已取消'}">{{order.curState}}</span>
             </p>
-            <p>{{order.createTime}}</p>
-            <p>{{order.waitTime}}</p>
-            <p><span class="note" :class="{null_: order.remark === '无'}">{{order.remark}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.createTime}}</span></p>
+            <p><span :class="{cancel: order.curState === '已取消'}">{{order.waitTime}}</span></p>
+            <p><span class="note" :class="{null_: order.remark === '无', cancel: order.curState === '已取消'}">{{order.remark}}</span></p>
             <p v-show="order.curState === '新订单'">
               <Button type="info" class="newGroupBtn" @click.stop="dealTheOrder(order.order_id, 'accepted')">接单</Button>
               <Button type="ghost" class="newGroupBtn ghost" @click.stop="dealTheOrder(order.order_id, 'cancelled')">拒绝</Button>
@@ -24,6 +25,7 @@
               <Button type="success" class="newGroupBtn" @click.stop="dealTheOrder(order.order_id, 'completed')">完成</Button>
               <Button type="ghost" class="newGroupBtn cancelGhost" @click.stop="dealTheOrder(order.order_id, 'cancelled')">取消</Button>
             </p>
+            <p v-show="order.curState === '已完成' || order.curState === '已取消'">查看</p>
           </div>
         </div>
         <Page class="pages" :total="total" :current.sync="current" show-elevator size="small" @on-change="change"></Page>
@@ -34,14 +36,14 @@
 </template>
 
 <script>
-import MyMenu from './Menu';
-import TopLine from './TopLine';
+import MyMenu from './../Menu';
+import TopLine from './../TopLine';
 import OrderMenu from './OrderMenu';
 import OrderDetail from './OrderDetail';
 export default {
   data () {
     return {
-      // pagesNum: 0,
+      // pagesNum: this.$store.state.numberOfPages,
       total: this.$store.state.numberOfPages * 10,
       current: 1,
       filterList: []
@@ -50,11 +52,9 @@ export default {
   computed: {
     orderList: {
       get: function () {
-        // console.log('computed', this.$store.state.orderList);
         return this.$store.state.orderList;
       },
       set: function () {
-        // console.log(test);
       }
     },
     pagesNum: {
@@ -70,7 +70,9 @@ export default {
       this.filterList = newList;
     },
     pagesNum: function (newValue, oldValue) {
+      console.log(newValue);
       this.total = newValue * 10;
+      console.log(this.total);
     }
   },
   methods: {
@@ -78,12 +80,11 @@ export default {
       this.current = 1;
     },
     showDetail (index) {
-      // console.log(this.filterList[index]);
+      console.log(this.filterList[index]);
       this.$store.commit('UPDATE_CUR_ORDER', this.filterList[index]);
       document.getElementById('orderDetail').style.display = 'block';
     },
     closeDetail (sign) {
-      console.log(sign);
       document.getElementById('orderDetail').style.display = 'none';
       if (sign === 1) {
         this.$store.dispatch('restaurantSelfOrder', {
@@ -116,7 +117,6 @@ export default {
         if (err) {
           this.errorMsg = err;
         } else {
-          console.log('deal succeed!');
           this.$store.dispatch('restaurantSelfOrder', {
             page: this.current - 1,
             stateArr: this.$store.state.filters
@@ -132,7 +132,7 @@ export default {
   },
   beforeMount () {
     this.$store.commit('UPDATE_INDEX', 1);
-    this.$store.commit('UPDATE_SUB_INDEX', 1);
+    this.$store.commit('UPDATE_SUB_INDEX', 3);
 
     var self = this.$store;
     var that = this;
@@ -195,6 +195,7 @@ export default {
 
       .orderList {
         background: #ffffff;
+        // flex: 1;
 
         .orderItem {
           display: flex;
@@ -238,6 +239,11 @@ export default {
             flex:4;
             justify-content: center;
           }
+          p:nth-child(10) {
+            flex:4;
+            justify-content: center;
+            cursor: default;
+          }
 
           .newOrder {
             color:#ff8b18;
@@ -264,7 +270,6 @@ export default {
             width:55px;
             height:26px;
             line-height: 1;
-            z-index: 20;
           }
 
           .ghost {
@@ -293,6 +298,10 @@ export default {
 
         .orderItem:nth-child(2n+1) {
           background:#fff8e3;
+        }
+
+        .cancel {
+          color:#9b9b9b;
         }
       }
 

@@ -175,8 +175,8 @@
 </template>
 
 <script>
-import Menu from './Menu';
-import TopLine from './TopLine';
+import Menu from './../Menu';
+import TopLine from './../TopLine';
 export default {
   data () {
     return {
@@ -199,7 +199,7 @@ export default {
       dishName: '',
       dishPrice: '',
       dishId: -1,
-      dishImg: require('../../assets/images/yulan.jpg')
+      dishImg: require('../../../assets/images/yulan.jpg')
     };
   },
   computed: {
