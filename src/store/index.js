@@ -24,7 +24,8 @@ export default new Vuex.Store({
     curNewCate: -1,
     isEditDish: false,
     curDish: null,
-    countObj: {}
+    countObj: {},
+    QRList: []
   },
   actions,
   getters,

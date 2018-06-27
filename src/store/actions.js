@@ -185,15 +185,16 @@ export default {
     });
   },
   addDeskQR ({ commit }, data) {
-    return axios.post(baseUrl + 'table', data).then((value) => {
+    return axios.post(baseUrl + 'qrcode', data).then((value) => {
       return false;
     }, (error) => {
       return error.response.data.message;
     });
   },
   getDeskQR ({ commit }, data) {
-    return axios.get(baseUrl + 'table').then((value) => {
-      console.log('getDeskQR', value);
+    return axios.get(baseUrl + 'qrcode').then((value) => {
+      console.log('getDeskQR', value.data);
+      commit('UPDATE_QR_LIST', value.data);
       return false;
     }, (error) => {
       return error.response.data.message;

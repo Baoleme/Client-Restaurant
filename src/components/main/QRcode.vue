@@ -10,6 +10,12 @@
             <input type="number" class="input" v-model="number" placeholder="输入需生成的桌子二维码数量">
             <Button type="info" class="generBtn" @click="generate">生成</Button>
           </div>
+          <div class="qrBox">
+            <div class="qrItem" v-for="(qrCode, index) in qrCodeList" :key="index">
+              <div class="numDesk">{{index + 1}}号桌</div>
+              <img :src="qrCode">
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -25,6 +31,11 @@ export default {
     return {
       number: ''
     };
+  },
+  computed: {
+    qrCodeList () {
+      return this.$store.state.QRList;
+    }
   },
   methods: {
     generate: function () {
@@ -138,6 +149,32 @@ export default {
     letter-spacing:2px;
     border: none;
     margin-top: 25px;
+  }
+}
+.qrBox {
+  display: flex;
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-start;
+  margin: 20px 0;
+
+  .qrItem {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 18px 0;
+    .numDesk {
+      font-size: 14px;
+    }
+    img {
+      width:168px;
+      height:168px;
+      margin: 15px;
+    }
+    .dlBtn {
+      width: 35%;
+    }
   }
 }
 :-moz-placeholder { /* Mozilla Firefox 4 to 18 */

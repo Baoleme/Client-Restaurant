@@ -177,5 +177,8 @@ export default {
     if (data.key === 'state') {
       state.dishList[data.activeIndex].dish.splice(it, 1, data.dish);
     }
+  },
+  UPDATE_QR_LIST (state, data) {
+    state.QRList = data;
   }
 };
