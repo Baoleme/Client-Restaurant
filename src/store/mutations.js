@@ -35,6 +35,7 @@ export default {
     state.numberOfPages = data.number_of_pages;
     state.orderList = data.order;
     for (let i = 0, len = state.orderList.length; i < len; i++) {
+      state.orderList[i].table = Number(state.orderList[i].table) + 1;
       state.orderList[i].waitTime = '-';
       state.orderList[i].createTime = state.orderList[i].state_record[0].time;
       state.orderList[i].curState = state.orderList[i].state_record[state.orderList[i].state_record.length - 1].state;
