@@ -61,6 +61,15 @@ export default {
       }
     });
   },
+  getOrderCounts ({ commit }) {
+    return axios.get(baseUrl + 'restaurant/self/order/count').then((res) => {
+      if (res.status === 200) {
+        console.log(res.data);
+        commit('UPDATE_ORDER_COUNT', res.data);
+        return false;
+      }
+    });
+  },
   trackSelfOrder ({ commit }, data) {
     commit('UPDATE_FILTERS', data.stateArr);
     return axios.get(baseUrl + 'restaurant/self/order?page=' + data.page + '&number=10&state=' + data.stateArr.join(',') + '&keyword=' + data.keyword).then((res) => {

@@ -72,7 +72,13 @@ export default {
       this.$store.commit('UPDATE_INDEX', index);
       this.index = index;
       if (index === 0) {
-        this.$router.push('/main');
+        this.$store.dispatch('getOrderCounts').then((err) => {
+          if (err) {
+            this.errorMsg = err;
+          } else {
+            this.$router.push('/main');
+          }
+        });
       } else if (index === 1) {
         this.$store.commit('UPDATE_SUB_INDEX', 1);
         this.$store.dispatch('restaurantSelfOrder', {

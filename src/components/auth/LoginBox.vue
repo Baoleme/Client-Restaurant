@@ -71,7 +71,13 @@ export default {
               if (err) {
                 this.errorMsg = err;
               } else {
-                this.$router.replace('/main');
+                this.$store.dispatch('getOrderCounts').then((err) => {
+                  if (err) {
+                    this.errorMsg = err;
+                  } else {
+                    this.$router.replace('/main');
+                  }
+                });
               }
             });
             this.$store.dispatch('getDish');

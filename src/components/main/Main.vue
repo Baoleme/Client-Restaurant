@@ -49,11 +49,11 @@
             <div class="group">
               <div class="item1">
                 <div class="label">新订单</div>
-                <div class="number">2</div>
+                <div class="number">{{numNewOrder}}</div>
               </div>
               <div class="item2">
                 <div class="label">进行中</div>
-                <div class="number">0</div>
+                <div class="number">{{numOrdering}}</div>
               </div>
             </div>
             <div class="hint"><span @click="gotoOrdering">去处理></span></div>
@@ -61,13 +61,13 @@
           <div class="ordered">
             <div class="order">已结订单</div>
             <div class="subLine"></div>
-            <div class="orderNum">30</div>
+            <div class="orderNum">{{numOrdered}}</div>
             <div class="hint"><span @click="gotoOrdered">详情></span></div>
           </div>
           <div class="orderall">
             <div class="order">今日订单总数</div>
             <div class="subLine"></div>
-            <div class="orderNum">32</div>
+            <div class="orderNum">{{numAllOrder}}</div>
             <div class="hint"><span @click="gotoOrderall">详情></span></div>
           </div>
           <div class="hidden"></div>
@@ -90,7 +90,11 @@ export default {
       phone: this.$store.state.infoObj.phone,
       description: this.$store.state.infoObj.description,
       logoUrl: this.$store.state.infoObj.logoUrl,
-      taggle: true
+      taggle: true,
+      numNewOrder: this.$store.state.countObj.numNewOrder,
+      numOrdering: this.$store.state.countObj.numOrdering,
+      numOrdered: this.$store.state.countObj.numOrdered,
+      numAllOrder: this.$store.state.countObj.numAllOrder
     };
   },
   computed: {

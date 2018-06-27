@@ -89,6 +89,12 @@ export default {
       }
     }
   },
+  UPDATE_ORDER_COUNT (state, data) {
+    state.countObj.numNewOrder = data.paid;
+    state.countObj.numOrdering = data.accepted;
+    state.countObj.numOrdered = data.cancelled + data.completed;
+    state.countObj.numAllOrder = data.cancelled + data.completed + data.paid + data.accepted;
+  },
   UPDATE_FILTERS (state, data) {
     state.filters = data;
   },

@@ -23,7 +23,8 @@ export default new Vuex.Store({
     curImg: '',
     curNewCate: -1,
     isEditDish: false,
-    curDish: null
+    curDish: null,
+    countObj: {}
   },
   actions,
   getters,
