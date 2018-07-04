@@ -48,13 +48,13 @@
 ├─node_modules：相关依赖文件
 ├─my_theme：自定义主题相关文件
 ├─src：前端开发源码
-│	├─assets：静态资源如矢量图等
-│	├─component：前端组件
-│	├─lib：axios预配置相关文件
-│	├─router：前端路由
-│	├─store：vuex的store
-│	├─App.vue：应用的外层结构
-│	└─main.js：应用的入口文件
+│  ├─assets：静态资源如矢量图等
+│  ├─component：前端组件
+│  ├─lib：axios预配置相关文件
+│  ├─router：前端路由
+│  ├─store：vuex的store
+│  ├─App.vue：应用的外层结构
+│  └─main.js：应用的入口文件
 └─static：前端开发过程中用到的静态文件
 ```
 
