@@ -24,20 +24,20 @@
       ├─Menu: 主界面导航组件
       ├─TopLine: 主界面顶部组件
       ├─Main: 【概览界面】
- 	  ├─order: 订单管理
- 	  │  ├─OrderMenu: 订单界面导航栏组件
- 	  │  ├─Ordering:【进行中订单界面】
- 	  │  ├─Ordered:【已完成订单界面】
- 	  │  ├─OrderAll:【全部订单界面】
- 	  │  ├─TrackOrder:【查询订单界面】
- 	  │  └─OrderDetail: 订单详细框组件
- 	  ├─dish: 菜品管理
- 	  │  ├─Management:【菜品管理主界面】
- 	  │  └─NewDish: 【新建/编辑菜品界面】
- 	  ├─QRcode:【二维码管理界面】
- 	  └─self: 商家信息
- 	     ├─ChangePW:【修改密码界面】
- 	     └─Info:【修改商家信息界面】
+      ├─order: 订单管理
+      │  ├─OrderMenu: 订单界面导航栏组件
+      │  ├─Ordering:【进行中订单界面】
+      │  ├─Ordered:【已完成订单界面】
+      │  ├─OrderAll:【全部订单界面】
+      │  ├─TrackOrder:【查询订单界面】
+      │  └─OrderDetail: 订单详细框组件
+      ├─dish: 菜品管理
+      │  ├─Management:【菜品管理主界面】
+      │  └─NewDish: 【新建/编辑菜品界面】
+      ├─QRcode:【二维码管理界面】
+      └─self: 商家信息
+         ├─ChangePW:【修改密码界面】
+         └─Info:【修改商家信息界面】
 ```
 
 ## 文件结构
