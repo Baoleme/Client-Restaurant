@@ -8,7 +8,7 @@
           <div class="box">
             <div class="QR">二维码生成</div>
             <input type="number" class="input" v-model="number" placeholder="输入需生成的桌子二维码数量">
-            <Button type="info" class="generBtn" @click="generate">生成</Button>
+            <Button id="btn" type="info" class="generBtn" @click="generate">{{taggleHint}}</Button>
           </div>
           <div class="qrBox">
             <div class="qrItem" v-for="(qrCode, index) in qrCodeList" :key="index">
@@ -29,7 +29,8 @@ export default {
   name: 'Main',
   data () {
     return {
-      number: ''
+      number: '',
+      taggleHint: '生成'
     };
   },
   computed: {
@@ -39,6 +40,11 @@ export default {
   },
   methods: {
     generate: function () {
+      if (this.taggleHint === '生成') {
+        this.taggleHint = '重新生成';
+        document.getElementById('btn').classList.add('reGenerBtn');
+        document.getElementById('btn').classList.remove('generBtn');
+      }
       if (Number(this.number) <= 0) {
         this.$Modal.warning({
           title: '生成二维码提示',
@@ -56,15 +62,6 @@ export default {
               content: '生成失败，未知错误!'
             });
           } else {
-            this.$store.dispatch('getDeskQR').then((err) => {
-              if (err) {
-                this.$Modal.warning({
-                  title: '生成二维码提示',
-                  content: '生成成功但获取失败，未知错误!'
-                });
-              } else {
-              }
-            });
           }
         });
       }
@@ -148,6 +145,17 @@ export default {
     color:#ffffff;
     letter-spacing:2px;
     border: none;
+    margin-top: 25px;
+  }
+  .reGenerBtn {
+    background:white;
+    color: #fe8966;
+    border: #fe8966 1px solid;
+    border-radius:4px;
+    width:260px;
+    height:43px;
+    font-size:14px;
+    letter-spacing:2px;
     margin-top: 25px;
   }
 }
