@@ -12,7 +12,7 @@
           <span>商品状态</span>
           <CheckboxGroup v-model="filter" class="checkboxGroup" @on-change="onFilterChange">
             <Checkbox class="checkBox" label="售卖中"><span>售卖中</span></Checkbox>
-            <Checkbox class="checkBox" label="已下架"><span>已下架</span></Checkbox>
+            <Checkbox class="checkBox" label="已售罄"><span>已售罄</span></Checkbox>
           </CheckboxGroup>
         </div>
         <div class="newGruop">
@@ -64,7 +64,7 @@
                     <div class="No">{{index+1}}</div>
                   </div>
                   <div class="rightTag">
-                    <div class="tag" :class="{tagBlue: dish.state === '售卖中', tagGrey: dish.state === '已下架'}">
+                    <div class="tag" :class="{tagBlue: dish.state === '售卖中', tagGrey: dish.state === '已售罄'}">
                       <div class="circle"></div><span>{{dish.state}}</span>
                     </div>
                     <div @click.stop="deleteDish(dish.dish_id)">
@@ -103,7 +103,7 @@
               <div class="titleLine"></div>
               <div class="quickEditItem" v-for="(dish, index) in filterDishes" :key="dish.dish_id">
                 <div>
-                  <div class="tag" :class="{tagBlue: dish.state === '售卖中', tagGrey: dish.state === '已下架'}" @click="toggleState(index, dish)">
+                  <div class="tag" :class="{tagBlue: dish.state === '售卖中', tagGrey: dish.state === '已售罄'}" @click="toggleState(index, dish)">
                     <div class="circle"></div><span>{{dish.state}}</span>
                   </div>
                 </div>
@@ -132,7 +132,7 @@ export default {
   data () {
     return {
       activeSubIndex: 0,
-      filter: ['售卖中', '已下架'],
+      filter: ['售卖中', '已售罄'],
       isEditCate: false,
       isAddNow: false,
       isCurEdit: false,
@@ -435,7 +435,7 @@ export default {
         this.$store.commit('UPDATE_DISH_INFO', {
           activeIndex: this.activeSubIndex,
           key: 'state',
-          newValue: '已下架',
+          newValue: '已售罄',
           dish: dish
         });
       } else {

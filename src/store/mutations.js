@@ -114,7 +114,7 @@ export default {
           if (state.dishList[i].dish[j].selling) {
             state.dishList[i].dish[j].state = '售卖中';
           } else {
-            state.dishList[i].dish[j].state = '已下架';
+            state.dishList[i].dish[j].state = '已售罄';
           }
         }
       }
