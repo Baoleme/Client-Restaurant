@@ -71,6 +71,9 @@ export default {
       for (let j = 0, len2 = state.orderList[i].state_record.length; j < len2; j++) {
         let temp = new Date(state.orderList[i].state_record[j].time);
         state.orderList[i].state_record[j].time = temp.toLocaleString();
+        if (state.orderList[i].state_record[j].state === 'created') {
+          state.orderList[i].state_record[j].state = '未支付';
+        }
         if (state.orderList[i].state_record[j].state === 'paid') {
           state.orderList[i].state_record[j].state = '新订单';
         }
