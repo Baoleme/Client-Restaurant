@@ -71,9 +71,9 @@ export default {
       this.filterList = newList;
     },
     pagesNum: function (newValue, oldValue) {
-      console.log(newValue);
+      // console.log(newValue);
       this.total = newValue * 10;
-      console.log(this.total);
+      // console.log(this.total);
     }
   },
   methods: {
@@ -81,7 +81,7 @@ export default {
       this.current = 1;
     },
     showDetail (index) {
-      console.log(this.filterList[index]);
+      // console.log(this.filterList[index]);
       this.$store.commit('UPDATE_CUR_ORDER', this.filterList[index]);
       document.getElementById('orderDetail').style.display = 'block';
       document.getElementById('mask').style.opacity = 1;

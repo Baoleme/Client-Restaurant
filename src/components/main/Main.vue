@@ -109,7 +109,7 @@ export default {
   },
   watch: {
     numNewOrder: function (newValue, oldValue) {
-      console.log(newValue);
+      // console.log(newValue);
     }
   },
   methods: {

@@ -121,7 +121,7 @@ export default {
     clearErrMsg () {
       if (this.errorMsg !== '') {
         this.errorMsg = '';
-        console.log(this.errorMsg);
+        // console.log(this.errorMsg);
       }
     }
   },

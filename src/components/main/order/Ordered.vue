@@ -68,7 +68,7 @@ export default {
       this.current = 1;
     },
     showDetail (index) {
-      console.log(this.filterList[index]);
+      // console.log(this.filterList[index]);
       this.$store.commit('UPDATE_CUR_ORDER', this.filterList[index]);
       document.getElementById('orderDetail').style.display = 'block';
       document.getElementById('mask').style.opacity = 1;

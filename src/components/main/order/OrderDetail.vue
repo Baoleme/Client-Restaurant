@@ -90,7 +90,7 @@ export default {
     },
     copy () {
       var number = document.getElementById('number');
-      console.log(number);
+      // console.log(number);
       number.select();
       document.execCommand('Copy', 'false', null);
     },

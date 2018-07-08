@@ -390,7 +390,7 @@ export default {
       } else {
         newDishObj.tag = tag;
       }
-      console.log('subFunction:', newDishObj);
+      // console.log('subFunction:', newDishObj);
       if (sign) {
         this.$store.dispatch('modifyDish', {
           id: this.dishId,
@@ -424,7 +424,7 @@ export default {
       }
     },
     addNewDish: function (sign) {
-      console.log(this.specList);
+      // console.log(this.specList);
       if (this.$store.state.curImg === '') {
         this.isImgNull = 1;
       }
@@ -476,7 +476,7 @@ export default {
   },
   mounted () {
     let tempObj = this.$store.state.curDish;
-    console.log('newDish:', tempObj);
+    // console.log('newDish:', tempObj);
     if (tempObj.flag) {
       this.dishName = tempObj.name;
       this.dishCate = tempObj.category;
@@ -533,7 +533,7 @@ export default {
     document.getElementById('uploadImg').onchange = function () {
       // 获取当前选到的文件对象
       var imgFile = this.files[0];
-      console.log(this.files[0].size / 1024000);
+      // console.log(this.files[0].size / 1024000);
       // 判断文件大小是否符合要求
       if ((this.files[0].size / 1024000) > 1) {
         that.isSizeOut = 1;

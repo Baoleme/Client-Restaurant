@@ -3,7 +3,7 @@ export default {
     state.isLogin = true;
   },
   GET_SELF_INFO (state, data) {
-    console.log('GET_SELF_INFO', data);
+    // console.log('GET_SELF_INFO', data);
     state.infoObj = {
       email: data.email,
       name: data.name,
@@ -29,7 +29,7 @@ export default {
     state.curOrder = data;
   },
   UPDATE_CLUE (state, clue) {
-    console.log('clue', clue);
+    // console.log('clue', clue);
     state.clue = clue;
   },
   UPDATE_ORDER_LIST (state, data) {
@@ -69,7 +69,7 @@ export default {
       }
       state.orderList[i].price = Number(state.orderList[i].price).toFixed(2);
 
-      console.log(state.orderList[i].createTime);
+      // console.log(state.orderList[i].createTime);
       let temp = new Date(state.orderList[i].createTime);
       state.orderList[i].createTime = temp.toLocaleString();
       for (let j = 0, len2 = state.orderList[i].state_record.length; j < len2; j++) {
@@ -111,7 +111,7 @@ export default {
     state.filters = data;
   },
   UPDATE_DISH_LIST (state, data) {
-    console.log('UPDATE_DISH_LIST', data);
+    // console.log('UPDATE_DISH_LIST', data);
     state.dishList = data;
     state.categories = [];
     for (let i = 0, len = state.dishList.length; i < len; i++) {
@@ -161,7 +161,7 @@ export default {
   },
   SAVE_NEWDISH_IMG (state, data) {
     state.curImg = data;
-    console.log(state.curImg);
+    // console.log(state.curImg);
   },
   SET_ISEDITDISH (state, data) {
     state.isEditDish = data;

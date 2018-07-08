@@ -319,7 +319,7 @@ export default {
             // 监听器设置
             on: {
               'on-change': (val) => {
-                console.log(val);
+                // console.log(val);
                 this.model1 = val;
               }
             }
@@ -371,7 +371,7 @@ export default {
     },
     changeCate (index) {
       let newName = document.getElementsByClassName('menuIteminput')[index].value;
-      console.log(newName);
+      // console.log(newName);
       this.$store.dispatch('changeCate', {
         name: newName,
         id: this.myCategories[index].id
@@ -393,7 +393,7 @@ export default {
       if (this.isCurEdit) {
         document.getElementById('curCateName').contentEditable = false;
         let newName = document.getElementById('curCateName').innerText;
-        console.log(newName);
+        // console.log(newName);
         this.$store.dispatch('changeCate', {
           name: newName,
           id: id
@@ -422,7 +422,7 @@ export default {
       this.$store.commit('SAVE_CUR_CATENAME', this.curCategory.name);
       data.flag = 1;
       data.category = this.curCategory.name;
-      console.log('gotoEditDish', data);
+      // console.log('gotoEditDish', data);
       this.$store.commit('UPDATE_CUR_DISH', data);
       this.$router.push('/main/dish/newdish');
     },
@@ -502,7 +502,7 @@ export default {
           dish: dish
         });
       }
-      console.log('toggleState');
+      // console.log('toggleState');
       this.filterDishes[index].dirty = 1;
     },
     setDirty (index) {

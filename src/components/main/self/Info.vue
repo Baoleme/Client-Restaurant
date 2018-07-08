@@ -223,7 +223,7 @@ export default {
     var self = this.$store;
     document.getElementById('uploadImg').onchange = function () {
       var imgFile = this.files[0];
-      console.log(this.files[0].size / 1024000);
+      // console.log(this.files[0].size / 1024000);
       if ((this.files[0].size / 1024000) > 1) {
         that.isSizeOut = 1;
       } else {

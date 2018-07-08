@@ -87,7 +87,7 @@ export default {
       document.getElementById('mask').style.zIndex = 20;
     },
     closeDetail (sign) {
-      console.log(sign);
+      // console.log(sign);
       document.getElementById('mask').style.opacity = 0;
       document.getElementById('mask').style.zIndex = -1;
       document.getElementById('orderDetail').style.display = 'none';
@@ -122,7 +122,7 @@ export default {
         if (err) {
           this.errorMsg = err;
         } else {
-          console.log('deal succeed!');
+          // console.log('deal succeed!');
           this.$store.dispatch('restaurantSelfOrder', {
             page: this.current - 1,
             stateArr: this.$store.state.filters

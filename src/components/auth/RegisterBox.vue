@@ -105,7 +105,7 @@ export default {
     clearErrMsg () {
       if (this.errorMsg !== '') {
         this.errorMsg = '';
-        console.log(this.errorMsg);
+        // console.log(this.errorMsg);
       }
       if (!(regMail.test(this.username))) {
         this.isNameRight = false;
@@ -131,7 +131,7 @@ export default {
         document.getElementsByClassName('fileMsg')[0].style.color = 'black';
         // console.log(myfile.files[0].name);
         this.license = myfile.files[0];
-        console.log(this.license);
+        // console.log(this.license);
       }
     },
     taggle () {
