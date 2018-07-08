@@ -485,6 +485,9 @@ export default {
       this.description = tempObj.description;
       this.dishId = tempObj.dish_id;
       this.dishImg = tempObj.image_url[0];
+      if (!this.description) {
+        this.description = '';
+      }
 
       if (tempObj.spicy === 0) {
         this.chilliModel = '不辣';
