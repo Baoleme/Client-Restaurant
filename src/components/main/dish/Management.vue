@@ -651,13 +651,13 @@ export default {
         background-color: #ffffff;
         border-radius:6px 0 0 0;
         width:177px;
-        height:78%;
+        height:80%;
         box-shadow:0 2px 15px 0 rgba(193,193,193,0.42);
         z-index: 10;
         font-size:14px;
-        position: fixed;
-        top: 180px;
-        overflow: scroll;
+        // position: fixed;
+        margin-top: 158px;
+        overflow: auto;
 
         .activeGear {
           color: #ff8b18;

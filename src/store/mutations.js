@@ -57,6 +57,15 @@ export default {
     }
 
     for (let i = 0, len = state.orderList.length; i < len; i++) {
+      // 处理价格精度问题
+      if (Math.abs(Number(state.orderList[i].price).toFixed(0) - Number(state.orderList[i].price)) < 0.0001) {
+        state.orderList[i].price = Number(state.orderList[i].price).toFixed(0);
+      }
+      if (Math.abs(Number(state.orderList[i].price).toFixed(1) - Number(state.orderList[i].price)) < 0.0001) {
+        state.orderList[i].price = Number(state.orderList[i].price).toFixed(1);
+      }
+      state.orderList[i].price = Number(state.orderList[i].price).toFixed(2);
+
       console.log(state.orderList[i].createTime);
       let temp = new Date(state.orderList[i].createTime);
       state.orderList[i].createTime = temp.toLocaleString();

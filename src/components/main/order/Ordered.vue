@@ -220,7 +220,11 @@ export default {
     }
   }
 }
+#orderDetail::-webkit-scrollbar {
+  display: none;
+}
 #orderDetail {
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: auto;
 }
 </style>
