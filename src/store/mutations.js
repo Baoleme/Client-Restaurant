@@ -1,4 +1,7 @@
 export default {
+  LOGIN (state) {
+    state.isLogin = true;
+  },
   GET_SELF_INFO (state, data) {
     console.log('GET_SELF_INFO', data);
     state.infoObj = {
@@ -102,7 +105,7 @@ export default {
       state.countObj.numNewOrder = data.data.paid;
       state.countObj.numOrdering = data.data.accepted;
     }
-    console.log(state.countObj);
+    // console.log(state.countObj);
   },
   UPDATE_FILTERS (state, data) {
     state.filters = data;

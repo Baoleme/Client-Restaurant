@@ -34,7 +34,9 @@
 export default {
   data () {
     return {
-      errorMsg: ''
+      errorMsg: '',
+      username: '',
+      password: ''
     };
   },
   computed: {
@@ -118,6 +120,58 @@ export default {
           }
         });
       }
+    },
+    getCookie () {
+      if (document.cookie.length > 0) {
+        var arr = document.cookie.split('; ');
+        for (var i = 0; i < arr.length; i++) {
+          var arr2 = arr[i].split('=');
+          if (arr2[0] === 'username') {
+            this.username = arr2[1];
+          } else if (arr2[0] === 'password') {
+            this.password = arr2[1];
+          }
+        }
+      }
+    },
+    login () {
+      this.$store.dispatch('loginAction', {
+        username: this.username,
+        password: this.password
+      }).then((err) => {
+        if (err) {
+        } else {
+          this.$store.dispatch('getRestInfo').then((err) => {
+            if (err) {
+            } else {
+              this.$store.dispatch('getOrderCounts', 0).then((err) => {
+                if (err) {
+                } else {
+                  this.$store.dispatch('getOrderCounts', 1).then((err) => {
+                    if (err) {
+                      this.errorMsg = err;
+                    } else {
+                      // this.$router.push('/main');
+                    }
+                  });
+                }
+              });
+            }
+          });
+          this.$store.dispatch('getDish');
+        }
+      });
+    }
+  },
+  mounted () {
+    // this.getCookie();
+    // console.log(this.username);
+    // console.log(this.password);
+    // if (this.username && this.password) {
+    //   this.login();
+    // }
+    if (this.$store.state.isLogin === false) {
+      this.$router.push('/');
     }
   }
 };

@@ -110,6 +110,23 @@ export default {
       logoImg: require('../../../assets/images/yulan.jpg')
     };
   },
+  // computed: {
+  //   resName () {
+  //     return this.$store.state.infoObj.name;
+  //   },
+  //   resPhone () {
+  //     return this.$store.state.infoObj.phone;
+  //   },
+  //   resAddress () {
+  //     return this.$store.state.infoObj.address;
+  //   },
+  //   description () {
+  //     return this.$store.state.infoObj.description || '';
+  //   },
+  //   logoImg () {
+  //     return this.$store.state.infoObj.logoUrl;
+  //   }
+  // },
   methods: {
     nameOnfocus: function () {
       this.isNameNull = 0;
@@ -224,6 +241,14 @@ export default {
         });
       }
     };
+
+    // this.$store.dispatch('getRestInfo').then((err) => {
+    //   if (err) {
+    //     this.errorMsg = err;
+    //   } else {
+    //     this.$store.commit('SAVE_NEWDISH_IMG', this.$store.state.infoObj.logoUrl);
+    //   }
+    // });
   },
   beforeMount () {
     this.$store.commit('UPDATE_INDEX', 4);

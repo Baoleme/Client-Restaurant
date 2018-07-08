@@ -8,6 +8,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    isLogin: false,
     index: 0,
     infoObj: {},
     isNetworkErr: false,

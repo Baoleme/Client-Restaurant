@@ -41,7 +41,7 @@ export default {
   name: 'LoginBox',
   data () {
     return {
-      username: '12429@zyuco.com',
+      username: '',
       password: '',
       autoLogin: false,
       errorMsg: '',
@@ -62,10 +62,12 @@ export default {
           if (err) {
             this.errorMsg = err;
           } else {
+            this.$store.commit('LOGIN');
             if (this.autoLogin === true && !this.userInCookie) {
               this.setCookie(this.username, this.password, 7);
             } else if (this.autoLogin === false) {
               this.clearCookie();
+              this.setCookie(this.username, this.password, 1);
             }
             this.$store.dispatch('getRestInfo').then((err) => {
               if (err) {
@@ -102,7 +104,7 @@ export default {
         var arr = document.cookie.split('; ');
         for (var i = 0; i < arr.length; i++) {
           var arr2 = arr[i].split('=');
-          if (arr2[0] === 'userName') {
+          if (arr2[0] === 'username') {
             this.username = arr2[1];
           } else if (arr2[0] === 'password') {
             this.password = arr2[1];
@@ -129,11 +131,11 @@ export default {
       this.userInCookie = true;
       this.autoLogin = true;
       this.login();
-      console.log('mounted', 'getCookie ture');
+      // console.log('mounted', 'getCookie ture');
     } else {
       this.userInCookie = false;
       this.autoLogin = false;
-      console.log('mounted', 'getCookie false');
+      // console.log('mounted', 'getCookie false');
     }
   }
 };
