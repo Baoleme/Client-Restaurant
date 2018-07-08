@@ -69,6 +69,7 @@ export default {
   },
   methods: {
     goto (index) {
+      this.$store.commit('SAVE_CUR_CATENAME', '');
       this.$store.commit('UPDATE_INDEX', index);
       this.index = index;
       if (index === 0) {

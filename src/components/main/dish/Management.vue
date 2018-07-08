@@ -255,9 +255,6 @@ export default {
     //   };
     // }
   },
-  beforeDestroy () {
-    this.$store.commit('SAVE_CUR_CATENAME', '');
-  },
   methods: {
     goto (index) {
       // console.log(index);
