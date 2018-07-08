@@ -31,6 +31,7 @@
         <Page class="pages" :total="total" :current.sync="current" show-elevator size="small" @on-change="change"></Page>
         <OrderDetail id="orderDetail" @close="closeDetail"/>
       </div>
+      <div id="mask"></div>
     </div>
   </div>
 </template>
@@ -83,8 +84,12 @@ export default {
       console.log(this.filterList[index]);
       this.$store.commit('UPDATE_CUR_ORDER', this.filterList[index]);
       document.getElementById('orderDetail').style.display = 'block';
+      document.getElementById('mask').style.opacity = 1;
+      document.getElementById('mask').style.zIndex = 20;
     },
     closeDetail (sign) {
+      document.getElementById('mask').style.opacity = 0;
+      document.getElementById('mask').style.zIndex = -1;
       document.getElementById('orderDetail').style.display = 'none';
       if (sign === 1) {
         this.$store.dispatch('restaurantSelfOrder', {
@@ -312,6 +317,14 @@ export default {
       }
     }
   }
+}
+#mask {
+  background: rgba(0, 0, 0, 0.55);
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  opacity: 0;
 }
 #orderDetail::-webkit-scrollbar {
   display: none;

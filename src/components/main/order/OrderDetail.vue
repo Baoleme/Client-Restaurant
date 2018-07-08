@@ -111,7 +111,7 @@ export default {
 </script>
 <style lang="scss">
 .shadow {
-  background: rgba(0, 0, 0, 0.55);
+  // background: rgba(0, 0, 0, 0.55);
   position: absolute;
   top: 0;
   left: 0;
