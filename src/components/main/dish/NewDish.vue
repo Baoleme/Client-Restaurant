@@ -415,6 +415,7 @@ export default {
               if (err) {
                 this.errorMsg = err;
               } else {
+                this.$store.commit('SAVE_CUR_CATENAME', this.dishCate);
                 this.$router.push('/main/dish/management');
               }
             });
@@ -523,19 +524,24 @@ export default {
       }
     }
 
+    // 将this对象保存起来，防止冲突
     var that = this;
     var self = this.$store;
     document.getElementById('uploadImg').onchange = function () {
+      // 获取当前选到的文件对象
       var imgFile = this.files[0];
       console.log(this.files[0].size / 1024000);
+      // 判断文件大小是否符合要求
       if ((this.files[0].size / 1024000) > 1) {
         that.isSizeOut = 1;
       } else {
         that.isSizeOut = 0;
+        // 上传图片
         self.dispatch('uploadImg', this.files[0]).then((err) => {
           if (err) {
           } else {
             that.isImgNull = 0;
+            // 使用FileReader将刚刚选择的图片显示出来
             var fr = new FileReader();
             fr.onload = function () {
               document.getElementById('dishImg').src = fr.result;

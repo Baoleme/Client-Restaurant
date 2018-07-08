@@ -309,12 +309,14 @@ export default {
     },
     delCate (id) {
       this.$Modal.confirm({
+        // 使用render动态生成界面元素
         render: (h) => {
           return h('Select', {
             props: {
               value: this.model1,
               placeholder: '请选择该分类下所有菜品的新分类'
             },
+            // 监听器设置
             on: {
               'on-change': (val) => {
                 console.log(val);
@@ -322,6 +324,7 @@ export default {
               }
             }
           }, [this.myCategories.filter(item => item.id !== id).map(function (item) {
+            // 嵌套render..
             return h('Option', {
               props: {
                 value: item.name,
