@@ -90,14 +90,10 @@ export default {
     this.$store.commit('UPDATE_INDEX', 1);
     this.$store.commit('UPDATE_SUB_INDEX', 2);
 
-    var self = this.$store;
-    var that = this;
-    this.intervalid = setInterval(function () {
-      self.dispatch('restaurantSelfOrder', {
-        page: that.current - 1,
-        stateArr: self.state.filters
-      });
-    }, 1000);
+    this.$store.dispatch('restaurantSelfOrder', {
+      page: this.current - 1,
+      stateArr: this.$store.state.filters
+    });
   },
   beforeDestroy () {
     clearInterval(this.intervalid);
@@ -154,12 +150,12 @@ export default {
 
         .orderItem {
           display: flex;
-          height:45px;
+          height:38px;
           padding: 0px 40px 0 31px;
 
           p {
             font-family:PingFangSC-Medium;
-            font-size:13px;
+            font-size:12px;
             display: flex;
             align-items: center;
             color:#493f3a;

@@ -178,6 +178,10 @@ export default {
       padding-left: 168px;
     }
 
+    .content::-webkit-scrollbar {
+      display: none;
+    }
+
     .content {
       display: flex;
       flex-direction: column;
@@ -198,12 +202,12 @@ export default {
 
         .orderItem {
           display: flex;
-          height:45px;
+          height:38px;
           padding: 0px 40px 0 31px;
 
           p {
             font-family:PingFangSC-Medium;
-            font-size:13px;
+            font-size:12px;
             display: flex;
             align-items: center;
             color:#493f3a;
@@ -305,6 +309,7 @@ export default {
   }
 }
 #orderDetail {
-  overflow: scroll;
+  // overflow: scroll;
+  // height: 90%;
 }
 </style>

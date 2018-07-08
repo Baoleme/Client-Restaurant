@@ -59,7 +59,7 @@
             <div class="hint"><span @click="gotoOrdering">去处理></span></div>
           </div>
           <div class="ordered">
-            <div class="order">已结订单</div>
+            <div class="order">今日已结订单</div>
             <div class="subLine"></div>
             <div class="orderNum">{{numOrdered}}</div>
             <div class="hint"><span @click="gotoOrdered">详情></span></div>
@@ -161,8 +161,9 @@ export default {
 
     var self = this.$store;
     this.intervalid = setInterval(function () {
-      self.dispatch('getOrderCounts');
-    }, 1000);
+      self.dispatch('getOrderCounts', 0);
+      self.dispatch('getOrderCounts', 1);
+    }, 2000);
   },
   beforeDestroy () {
     clearInterval(this.intervalid);
@@ -200,7 +201,8 @@ export default {
 
 .part1 {
   display: flex;
-  flex: 6;
+  // flex: 5;
+  height: 440px;
   .infoContent {
     flex: 26.3;
     background: #ffffff;
@@ -218,7 +220,8 @@ export default {
 }
 
 .part2 {
-  flex: 4;
+  // flex: 4;
+  height: 240px;
   display: flex;
   margin-bottom: 30px;
   .ordering {
@@ -273,7 +276,7 @@ export default {
     color:#929292;
     letter-spacing:1px;
     text-align:center;
-    margin-top: 45px;
+    margin-top: 32px;
   }
 }
 
@@ -285,7 +288,7 @@ export default {
     .item1 {
       border-right: 1px #979797 dashed;
       flex: 1;
-      margin-top: 25px;
+      margin-top: 15px;
 
       .number {
         font-family:PingFangTC-Semibold;
@@ -298,7 +301,7 @@ export default {
 
     .item2 {
       flex: 1;
-      margin-top: 25px;
+      margin-top: 15px;
 
       .number {
         font-family:PingFangTC-Semibold;
@@ -389,8 +392,6 @@ export default {
     width: 96%;
     border-top:1px solid #e6e6e6;
     margin: auto;
-    margin-top: 0;
-    margin-bottom: 0;
   }
 
   .subPart2 {
@@ -416,7 +417,7 @@ export default {
   font-family:PingFangTC-Regular;
   font-size:13px;
   color:#9b9b9b;
-  margin: 28px;
+  margin: 0 28px 20px 28px;
   >span {
     cursor: pointer;
   }

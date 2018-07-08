@@ -124,11 +124,10 @@ export default {
     background:#ffffff;
     border-radius:4px;
     width:740px;
-    // height:622px;
     margin: auto;
     margin-top: 46px;
     padding-top: 15px;
-    min-height: 80%;
+    margin-bottom: 30px;
 
     .titleLine {
       display: flex;

@@ -72,11 +72,17 @@ export default {
       this.$store.commit('UPDATE_INDEX', index);
       this.index = index;
       if (index === 0) {
-        this.$store.dispatch('getOrderCounts').then((err) => {
+        this.$store.dispatch('getOrderCounts', 0).then((err) => {
           if (err) {
             this.errorMsg = err;
           } else {
-            this.$router.push('/main');
+            this.$store.dispatch('getOrderCounts', 1).then((err) => {
+              if (err) {
+                this.errorMsg = err;
+              } else {
+                this.$router.push('/main');
+              }
+            });
           }
         });
       } else if (index === 1) {

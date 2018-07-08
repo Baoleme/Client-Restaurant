@@ -78,6 +78,9 @@ export default {
 </script>
 
 <style lang="scss">
+.mainContanier::-webkit-scrollbar {
+  display: none;
+}
 .mainContanier {
   display: flex;
   min-height: 100vh;

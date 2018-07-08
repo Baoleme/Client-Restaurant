@@ -6,7 +6,7 @@
       <div class="firstPart">
         <div class="chooseDish">
           <Icon class="icon" type="ios-search-strong" size="23" color="#FCC138"></Icon>
-          <Input class="input" placeholder="商品名称" clearable size="small"/>
+          <Input class="input" placeholder="搜索当前分类菜品名称" clearable size="small" v-model="search" @on-keydown="searchDishes"/>
         </div>
         <div class="goodsState">
           <span>商品状态</span>
@@ -54,7 +54,8 @@
                 <span contenteditable="false" id="curCateName" :class="{isCurEdit: isCurEdit === true}">{{curCategory.name}}</span>
                 <Icon type="edit" size="16" @click.native="editCurCate(curCategory.id)" :class="{isCurEditIcon: isCurEdit === true}"></Icon>
               </div>
-              <div class="curCategoryRight" @click="toggleQuickEdit" :class="{quickEdit: isQuickEdit === true}">快速编辑</div>
+              <!-- <div class="curCategoryRight" @click="toggleQuickEdit" :class="{quickEdit: isQuickEdit === true}">快速编辑</div> -->
+              <div class="curCategoryRight" @click="toggleQuickEdit">{{quickEditHint}}</div>
             </div>
             <div class="dishes" v-show="!isQuickEdit">
               <div class="dish" v-for="(dish, index) in filterDishes" :key="index" @click="gotoEditDish(dish)">
@@ -92,7 +93,7 @@
                 </div>
               </div>
             </div>
-            <div v-show="isQuickEdit">
+            <div v-show="isQuickEdit" class="quickEdit">
               <div class="quickEditTitle">
                 <div>当前状态</div>
                 <div>名称</div>
@@ -108,7 +109,8 @@
                   </div>
                 </div>
                 <div><input class="quickEditName" type="text" maxlength="15" :value="dish.name" @blur="changeAttr(index,'name',dish)" @change="setDirty(index)"></div>
-                <div><img :src="dish.image_url"/></div>
+                <!-- <div class="imgCol"><img :src="dish.image_url" class="imgs"/><input type="file" class="uploadFile"></div> -->
+                <div class="imgCol"><img :src="dish.image_url" class="imgs"/></div>
                 <div><input class="quickEditPrice" type="number" :value="dish.price" @blur="changeAttr(index,'price',dish)" @change="setDirty(index)"></div>
                 <div><span @click.stop="deleteDish(dish.dish_id)">删除</span></div>
               </div>
@@ -138,11 +140,13 @@ export default {
       isCurEdit: false,
       newCateName: '',
       isQuickEdit: false,
+      quickEditHint: '快速编辑',
       filterDishes: [],
       model1: '',
       toCateId: -1,
       myCategories: [],
-      idArr: []
+      idArr: [],
+      search: ''
     };
   },
   computed: {
@@ -150,11 +154,20 @@ export default {
       return this.$store.state.categories;
     },
     curCategory () {
-      return this.myCategories[this.activeSubIndex];
+      if (this.myCategories.length) {
+        return this.myCategories[this.activeSubIndex];
+      } else {
+        return {
+          name: '',
+          id: -1
+        };
+      }
     },
     dishes: {
       get: function () {
-        return this.$store.state.dishList[this.activeSubIndex].dish;
+        if (this.$store.state.dishList[this.activeSubIndex]) {
+          return this.$store.state.dishList[this.activeSubIndex].dish;
+        }
       },
       set: function () {
       }
@@ -191,6 +204,12 @@ export default {
     }
   },
   mounted () {
+    for (let i = 0; i < this.$store.state.categories.length; ++i) {
+      if (this.$store.state.curCateName === this.$store.state.categories[i].name) {
+        this.activeSubIndex = i;
+        break;
+      }
+    }
     this.filterDishes = this.dishes;
     this.$dragging.$on('dragged', ({ value }) => {
     });
@@ -213,11 +232,42 @@ export default {
         }
       });
     });
+
+    // var self = this.$store;
+    // var uploadFiles = document.getElementsByClassName('uploadFile');
+    // console.log(uploadFiles);
+    // for (let i = 0; i < uploadFiles.length; ++i) {
+    //   let j = i;
+    //   console.log(j);
+    //   uploadFiles[j].onchange = function (j) {
+    //     var imgFile = this.files[0];
+    //     console.log(imgFile);
+    //     self.dispatch('uploadImg', this.files[0]).then((err) => {
+    //       if (err) {
+    //       } else {
+    //         var fr = new FileReader();
+    //         fr.onload = function () {
+    //           document.getElementsByClassName('imgs')[j].src = fr.result;
+    //         };
+    //         fr.readAsDataURL(imgFile);
+    //       }
+    //     });
+    //   };
+    // }
+  },
+  beforeDestroy () {
+    this.$store.commit('SAVE_CUR_CATENAME', '');
   },
   methods: {
     goto (index) {
       // console.log(index);
       this.activeSubIndex = index;
+      this.$store.commit('SAVE_CUR_CATENAME', this.curCategory.name);
+    },
+    searchDishes () {
+      if (event.keyCode === 13) {
+        this.filterDishes = this.dishes.filter(dish => dish.name.indexOf(this.search) !== -1);
+      }
     },
     editCategory () {
       let menuItem = document.getElementsByClassName('menuIteminput');
@@ -369,6 +419,7 @@ export default {
     gotoEditDish (data) {
       this.$store.commit('SET_ISEDITDISH', true);
       this.$store.commit('SAVE_NEWDISH_IMG', data.image_url[0]);
+      this.$store.commit('SAVE_CUR_CATENAME', this.curCategory.name);
       data.flag = 1;
       data.category = this.curCategory.name;
       console.log('gotoEditDish', data);
@@ -429,6 +480,11 @@ export default {
     toggleQuickEdit () {
       this.updateList();
       this.isQuickEdit = !this.isQuickEdit;
+      if (this.quickEditHint === '快速编辑') {
+        this.quickEditHint = '回到普通编辑';
+      } else {
+        this.quickEditHint = '快速编辑';
+      }
     },
     toggleState (index, dish) {
       if (dish.state === '售卖中') {
@@ -587,6 +643,10 @@ export default {
       width: 100%;
       height: 100%;
 
+      .category::-webkit-scrollbar {
+        display: none;
+      }
+
       .category {
         background-color: #ffffff;
         border-radius:6px 0 0 0;
@@ -686,6 +746,10 @@ export default {
         background: #f6f6f6;
         width: 88.1%;
 
+        .detailPart::-webkit-scrollbar {
+          display: none;
+        }
+
         .detailPart {
           background-color: #ffffff;
           border-radius:0 6px 0 0;
@@ -707,6 +771,7 @@ export default {
             top: 180px;
             width: 75%;
             background: #ffffff;
+            z-index: 99;
 
             .curCategoryLeft {
               font-family:PingFangSC-Light;
@@ -727,7 +792,7 @@ export default {
             }
             .curCategoryRight {
               font-size: 12px;
-              padding-right: 50px;
+              padding-right: 60px;
               cursor: pointer;
             }
 
@@ -744,7 +809,7 @@ export default {
             width: 97%;
 
             .dish {
-              flex: 0 0 47%;
+              flex: 0 0 45%;
               box-shadow:0 3px 4px 3px rgba(0,0,0,0.04);
               border-radius:5px;
               border: 1px solid #f0f0f0;
@@ -817,7 +882,7 @@ export default {
                       overflow: hidden;
                       text-overflow:ellipsis;
                       white-space: nowrap;
-                      width: 20vw;
+                      width: 17vw;
                       text-align:left;
                     }
 
@@ -837,7 +902,7 @@ export default {
                     text-overflow:ellipsis;
                     white-space: nowrap;
                     // width: 344px;
-                    width: 24vw;
+                    width: 280px;
                     text-align: left;
                     flex: 1;
                   }
@@ -951,6 +1016,10 @@ export default {
             border-bottom: 1px solid #e6e6e6;
           }
 
+          .quickEdit {
+            margin-top: 60px;
+          }
+
           .quickEditTitle {
             display: flex;
             font-family:PingFangSC-Medium;
@@ -1027,6 +1096,18 @@ export default {
 
           .quickEditItem:nth-child(2n+1) {
             background: #fffbed;
+          }
+
+          .imgCol {
+            position: relative;
+          }
+
+          .uploadFile {
+            opacity: 0;
+            width:50px;
+            height:50px;
+            position: absolute;
+            left: 0;
           }
 
           .bottomHint {

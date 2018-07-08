@@ -90,6 +90,7 @@
                 <Select v-model="item.defaultName" size="small" style="width:200px" placeholder="请选择默认规格名">
                   <Option v-for="it in item.specItemList" :value="it.nameModel" :key="it.nameModel">{{ it.nameModel }}</Option>
                 </Select>
+                <span class="require">&nbsp;&nbsp;必填*</span>
                 <!-- <input type="text" class="defaultCate borderClass" placeholder="默认规格名，如标准杯" v-model="item.defaultName"> -->
               </div>
               <div class="newSpecGroup" v-for="(subItem, index2) in item.specItemList" :key="index2">
@@ -348,9 +349,13 @@ export default {
         spicy: dishSpicy,
         image_url: [
           this.$store.state.curImg
-        ],
-        description: this.description
+        ]
       };
+      if (this.description === '') {
+        newDishObj.description = null;
+      } else {
+        newDishObj.description = this.description;
+      }
       let specifications = [];
       if (this.specList.length === 0) {
         newDishObj.specifications = null;
@@ -433,6 +438,9 @@ export default {
       }
       let flag = 0;
       for (let i = 0; i < this.specList.length; ++i) {
+        if (this.specList[i].defaultName === '' || this.specList[i].nameModel === '') {
+          flag = 1;
+        }
         for (let j = 0; j < this.specList[i].specItemList.length; ++j) {
           if (this.specList[i].specItemList[j].nameModel === '') {
             this.specList[i].specItemList[j].isNull = 1;
@@ -583,9 +591,8 @@ input[type="number"]{
       flex-direction: column;
       background-color:#f6f6f6;
       padding: 0px 22px 0 22px;
-      position: relative;
-      top: 79px;
-      left: 163px;
+      margin-top: 79px;
+      margin-left: 163px;
 
       >span {
         opacity:0.8;

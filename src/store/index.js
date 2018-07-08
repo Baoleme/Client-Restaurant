@@ -19,13 +19,13 @@ export default new Vuex.Store({
     filters: [],
     dishList: [],
     categories: [],
-    waitTimeClock: [],
     curImg: '',
     curNewCate: -1,
     isEditDish: false,
     curDish: null,
     countObj: {},
-    QRList: []
+    QRList: [],
+    curCateName: ''
   },
   actions,
   getters,

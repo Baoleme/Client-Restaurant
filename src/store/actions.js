@@ -55,17 +55,28 @@ export default {
     commit('UPDATE_FILTERS', data.stateArr);
     return axios.get(baseUrl + 'restaurant/self/order?page=' + data.page + '&number=10&state=' + data.stateArr.join(',')).then((res) => {
       if (res.status === 200) {
-        // console.log(res.data);
+        console.log(res.data);
         commit('UPDATE_ORDER_LIST', res.data);
         return false;
       }
     });
   },
-  getOrderCounts ({ commit }) {
-    return axios.get(baseUrl + 'restaurant/self/order/count').then((res) => {
+  getOrderCounts ({ commit }, flag) {
+    let url;
+    if (flag === 1) {
+      let start = new Date(new Date(new Date().toLocaleDateString()).getTime()).toISOString();
+      let end = new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1).toISOString();
+      url = baseUrl + 'restaurant/self/order/count?from=' + start + '&to=' + end;
+    } else {
+      url = baseUrl + 'restaurant/self/order/count';
+    }
+    return axios.get(url).then((res) => {
       if (res.status === 200) {
-        console.log(res.data);
-        commit('UPDATE_ORDER_COUNT', res.data);
+        // console.log(res.data);
+        commit('UPDATE_ORDER_COUNT', {
+          data: res.data,
+          flag: flag
+        });
         return false;
       }
     });

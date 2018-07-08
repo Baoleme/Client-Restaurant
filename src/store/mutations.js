@@ -30,8 +30,8 @@ export default {
     state.clue = clue;
   },
   UPDATE_ORDER_LIST (state, data) {
-    console.log('UPDATE_ORDER_LIST:', data.order);
-    console.log('number_of_pages:', data.number_of_pages);
+    // console.log('UPDATE_ORDER_LIST:', data.order);
+    // console.log('number_of_pages:', data.number_of_pages);
     state.numberOfPages = data.number_of_pages;
     state.orderList = data.order;
     for (let i = 0, len = state.orderList.length; i < len; i++) {
@@ -40,32 +40,24 @@ export default {
       state.orderList[i].createTime = state.orderList[i].state_record[0].time;
       state.orderList[i].curState = state.orderList[i].state_record[state.orderList[i].state_record.length - 1].state;
       if (state.orderList[i].curState === 'paid' || state.orderList[i].curState === 'accepted') {
-        for (let j = 0, len = state.waitTimeClock.length; j < len; j++) {
-          if (state.waitTimeClock[j].id === state.orderList[i].order_id) {
-            let h = parseInt(state.waitTimeClock[j].clock / 3600);
-            let m = parseInt(state.waitTimeClock[j].clock / 60 % 60);
-            let s = parseInt(state.waitTimeClock[j].clock % 60);
-            if (m < 10) {
-              m = '0' + m;
-            }
-            if (s < 10) {
-              s = '0' + s;
-            }
-            state.orderList[i].waitTime = h + ':' + m + ':' + s;
-            break;
-          }
+        let start = Date.parse(new Date(state.orderList[i].createTime));
+        let cur = Date.parse(new Date());
+        let utc = cur - start;
+        let hour = Math.floor(utc / (60 * 60 * 1000));
+        let min = Math.floor(utc / (60 * 1000) - hour * 60);
+        let second = Math.floor(utc / (1000) - hour * 3600 - min * 60);
+        if (second < 10) {
+          second = '0' + second;
         }
-        if (state.orderList[i].waitTime === '-') {
-          state.waitTimeClock.push({
-            id: state.orderList[i].order_id,
-            clock: 0
-          });
-          state.orderList[i].waitTime = '0:00:01';
+        if (min < 10) {
+          min = '0' + min;
         }
+        state.orderList[i].waitTime = hour + ':' + min + ':' + second;
       }
     }
 
     for (let i = 0, len = state.orderList.length; i < len; i++) {
+      console.log(state.orderList[i].createTime);
       let temp = new Date(state.orderList[i].createTime);
       state.orderList[i].createTime = temp.toLocaleString();
       for (let j = 0, len2 = state.orderList[i].state_record.length; j < len2; j++) {
@@ -94,10 +86,13 @@ export default {
     }
   },
   UPDATE_ORDER_COUNT (state, data) {
-    state.countObj.numNewOrder = data.paid;
-    state.countObj.numOrdering = data.accepted;
-    state.countObj.numOrdered = data.cancelled + data.completed;
-    state.countObj.numAllOrder = data.cancelled + data.completed + data.paid + data.accepted;
+    if (data.flag === 1) {
+      state.countObj.numOrdered = data.data.cancelled + data.data.completed;
+      state.countObj.numAllOrder = data.data.cancelled + data.data.completed + data.data.paid + data.data.accepted;
+    } else {
+      state.countObj.numNewOrder = data.data.paid;
+      state.countObj.numOrdering = data.data.accepted;
+    }
     console.log(state.countObj);
   },
   UPDATE_FILTERS (state, data) {
@@ -123,13 +118,9 @@ export default {
       }
     }
   },
-  UPDATE_TIME_CLOCK (state) {
-    for (let i = 0, len = state.waitTimeClock.length; i < len; i++) {
-      state.waitTimeClock[i].clock++;
-    }
-  },
   ADD_CATE (state, data) {
     state.curNewCate = data.category_id;
+    state.curCateName = data.name;
     state.categories.push({
       id: data.category_id,
       name: data.name
@@ -185,5 +176,8 @@ export default {
   },
   UPDATE_QR_LIST (state, data) {
     state.QRList = data;
+  },
+  SAVE_CUR_CATENAME (state, data) {
+    state.curCateName = data;
   }
 };

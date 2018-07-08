@@ -247,6 +247,9 @@ input[type="number"]{
   position: fixed;
   z-index: 9999;
 }
+// .mainContanier::-webkit-scrollbar {
+//   display: none;
+// }
 .mainContanier {
   display: flex;
   min-height: 100vh;

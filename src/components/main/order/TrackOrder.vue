@@ -28,7 +28,7 @@
             <p v-show="order.curState === '已完成' || order.curState === '已取消'">查看</p>
           </div>
         </div>
-        <div class="noResult" v-show="filterList.length === 0">没有符合条件的订单</div>
+        <div class="noResult" v-show="isNull">没有符合条件的订单</div>
         <Page class="pages" :total="total" :current.sync="current" show-elevator size="small" @on-change="change"></Page>
         <OrderDetail id="orderDetail" @close="closeDetail"/>
       </div>
@@ -46,7 +46,8 @@ export default {
     return {
       total: this.$store.state.numberOfPages * 10,
       current: 1,
-      filterList: []
+      filterList: [],
+      isNull: false
     };
   },
   computed: {
@@ -71,6 +72,11 @@ export default {
   watch: {
     orderList: function (newList, oldList) {
       this.filterList = newList;
+      if (this.filterList.length !== 0) {
+        this.isNull = false;
+      } else {
+        this.isNull = true;
+      }
     },
     pagesNum: function (newValue, oldValue) {
       this.total = newValue * 10;
@@ -124,7 +130,7 @@ export default {
         stateArr: self.state.filters,
         keyword: self.state.clue
       });
-    }, 1000);
+    }, 2000);
   },
   beforeDestroy () {
     clearInterval(this.intervalid);
@@ -171,12 +177,12 @@ export default {
 
         .orderItem {
           display: flex;
-          height:45px;
+          height:38px;
           padding: 0px 40px 0 31px;
 
           p {
             font-family:PingFangSC-Medium;
-            font-size:13px;
+            font-size:12px;
             display: flex;
             align-items: center;
             color:#493f3a;

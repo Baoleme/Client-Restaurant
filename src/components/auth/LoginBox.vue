@@ -71,11 +71,17 @@ export default {
               if (err) {
                 this.errorMsg = err;
               } else {
-                this.$store.dispatch('getOrderCounts').then((err) => {
+                this.$store.dispatch('getOrderCounts', 0).then((err) => {
                   if (err) {
                     this.errorMsg = err;
                   } else {
-                    this.$router.replace('/main');
+                    this.$store.dispatch('getOrderCounts', 1).then((err) => {
+                      if (err) {
+                        this.errorMsg = err;
+                      } else {
+                        this.$router.push('/main');
+                      }
+                    });
                   }
                 });
               }

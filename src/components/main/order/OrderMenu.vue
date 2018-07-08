@@ -244,11 +244,11 @@ export default {
 
   .tableTitle {
     display: flex;
-    margin: 30px 40px 16px 31px;
+    margin: 20px 40px 10px 31px;
 
     p {
       font-family:PingFangSC-Medium;
-      font-size:13px;
+      font-size:12px;
       color:#9b9b9b;
       display: flex;
     }
