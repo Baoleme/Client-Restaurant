@@ -145,6 +145,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.menu {
+  position: fixed;
+  z-index: 99999;
+}
 .mainContanier {
   display: flex;
   min-height: 100vh;
@@ -154,18 +158,25 @@ export default {
     min-height: 100vh;
     flex-direction: column;
     width: 100%;
+    overflow: hidden;
 
     .top {
-      width: 100%;
+      position: fixed;
+      right: 0;
+      z-index: 9999;
+      padding-left: 168px;
     }
 
     .content {
       display: flex;
       flex-direction: column;
       flex: 10;
-      background-color:#f6f6f6;;
+      background-color:#f6f6f6;
       padding: 22px 22px 0 22px;
-      position: relative;
+      // position: relative;
+      margin-top: 79px;
+      margin-left: 163px;
+      width: 89%;
 
       .orderMenu {
         z-index: 10;
@@ -299,5 +310,8 @@ export default {
       }
     }
   }
+}
+#orderDetail {
+  overflow: scroll;
 }
 </style>

@@ -125,7 +125,7 @@ export default {
     border-radius:4px;
     width:740px;
     margin: auto;
-    margin-top: 46px;
+    margin-top: 120px;
     padding-top: 15px;
     margin-bottom: 30px;
 

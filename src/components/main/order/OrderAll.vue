@@ -184,9 +184,9 @@ export default {
       flex: 10;
       background-color:#f6f6f6;;
       padding: 22px 22px 0 22px;
-      position: relative;
-      top: 79px;
-      left: 163px;
+      // position: relative;
+      margin-top: 79px;
+      margin-left: 163px;
       width: 89%;
 
       .orderMenu {
@@ -195,7 +195,7 @@ export default {
 
       .orderList {
         background: #ffffff;
-        // flex: 1;
+        flex: 1;
 
         .orderItem {
           display: flex;
