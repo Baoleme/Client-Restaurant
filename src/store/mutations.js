@@ -42,7 +42,7 @@ export default {
       if (state.orderList[i].curState === 'paid' || state.orderList[i].curState === 'accepted') {
         let start = Date.parse(new Date(state.orderList[i].createTime));
         let cur = Date.parse(new Date());
-        let utc = cur - start;
+        let utc = cur - start + 1000;
         let hour = Math.floor(utc / (60 * 60 * 1000));
         let min = Math.floor(utc / (60 * 1000) - hour * 60);
         let second = Math.floor(utc / (1000) - hour * 3600 - min * 60);
