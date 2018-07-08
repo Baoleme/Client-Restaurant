@@ -107,6 +107,11 @@ export default {
       return this.$store.state.countObj.numAllOrder;
     }
   },
+  watch: {
+    numNewOrder: function (newValue, oldValue) {
+      console.log(newValue);
+    }
+  },
   methods: {
     gotoEditInfo: function () {
       this.$store.commit('UPDATE_INDEX', 4);
@@ -160,10 +165,21 @@ export default {
     this.$store.commit('UPDATE_INDEX', 0);
 
     var self = this.$store;
+    // var router = this.$router;
     this.intervalid = setInterval(function () {
-      self.dispatch('getOrderCounts', 0);
-      self.dispatch('getOrderCounts', 1);
-    }, 2000);
+      self.dispatch('getOrderCounts', 0).then((err) => {
+        if (err) {
+          this.errorMsg = err;
+        } else {
+          self.dispatch('getOrderCounts', 1).then((err) => {
+            if (err) {
+              this.errorMsg = err;
+            } else {
+            }
+          });
+        }
+      });
+    }, 1000);
   },
   beforeDestroy () {
     clearInterval(this.intervalid);

@@ -23,7 +23,12 @@ export default new Vuex.Store({
     curNewCate: -1,
     isEditDish: false,
     curDish: null,
-    countObj: {},
+    countObj: {
+      numOrdered: 0,
+      numAllOrder: 0,
+      numNewOrder: 0,
+      numOrdering: 0
+    },
     QRList: [],
     curCateName: ''
   },
