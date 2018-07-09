@@ -37,7 +37,11 @@ export default {
     },
     gotoEmailHome () {
       // 根据邮箱地址跳转到对应的登录页面
-      window.open('http://mail.' + this.emailAddress.split('@')[1]);
+      if (this.emailAddress.split('@')[1] === 'gmail.com') {
+        window.open('https://accounts.google.com');
+      } else {
+        window.open('http://mail.' + this.emailAddress.split('@')[1]);
+      }
     }
   },
   computed: {
