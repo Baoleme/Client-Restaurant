@@ -3,7 +3,7 @@
     <Tooltip content="Top Right text" placement="top-end">
       <span>微信关注</span>
       <div slot="content">
-        <img src="@/assets/images/QRCode.jpeg" alt="QRCode">
+        <img src="@/assets/images/QRCode.png" alt="QRCode">
       </div>
     </Tooltip>
     <span> | </span>
